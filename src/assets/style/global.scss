@@ -1,0 +1,13 @@
+@import './reset.scss';
+
+$default-size: 100;
+
+@function px2rem($px){
+  @return $px / $default-size * 1rem;
+}
+
+@mixin center(){
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
