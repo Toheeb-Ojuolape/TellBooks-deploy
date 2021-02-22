@@ -1,7 +1,7 @@
 <template>
   <v-window v-model="step">
     <v-window-item :value="1">
-      <v-app class="hidden-lg-and-up">
+      <v-app >
         <v-main class="hidden-lg-and-up" style="background:#f66c1f">
           <v-img
             src="https://res.cloudinary.com/tell/image/upload/v1604278196/tellbooks_mluam5.png"
@@ -10,13 +10,13 @@
               style="padding-top:470px;font-size:29px;line-height:normal;margin:15px"
               class="fade-in font-weight-black white--text"
             >
-              Welcome to tellbooks
+              Welcome to Tell! Books
             </h1>
             <p
               style="font-size:15px;line-height:normal;margin:20px;margin-top:-10px"
               class="fade-in white--text font-weight-semibold"
             >
-              Earn 85%-90% royalty when you publish on tellbooks. Withdraw at
+              Earn 85%-90% royalty when you publish on Tell! Books. Withdraw at
               anytime.
             </p>
             <v-btn
@@ -38,13 +38,13 @@
               style="padding-top:470px;font-size:50px;line-height:normal;margin:15px"
               class="fade-in font-weight-black white--text"
             >
-              Welcome to tellbooks
+              Welcome to Tell! Books
             </h1>
             <p
               style="font-size:20px;line-height:normal;margin:20px;margin-top:-10px"
               class="fade-in white--text font-weight-semibold"
             >
-              Earn 85%-90% royalty when you publish on tellbooks. Withdraw at
+              Earn 85%-90% royalty when you publish on Tell! Books. Withdraw at
               anytime.
             </p>
             <v-btn
@@ -60,7 +60,7 @@
       </v-app>
     </v-window-item>
     <v-window-item :value="2">
-      <v-app class="hidden-lg-and-up">
+      <v-app>
         <v-main class="hidden-lg-and-up" style="background:#f66c1f">
           <v-img
             src="https://res.cloudinary.com/tell/image/upload/v1604278192/tellbooks6_w9tg1e.png"
@@ -349,7 +349,7 @@
 </template>
 
 <script>
-import firebase from "firebase/app";
+import firebase from "firebase/app"
 
 export default {
   data() {

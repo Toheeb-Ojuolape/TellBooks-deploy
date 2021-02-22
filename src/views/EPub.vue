@@ -23,8 +23,8 @@
         <div id="read"></div>
         <div class="cover">
           <div class="left" @click="prev"></div>
-          <div class="center" @click="toggleTitleAndFootbar"></div>
-          <div class="right" @click="next"></div>
+          <div class="center"></div>
+          <div class="right" @click="next()"></div>
         </div>
         <v-card color="grey lighten-4" tile class="footer-bar" v-if="ifShow">
           <v-card color="grey lighten-4" tile class="footer-bar hidden-md-and-down">

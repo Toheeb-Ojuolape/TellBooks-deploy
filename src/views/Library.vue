@@ -68,7 +68,7 @@
         Your purchased books will appear here:
       </p>
       <!-- Show selected book  -->
-      <v-row class="mb-6">
+      <v-row id="show" class="mb-6">
         <div v-if="newBook == true">
           <p class="hidden-md-and-down">
             <v-card
@@ -102,7 +102,7 @@
                       {{ stayBook.title }}
                     </h1>
                     <v-rating
-                      :value="stayBook.rating"
+                      :value="parseFloat(stayBook.rating)"
                       readonly
                       color="#f5a623"
                       size="10"
@@ -166,7 +166,7 @@
                       {{ book.title }}
                     </h1>
                     <v-rating
-                      :value="book.rating"
+                      :value="parseFloat(book.rating)"
                       readonly
                       color="#f5a623"
                       size="10"
@@ -221,6 +221,7 @@
               >
                 <v-btn
                   @click="showProgress(i, book)"
+                  href="#show"
                   height="250"
                   width="170"
                   elevation="24"
@@ -252,7 +253,7 @@
       >
         <!-- Select one book -->
         <div v-if="newBook == true">
-          <p class="hidden-lg-and-up">
+          <p class="hidden-lg-and-up" id="show">
             <v-card
               flat
               style="margin-top:40px;margin-left:10px"
@@ -284,7 +285,7 @@
                       {{ stayBook.title }}
                     </h1>
                     <v-rating
-                      :value="stayBook.rating"
+                      :value="parseFloat(stayBook.rating)"
                       readonly
                       color="#f5a623"
                       size="10"
@@ -349,7 +350,7 @@
                       {{ book.title }}
                     </h1>
                     <v-rating
-                      :value="book.rating"
+                      :value="parseFloat(book.rating)"
                       readonly
                       color="#f5a623"
                       size="10"
@@ -404,6 +405,7 @@
                   height="190"
                   width="120"
                   elevation="24"
+                  href="#show"
                 >
                   <v-img :src="book.bookcover" height="190" width="120" />
                 </v-btn>
