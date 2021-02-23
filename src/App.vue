@@ -10,11 +10,11 @@ export default {
   name: 'App',
   metaInfo() {
     return{
-    title: 'Top Online Book Publishing platform in Africa ',
+    title: 'African Book Publishing platform',
     titleTemplate: ' Tell! Books | %s',
      meta: [
                 { name: 'description', content:  'Tell! Books provides a medium for young African creatives to seamlessly publish, monetize and distribute their creative works online'},
-                { property: 'og:title', content: "Tell! Books | Top Online Book Publishing platform in Africa"},
+                { property: 'og:title', content: "Tell! Books | African Book Publishing platform"},
                 { property: 'og:site_name', content: 'Tell! Books'},
                 {property: 'og:type', content: 'website'},    
                 {name: 'robots', content: 'index,follow'} 

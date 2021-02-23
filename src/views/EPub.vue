@@ -22,16 +22,16 @@
       <div class="read-wrapper">
         <div id="read"></div>
         <div class="cover">
-          <div class="left" @click="prev"></div>
-          <div class="center"></div>
+          <div class="left" @click="prev()"></div>
+          <div class="center" @click="toggleTitleAndFootbar()"></div>
           <div class="right" @click="next()"></div>
         </div>
-        <v-card color="grey lighten-4" tile class="footer-bar" v-if="ifShow">
+        <v-card color="grey lighten-4" tile class="footer-bar">
           <v-card color="grey lighten-4" tile class="footer-bar hidden-md-and-down">
       <v-toolbar color="black" dense>
-      <v-btn color="white" text @click="prev(ev)"><v-icon class="white-text">mdi-chevron-left</v-icon>Left</v-btn>
+      <v-btn color="white" text @click="prev()"><v-icon class="white-text">mdi-chevron-left</v-icon>Previous</v-btn>
       <v-spacer></v-spacer>
-      <v-btn color="white" text @click="next(ev)">Right<v-icon color="white">mdi-chevron-right</v-icon></v-btn>
+      <v-btn color="white" text @click="next()">Next<v-icon color="white">mdi-chevron-right</v-icon></v-btn>
       </v-toolbar>
     </v-card>
 
@@ -41,7 +41,7 @@
           color="#fa9746"
           thumb-label
           @change="onProgressChange(progress)"
-          :max="book.locations.total/2"
+          :max="book.locations.total/3"
         ></v-slider>
       </v-toolbar>
     </v-card>
@@ -72,29 +72,21 @@
       <p style="font-size:21px; padding-top:10px;text-align:center">Loading Reading Progress </p>
     </v-overlay>
 
-    <v-dialog v-model="dialog" width="600">
-      <v-card color="#f66c1f" width="600">
-        <v-card-title
-          style="font-size:22px"
-          class="black font-weight-black white--text lighten-2"
+
+    <v-dialog v-model="dialog" max-width="500">
+      <v-card elevation="24" color="black" class="pa-7 text-center">
+        <v-icon size="100px" color="white">mdi-book-open</v-icon>
+        <h1
+          style="font-size:23px;padding:10px;color:white"
+          class="font-weight-black"
         >
           Instructions
-        </v-card-title>
-
-        <p style="font-size:16px; color:white;padding:19px">
-          Swipe RIGHT to move to the next page. Swipe LEFT to move to the previous
+        </h1>
+        <p style="font-size:15px;color:white">
+          Hi. Swipe RIGHT to move to the next page. Swipe LEFT to move to the previous
           page. Tap CENTER to see reading menu.
         </p>
-
-        <v-btn
-          color="black"
-          class="white--text"
-          style="font-size:14px;margin:20px;text-align:right"
-          @click="dialog = false"
-          elevation="24"
-        >
-          Ok
-        </v-btn>
+        <v-btn @click="dialog = false" elevation="24"> Ok</v-btn>
       </v-card>
     </v-dialog>
     </v-row>
@@ -297,7 +289,9 @@ created(){
     },
     next() {
       this.rendition.next();
-      this.progress = this.progress + 2
+      console.log(this.locations.cfiFromPercentage(0.1))
+      console.log(this.locations)
+      this.progress = this.progress + 1
     },
 
     
@@ -322,7 +316,7 @@ created(){
 
     savePage(){
       window.addEventListener("beforeunload", () => {
-        this.total = (this.book.locations.total/2)
+        this.total = (this.book.locations.total/3)
         let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
         localStorage.setItem(this.bookName,JSON.stringify(saved))
       },false )
@@ -343,7 +337,7 @@ created(){
   },
 
   beforeDestroy(){
-    this.total = (this.book.locations.total/2)
+    this.total = (this.book.locations.total/3)
     let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
     localStorage.setItem(this.bookName,JSON.stringify(saved))
   }

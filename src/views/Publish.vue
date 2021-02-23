@@ -319,7 +319,7 @@ export default {
       fileRules: [v => !!v || "File type is required"],
       descriptionRules: [
         v => !!v || "Description is required",
-        v => (v && v.length <= 100) || "Description must be max. 100 characters"
+        v => (v && v.length <= 300) || "Description must be max. 300 characters"
       ],
 
       feeRules: [v => !!v || "Price is required"],

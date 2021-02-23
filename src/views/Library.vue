@@ -221,7 +221,6 @@
               >
                 <v-btn
                   @click="showProgress(i, book)"
-                  href="#show"
                   height="250"
                   width="170"
                   elevation="24"
@@ -253,7 +252,7 @@
       >
         <!-- Select one book -->
         <div v-if="newBook == true">
-          <p class="hidden-lg-and-up" id="show">
+          <p class="hidden-lg-and-up">
             <v-card
               flat
               style="margin-top:40px;margin-left:10px"
@@ -405,7 +404,7 @@
                   height="190"
                   width="120"
                   elevation="24"
-                  href="#show"
+                  
                 >
                   <v-img :src="book.bookcover" height="190" width="120" />
                 </v-btn>
@@ -497,6 +496,7 @@ export default {
       this.newBook = false;
       let retrievedData = localStorage.getItem(book.slug);
       this.oneBook = this.books.slice(i, i + 1);
+      window.scrollTo(0,0);
       let readingProgress = JSON.parse(retrievedData);
       if (localStorage.getItem(book.slug) != null) {
         this.page = parseFloat(readingProgress[1]);

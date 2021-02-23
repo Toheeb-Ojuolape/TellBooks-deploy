@@ -14,7 +14,10 @@ import wb from "./registerServiceWorker";
 
 Vue.prototype.$workbox = wb;
 Vue.config.productionTip = false
-Vue.use(VueMeta);
+Vue.use(VueMeta, {
+  // optional pluginOptions
+  refreshOnceOnNavigation: true
+});
 Vue.use(vuetify);
 Vue.use(Flutterwave, { publicKey: 'FLWPUBK-f92a354d64f5b330062fe7928f4321f6-X' });
 Vue.use(LoadScript);
@@ -46,5 +49,6 @@ new Vue({
   router,
   vuetify,
   store,
+  VueMeta,
   render: h => h(App)
 }).$mount('#app')

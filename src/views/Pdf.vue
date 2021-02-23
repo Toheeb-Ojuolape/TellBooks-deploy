@@ -27,6 +27,23 @@
       </p>
     </v-overlay>
 
+    <v-dialog v-model="dialog" max-width="500">
+      <v-card elevation="24" color="black" class="pa-7 text-center">
+        <v-icon size="100px" color="white">mdi-book-open</v-icon>
+        <h1
+          style="font-size:23px;padding:10px;color:white"
+          class="font-weight-black"
+        >
+          Instructions
+        </h1>
+        <p style="font-size:15px;color:white">
+          Hi. Swipe RIGHT to move to the next page. Swipe LEFT to move to the previous
+          page. Swipe Up/Down to see reading menu.
+        </p>
+        <v-btn @click="dialog = false" elevation="24"> Ok</v-btn>
+      </v-card>
+    </v-dialog>
+
     <v-main
       v-touch="{
         left: () => page++,
@@ -35,6 +52,7 @@
         down: () => (ifShow = !ifShow)
       }"
       @click="ifShow == true"
+
     >
       <v-card color="grey lighten-4" tile class="title-bar" v-if="ifShow">
         <v-toolbar dense>
@@ -107,7 +125,7 @@
 
           <v-btn
             color="white"
-            @click="page++"
+            @click="goPage()"
             class="orange--text mb-3 px-3 mx-3"
             :loading="loading"
           >
@@ -128,9 +146,9 @@
 
     <v-card color="grey lighten-4" tile class="footer-bar hidden-md-and-down">
       <v-toolbar color="black" dense>
-      <v-btn color="white" text @click="page--"><v-icon class="white-text">mdi-chevron-left</v-icon>Left</v-btn>
+      <v-btn color="white" text @click="prev()"><v-icon class="white-text">mdi-chevron-left</v-icon>Previous</v-btn>
       <v-spacer></v-spacer>
-      <v-btn color="white" text @click="page++">Right<v-icon color="white">mdi-chevron-right</v-icon></v-btn>
+      <v-btn color="white" text @click="next()">Next<v-icon color="white">mdi-chevron-right</v-icon></v-btn>
       </v-toolbar>
     </v-card>
 
@@ -213,6 +231,7 @@ export default {
       switch1: false,
       reading: false,
       color: "#262a41",
+      dialog:false,
       read: "",
       readers: [],
       items: [
@@ -279,13 +298,13 @@ export default {
           .then(() => {
             if (this.book.readers.includes(this.user.data.displayName)) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false), 25000);
+              setTimeout(() => (this.overlay = false,this.dialog= true), 25000);
             } else if (this.book.readers.includes(this.user.data.uid)) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false), 25000);
+              setTimeout(() => (this.overlay = false,this.dialog= true), 25000);
             } else if (this.book.author == this.user.data.displayName) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false), 25000);
+              setTimeout(() => (this.overlay = false,this.dialog= true), 25000);
             } else {
               this.overlay = false;
               this.$router.push({
@@ -309,6 +328,19 @@ export default {
       this.$router.go(-1);
       let saved = [this.read, this.page, this.pageCount];
       localStorage.setItem(this.bookName, JSON.stringify(saved));
+    },
+
+    goPage(){
+      this.goTo= false
+    },
+
+    prev(){
+      this.page = this.page-1
+      window.scrollTo(0,0);
+    },
+     next(){
+      this.page = this.page+1
+      window.scrollTo(0,0);
     },
 
     savePage() {

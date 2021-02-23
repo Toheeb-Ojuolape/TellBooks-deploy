@@ -15,7 +15,7 @@
           height="500px"
           style="font-size:22px"
         >
-          Gifts
+          Library
         </v-toolbar-title>
 
         <v-spacer />
@@ -65,7 +65,7 @@
       <p
         style="font-size:17px;text-align:center;margin-top:10px;margin-bottom:0px"
       >
-        Books bought for you will appear here
+        Your purchased books will appear here:
       </p>
       <!-- Show selected book  -->
       <v-row class="mb-6">
@@ -102,7 +102,7 @@
                       {{ stayBook.title }}
                     </h1>
                     <v-rating
-                      :value="stayBook.rating"
+                      :value="parseFloat(stayBook.rating)"
                       readonly
                       color="#f5a623"
                       size="10"
@@ -166,7 +166,7 @@
                       {{ book.title }}
                     </h1>
                     <v-rating
-                      :value="book.rating"
+                      :value="parseFloat(book.rating)"
                       readonly
                       color="#f5a623"
                       size="10"
@@ -252,7 +252,7 @@
       >
         <!-- Select one book -->
         <div v-if="newBook == true">
-          <p class="hidden-lg-and-up">
+          <p class="hidden-lg-and-up" id="show">
             <v-card
               flat
               style="margin-top:40px;margin-left:10px"
@@ -284,7 +284,7 @@
                       {{ stayBook.title }}
                     </h1>
                     <v-rating
-                      :value="stayBook.rating"
+                      :value="parseFloat(stayBook.rating)"
                       readonly
                       color="#f5a623"
                       size="10"
@@ -349,7 +349,7 @@
                       {{ book.title }}
                     </h1>
                     <v-rating
-                      :value="book.rating"
+                      :value="parseFloat(book.rating)"
                       readonly
                       color="#f5a623"
                       size="10"
@@ -415,9 +415,9 @@
         <v-row v-else>
           <v-layout v-if="loading == false" style="text-align:center">
             <v-main flat style="text-align:center">
-              <v-icon size="150px" color="#ffd396">mdi-gift</v-icon>
+              <v-icon size="150px" color="#ffd396">mdi-bookshelf</v-icon>
               <p style="font-size:16px;color:#f66c1f">
-                You've not received any gifts yet
+                You've not bought any books yet
               </p>
             </v-main>
           </v-layout>
@@ -501,6 +501,7 @@ export default {
       this.newBook = false;
       let retrievedData = localStorage.getItem(book.slug);
       this.oneBook = this.books.slice(i, i + 1);
+      window.scrollTo(0,0);
       let readingProgress = JSON.parse(retrievedData);
       if (localStorage.getItem(book.slug) != null) {
         this.page = parseFloat(readingProgress[1]);

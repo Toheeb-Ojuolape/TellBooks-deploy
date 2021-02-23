@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Meta from 'vue-meta'
+import VueMeta from 'vue-meta'
 import VueRouter from 'vue-router'
 import EPub from '@/views/EPub'
 import Home from '@/views/Home'
@@ -29,7 +29,7 @@ import Books from '@/views/Books'
 import Err from '@/views/Err'
 
 Vue.use(VueRouter)
-Vue.use(Meta, {
+Vue.use(VueMeta, {
   keyName: 'metaInfo',
   attribute: 'data-vue-meta',
   ssrAttribute: 'data-vue-meta-server-rendered',

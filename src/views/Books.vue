@@ -238,7 +238,29 @@
             small
             fab
             color="#008140"
-            v-if="book.downloadable == 'Yes'"
+            v-if="notfreeUser && book.downloadable == 'Yes'"
+            style="margin-left:5px"
+            to="/notloggedin"
+          >
+            <v-icon color="white">mdi-cloud-download</v-icon>
+          </v-btn>
+
+          <v-btn
+            small
+            fab
+            color="#008140"
+            v-if="freeUser && book.downloadable == 'Yes'"
+            style="margin-left:5px"
+            :href="book.book"
+          >
+            <v-icon color="white">mdi-cloud-download</v-icon>
+          </v-btn>
+
+          <v-btn
+            small
+            fab
+            color="#008140"
+            v-if="freepaidUser && book.downloadable == 'Yes'"
             style="margin-left:5px"
             :href="book.book"
           >
@@ -531,7 +553,7 @@
             style="font-size:9px;margin-top:10px"
             class="my-5 white--text font-weight-black body-2"
             color="#f66c1f"
-            to="/signup"
+            to="/notloggedin"
           >
             Add To Library
           </v-btn>
@@ -570,7 +592,29 @@
             small
             fab
             color="#008140"
-            v-if="book.downloadable == 'Yes'"
+            v-if="notfreeUser && book.downloadable == 'Yes'"
+            style="margin-left:5px"
+            to="/notloggedin"
+          >
+            <v-icon color="white">mdi-cloud-download</v-icon>
+          </v-btn>
+
+          <v-btn
+            small
+            fab
+            color="#008140"
+            v-if="freeUser && book.downloadable == 'Yes'"
+            style="margin-left:5px"
+            :href="book.book"
+          >
+            <v-icon color="white">mdi-cloud-download</v-icon>
+          </v-btn>
+
+          <v-btn
+            small
+            fab
+            color="#008140"
+            v-if="freepaidUser && book.downloadable == 'Yes'"
             style="margin-left:5px"
             :href="book.book"
           >
