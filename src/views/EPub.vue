@@ -106,7 +106,7 @@
         x-large
         elevation="24"
         style="margin-top:30px;font-size:20px;color:#f66c1f"
-        href="https:/books.tell.africa/shelf"
+        to="/shelf"
       >
         Go Home</v-btn
       >

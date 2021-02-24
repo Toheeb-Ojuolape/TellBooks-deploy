@@ -81,14 +81,12 @@
             {{ book.title }}
           </h2>
 
-          <a
-            text
+          <router-link
             style="text-decoration:none;margin-left:0px;font-size:16px;color:#f66c1f"
-            link="true"
-            :href="`https://books.tell.africa/author/${book.author}`"
+            :to="`/author/${book.author}`"
           >
             by {{ book.author }}
-          </a>
+          </router-link>
           <p
             style="font-size:14px;padding-top:7px"
             v-if="book.coauthor != null"
@@ -231,7 +229,7 @@
             dark
             @click="giftlog"
             style="margin-left:15px"
-            ><v-icon>mdi-gift</v-icon> Gift {{ book.title }}
+            ><v-icon>mdi-gift</v-icon> Gift this book
           </v-btn>
 
           <v-btn
@@ -439,14 +437,12 @@
             {{ book.title }}
           </h2>
 
-          <a
-            text
+          <router-link
             style="text-decoration:none;font-size:14px;color:#f66c1f;margin-left:0px"
-            link="true"
-            :href="`https://books.tell.africa/author/${book.author}`"
+            :to="`/author/${book.author}`"
           >
             by {{ book.author }}
-          </a>
+          </router-link>
           <p
             style="font-size:11px;padding-top:7px"
             v-if="book.coauthor != null"
@@ -751,7 +747,7 @@
             color="yellow darken-3"
             outlined
           />
-          <v-btn @click="submitted" color="#f66c1f" class="white--text">
+          <v-btn @click="submitted" :disabled="rating == 0" color="#f66c1f" class="white--text">
             Submit Review
           </v-btn>
         </v-form>
@@ -1423,7 +1419,7 @@ export default {
           content:
             "Read more books by" +
             this.book.title +
-            " on Tell! Books | Top Online African Book publishing platform ",
+            " on Tell! Books | African Book publishing platform ",
         },
         { property: "og:type", content: "profile" },
         {

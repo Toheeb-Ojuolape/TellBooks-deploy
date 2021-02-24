@@ -14,10 +14,7 @@ import wb from "./registerServiceWorker";
 
 Vue.prototype.$workbox = wb;
 Vue.config.productionTip = false
-Vue.use(VueMeta, {
-  // optional pluginOptions
-  refreshOnceOnNavigation: true
-});
+Vue.use(VueMeta);
 Vue.use(vuetify);
 Vue.use(Flutterwave, { publicKey: 'FLWPUBK-f92a354d64f5b330062fe7928f4321f6-X' });
 Vue.use(LoadScript);

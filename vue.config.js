@@ -4,8 +4,8 @@ module.exports = {
     'vuetify'
   ],
     pwa: {
-      themeColor: "#42b983",
-      msTileColor: "#42b983",
+      themeColor: "#f66c1f",
+      msTileColor: "#f66c1f",
       appleMobileWebAppCache: "yes",
       workboxOptions: {
         exclude: [/_redirects/]

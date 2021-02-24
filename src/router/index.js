@@ -29,13 +29,7 @@ import Books from '@/views/Books'
 import Err from '@/views/Err'
 
 Vue.use(VueRouter)
-Vue.use(VueMeta, {
-  keyName: 'metaInfo',
-  attribute: 'data-vue-meta',
-  ssrAttribute: 'data-vue-meta-server-rendered',
-  tagIDKeyName: 'vmid',
-  refreshOnceOnNavigation: true
-})
+Vue.use(VueMeta)
 
 const routes = [
   {

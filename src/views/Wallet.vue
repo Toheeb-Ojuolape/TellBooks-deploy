@@ -85,7 +85,7 @@
     prepend-inner-icon='mdi-account-circle'
      />
 
-     <v-btn @click="withdraw" color="#1877f2" class="white--text" :loading='loading'>Withdraw</v-btn>
+     <v-btn @click="withdraw" color="#1877f2" class="white--text" :disabled="accountnumber == ''" :loading='loading'>Withdraw</v-btn>
 
     </v-form>
     </v-card>
@@ -149,7 +149,7 @@ export default {
           name:"",
           currency:'',
           withdrawal:false,
-          amount:"",
+          amount:null,
           bank:'',
           loading:false,
           accountnumber:"",

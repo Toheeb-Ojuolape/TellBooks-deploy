@@ -101,11 +101,11 @@
             ><v-icon style="color:white">mdi-pen</v-icon></v-btn
           >
           <p style="padding-top:20px;font-size:17px;text-align:center">
-            Your tellbooks username is
-            <a
-              :href="`https://books.tell.africa/author/${userData.displayName}`"
+            Your Tell! Books username is
+            <router-link
+              :to="`/author/${userData.displayName}`"
               style="text-decoration:none;color:#f66c1f"
-              >{{ userData.displayName }}</a
+              >{{ userData.displayName }}</router-link
             >
           </p>
           </div>
