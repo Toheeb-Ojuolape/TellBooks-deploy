@@ -15,7 +15,7 @@
           height="500px"
           style="font-size:22px"
         >
-          Library
+         Gifts
         </v-toolbar-title>
 
         <v-spacer />
@@ -65,7 +65,7 @@
       <p
         style="font-size:17px;text-align:center;margin-top:10px;margin-bottom:0px"
       >
-        Your purchased books will appear here:
+        Books bought for you will appear here
       </p>
       <!-- Show selected book  -->
       <v-row class="mb-6">
@@ -235,9 +235,9 @@
         <v-row v-else>
           <v-layout v-if="loading == false" style="text-align:center">
             <v-main flat style="text-align:center">
-              <v-icon size="150px" color="#ffd396">mdi-bookshelf</v-icon>
+              <v-icon size="150px" color="#ffd396">mdi-gift</v-icon>
               <p style="font-size:16px;color:#f66c1f">
-                You've not bought any books yet
+                You've not received any gifts
               </p>
             </v-main>
           </v-layout>
