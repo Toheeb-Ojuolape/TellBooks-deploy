@@ -182,7 +182,7 @@
                 sm="3"
                 xs="3"
                 lg="3"
-                style="margin-left:30px;margin-top:25px"
+                style="margin-left:30px;margin-top:25px;margin-bottom:20px"
                 v-for="(b, i) in filteredBooks"
                 :key="i"
               >

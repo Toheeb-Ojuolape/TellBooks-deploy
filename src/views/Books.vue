@@ -32,7 +32,7 @@
           class="white--text mr-5"
           style="font-size:15px;"
         >
-          <v-icon class="mr-1">mdi-plus-circle-outline</v-icon>Upload Book
+          <v-icon class="mr-1">mdi-plus-circle-outline</v-icon>Publish Book
         </v-btn>
       </v-toolbar>
 
@@ -56,7 +56,7 @@
           style="font-size:15px;color:#f66c1f"
         >
           <v-icon class="mr-1" color="#f66c1f">mdi-plus-circle-outline</v-icon
-          >Upload
+          >Publish
         </v-btn>
       </v-toolbar>
     </v-card>

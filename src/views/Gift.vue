@@ -415,9 +415,9 @@
         <v-row v-else>
           <v-layout v-if="loading == false" style="text-align:center">
             <v-main flat style="text-align:center">
-              <v-icon size="150px" color="#ffd396">mdi-bookshelf</v-icon>
+              <v-icon size="150px" color="#ffd396">mdi-gift</v-icon>
               <p style="font-size:16px;color:#f66c1f">
-                You've not bought any books yet
+                You've not received any gifts yet
               </p>
             </v-main>
           </v-layout>
