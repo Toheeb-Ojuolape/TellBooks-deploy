@@ -403,6 +403,7 @@ export default {
                 rating: "",
                 bookcover: this.picture,
                 book: this.file,
+                coauthor:this.coauthor,
                 category: this.categories,
                 language: this.language,
                 filetype: this.filetype,

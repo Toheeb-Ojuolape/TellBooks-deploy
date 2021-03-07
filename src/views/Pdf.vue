@@ -286,7 +286,7 @@ export default {
         this.pageCount = parseFloat(readingProgress[2])
         this.overlay = false;
         this.loadingProgress = true;
-        setTimeout(() => (this.loadingProgress = false), 10000);
+        setTimeout(() => (this.loadingProgress = false), 20000);
       } else {
         ref
           .get()

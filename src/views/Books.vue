@@ -91,7 +91,7 @@
             style="font-size:14px;padding-top:7px"
             v-if="book.coauthor != null"
           >
-            Coauthor(s): {{ book.coauthor }}
+            co-author(s): {{ book.coauthor }}
           </p>
           <div
             style="font-size:13px;margin-top:7px;margin-left:5px"
@@ -447,7 +447,7 @@
             style="font-size:11px;padding-top:7px"
             v-if="book.coauthor != null"
           >
-            Coauthor(s): {{ book.coauthor }}
+            co-author(s):<br> {{ book.coauthor }}
           </p>
           <div
             style="font-size:12px;margin-top:11px;"
