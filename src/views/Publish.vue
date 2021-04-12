@@ -36,7 +36,7 @@
         <v-spacer />
       </v-toolbar>
     </v-card>
-
+   <NavBar />
     <v-container style="margin-bottom:20px">
       <v-row>
         <v-col cols="12" md="5">
@@ -194,7 +194,7 @@
             </p>
 
             <v-btn
-              v-if="fileUploaded && imageUploaded"
+              :disabled="disabled"
               large
               block
               elevation="10"
@@ -203,7 +203,7 @@
               color="#ff5733"
               class="px-5 white--text"
               @click="create"
-              style="margin-bottom:29px"
+              style="margin-bottom:90px;margin-top:-30px"
             >
               Publish
             </v-btn>
@@ -260,10 +260,12 @@ import firebase from "firebase/app";
 import slugify from "slugify";
 import BottomMenu from "@/components/BottomMenu";
 import db from "../main";
+import NavBar from '@/components/NavBar'
 
 export default {
   components: {
-    BottomMenu
+    BottomMenu,
+    NavBar,
   },
   data() {
     return {
@@ -271,7 +273,7 @@ export default {
       files: [],
       choices: ["Yes", "No"],
       filetype: "",
-      bookfile: ["Epub", "Pdf"],
+      bookfile: ["Epub", "Pdf", "Audio"],
       categories: "",
       downloadable: "",
       language: "",
@@ -338,7 +340,9 @@ export default {
       fileUploaded: false,
       user: "",
       userData: "",
-      pointer: ""
+      pointer: "",
+      disabled:true,
+
     };
   },
 
@@ -503,6 +507,7 @@ export default {
       uploadFile.then(() => {
         this.fileloading = false;
         this.textFile = "Upload Complete!";
+        this.disabled = false
       });
     },
 

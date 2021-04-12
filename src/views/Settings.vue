@@ -63,126 +63,131 @@
       </v-card>
       <NavBar />
       <v-container style="margin-bottom:20px">
-        <v-row>
-          <v-card
-            cols="12"
-            md="3"
-            sm="3"
-            lg="3"
-            xs="3"
-            class="pa-5 justify-center mt-7 px-10"
-            style="text-align:center;margin-left:70px;margin-right:80px"
-          >
-            <v-card-text style="font-size:16px;color:black"
-              >Choose Theme</v-card-text
-            >
-            <ColorModePicker style="margin-left:10px" />
-          </v-card>
-          <v-card
-            cols="12"
-            md="3"
-            sm="3"
-            lg="3"
-            xs="3"
-            @click="support = true"
-            class="pa-5 px-11 justify-center mt-7"
-            style="text-align:center;margin-left:80px;margin-right:80px"
-          >
-            <v-card-text
-              style="font-size:16px;color:black"
-              @click="support = true"
-              >Customer Support</v-card-text
-            >
-            <v-btn fab color="#0066f5"
-              ><v-icon color="white" @click="support = true"
-                >mdi-headset</v-icon
-              ></v-btn
-            >
-          </v-card>
-          <v-card
-            cols="12"
-            md="3"
-            sm="3"
-            lg="3"
-            xs="3"
-            class="pa-5 justify-center mt-7"
-            to="/reset-password"
-            style="text-align:center;margin-left:80px;margin-right:80px"
-          >
-            <v-card-text style="font-size:16px;color:black" to="/reset-password"
-              >Change Password</v-card-text
-            >
-            <v-btn fab color="#0066f5"
-              ><v-icon color="white" to="/reset-password">
-                mdi-lock</v-icon
-              ></v-btn
-            >
-          </v-card>
-          <v-card
-            cols="12"
-            md="3"
-            sm="3"
-            lg="3"
-            xs="3"
-            size="1000px"
-            class="pa-5 px-14 justify-center mt-7"
-            to="/wallet"
-            style="text-align:center;margin-left:75px;margin-right:80px"
-          >
-            <v-card-text style="font-size:16px;color:black" to="/wallet"
-              >My Wallet</v-card-text
-            >
-            <v-btn fab color="#0066f5"
-              ><v-icon color="white" to="/wallet">
-                mdi-cash-multiple</v-icon
-              ></v-btn
-            >
-          </v-card>
-          <v-card
-            cols="12"
-            md="3"
-            sm="3"
-            lg="3"
-            xs="3"
-            class="px-11 py-4 justify-center mt-7"
-            @click="inviteFriends = true"
-            style="text-align:center;margin-left:80px;margin-right:80px"
-          >
-            <v-card-text
-              style="font-size:16px;color:black"
-              @click="inviteFriends = true"
-              >Invite Your Friends</v-card-text
-            >
-            <v-btn fab color="#0066f5"
-              ><v-icon color="white" @click="inviteFriends = true">
-                mdi-share-variant</v-icon
-              ></v-btn
-            >
-          </v-card>
-          <v-card
-            cols="12"
-            md="3"
-            sm="3"
-            lg="3"
-            xs="3"
-            class="pa-5 justify-center mt-7 px-15"
-            @click="signout"
-            style="text-align:center;margin-left:80px;margin-right:80px"
-          >
-            <v-card-text style="font-size:16px;color:black" @click="signout"
-              >Logout</v-card-text
-            >
-            <v-btn fab color="#0066f5"
-              ><v-icon color="white" @click="signout">
-                mdi-logout</v-icon
-              ></v-btn
-            >
-          </v-card>
-        </v-row>
+      <v-list shaped class="mb-6">
+      <v-list-item-group>
+      <v-list-item
+      to="/profile"
+      >
+      <v-list-item-icon>
+      <v-icon> mdi-account</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+      <v-list-item-title> Edit Profile</v-list-item-title>
+      </v-list-item-content>
+      
+      </v-list-item>
+      <v-list-item
+      >
+      <v-list-item-icon>
+      <v-icon> mdi-theme-light-dark</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+      <v-list-item-title> Choose Theme</v-list-item-title>
+      <ColorModePicker style="margin-left:10px" />
+      </v-list-item-content>
+      
+      </v-list-item>
+      <v-list-item
+      @click="support=true"
+      >
+      <v-list-item-icon>
+      <v-icon> mdi-headset</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+      <v-list-item-title> Customer Support</v-list-item-title>
+      </v-list-item-content>
+      
+      </v-list-item>
+      <v-list-item
+      @click="inviteFriends = true"
+      >
+      <v-list-item-icon>
+      <v-icon> mdi-share-variant</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+      <v-list-item-title> Invite Your Friends</v-list-item-title>
+      </v-list-item-content>
+      
+      </v-list-item>
+      <v-list-item
+      to="/reset-password"
+      >
+      <v-list-item-icon>
+      <v-icon> mdi-lock</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+      <v-list-item-title> Reset Password</v-list-item-title>
+      </v-list-item-content>
+      
+      </v-list-item>
+
+      <v-list-item
+      to="/wallet"
+      >
+      <v-list-item-icon>
+      <v-icon> mdi-cash-multiple</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+      <v-list-item-title> Wallet</v-list-item-title>
+      </v-list-item-content>
+      
+      </v-list-item>
+
+       <v-list-item
+      to="/statistics"
+      >
+      <v-list-item-icon>
+      <v-icon> mdi-trending-up</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+      <v-list-item-title> Statistics</v-list-item-title>
+      </v-list-item-content>
+      
+      </v-list-item>
+
+      <v-list-item
+      to="/publications"
+      >
+      <v-list-item-icon>
+      <v-icon> mdi-plus</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+      <v-list-item-title> Your Publications</v-list-item-title>
+      </v-list-item-content>
+      
+      </v-list-item>
+      <v-list-item
+      to="/publications"
+      >
+      <v-list-item-icon>
+      <v-icon> mdi-tag</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+      <v-list-item-title> Book Deals</v-list-item-title>
+      </v-list-item-content>
+      
+      </v-list-item>
+
+       <v-list-item
+      @click="signout()"
+      >
+      <v-list-item-icon>
+      <v-icon> mdi-logout</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+      <v-list-item-title> Log Out</v-list-item-title>
+      </v-list-item-content>
+      
+      </v-list-item>
+
+
+      </v-list-item-group>
+      </v-list>
       </v-container>
 
       <v-dialog max-width="300" max-height="500" v-model="inviteFriends">
         <v-card class="pa-12 text-center" justify="center">
+        <v-card-text>Tell your friends to join Tell! Books</v-card-text>
           <v-btn
             dark
             fab
@@ -312,7 +317,47 @@ export default {
       user: "",
       inviteFriends: false,
       pageUrl: "https://books.tell.africa/signup",
-      support: false
+      support: false,
+      items: [
+      
+      
+      {
+          action: 'mdi-account',
+          active: true,
+          title: 'Edit Profile',
+          to:'/profile'
+        },
+       {
+          action: 'mdi-theme-light-dark',
+          title: 'Choose Theme',
+          click:""
+        },
+        
+        {
+          action: 'mdi-headsets',
+          title: 'Customer Support',
+        },
+        {
+          action: 'mdi-lock',
+          title: 'Reset Password',
+          to:'/resetpassword'
+        },
+        {
+          action: 'mdi-cash-multiple',
+          title: 'Wallet',
+          click:"goBack()"
+        },
+        {
+          action: 'mdi-content-cut',
+          items: [{ title: 'List Item' }],
+          title: 'Office',
+        },
+        {
+          action: 'mdi-tag',
+          items: [{ title: 'List Item' }],
+          title: 'Promotions',
+        },
+      ],
     };
   },
 

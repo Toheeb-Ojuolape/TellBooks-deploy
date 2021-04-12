@@ -222,7 +222,7 @@ if (!ui) {
 }
         var uiConfig = {
             signInFlow: 'popup',
-            signInSuccessUrl: "/googlesignup",
+            signInSuccessUrl: "/socialsignup",
             signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID, firebase.auth.FacebookAuthProvider.PROVIDER_ID]
         }
          
@@ -234,7 +234,7 @@ if (!ui) {
  firebase.auth().onAuthStateChanged(user => {
     this.user = user
     if(this.user)
-    this.$router.go(-1)
+    this.$route.push('/socialsignup')
   })
   },
 //signing with social media ends

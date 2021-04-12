@@ -11,7 +11,8 @@
         {{ value }}%
       </v-progress-circular>
       <p style="font-size:21px; padding-top:10px;text-align:center">
-        Loading your ebook...
+        Loading your ebook...<br/>
+        <span style="font-size:9px">Pdf files usually take a while to load. Abeg No vex..</span>
       </p>
     </v-overlay>
 
@@ -40,18 +41,18 @@
           Hi. Swipe RIGHT to move to the next page. Swipe LEFT to move to the previous
           page. Swipe Up/Down to see reading menu.
         </p>
-        <v-btn @click="dialog = false" elevation="24"> Ok</v-btn>
+        <v-btn @click="startReading()" elevation="24"> Ok</v-btn>
       </v-card>
     </v-dialog>
 
     <v-main
+    v-for="(book,i) in singleBook" :key="i"
       v-touch="{
         left: () => page++,
         right: () => page--,
         up: () => (ifShow = !ifShow),
         down: () => (ifShow = !ifShow)
       }"
-      @click="ifShow == true"
 
     >
       <v-card color="grey lighten-4" tile class="title-bar" v-if="ifShow">
@@ -86,14 +87,14 @@
           </v-menu>
         </v-toolbar>
       </v-card>
+      <div @click="ifShow = !ifShow">
       <pdf
-        :src="read"
+        :src="book.book"
         :page="page"
         :rotate="rotate"
-        style="height:100%"
         @num-pages="pageCount = $event"
-        @page-loaded="currentPage = $event"
-      />
+        @page-loaded="currentPage = $event"/>
+        </div>
     </v-main>
     <v-dialog v-model="goTo" max-width="370" max-height="500" persistent>
       <v-card class="text-center" color="#f66c1f">
@@ -220,6 +221,7 @@
 import pdf from "vue-pdf";
 import db from "../main";
 import { mapGetters } from "vuex";
+import slugify from "slugify"
 
 export default {
   components: {
@@ -267,15 +269,34 @@ export default {
   computed: {
     // map `this.user` to `this.$store.getters.user`
     ...mapGetters({
-      user: "user"
-    })
+      user: "user",
+      books:"books"
+    }),
+   
+   singleBook(){
+     return this.books.filter(book => book.slug == this.bookName)
+   },
+   readerName(){
+      return slugify(this.user.data.displayName, {
+               replacement: "-",
+          remove: /[$*_+~.()'"!:@]/g,
+          lower: true,
+      })
+    }
+
   },
 
   created() {
+    this.$store.dispatch('bindBooks')
     this.renderBook();
   },
 
   methods: {
+
+    startReading(){
+        this.dialog = false 
+        this.page = this.page +1
+    },
     renderBook() {
       let ref = db.collection("books").doc(this.$route.params.id);
       let retrievedData = localStorage.getItem(this.bookName);
@@ -286,25 +307,24 @@ export default {
         this.pageCount = parseFloat(readingProgress[2])
         this.overlay = false;
         this.loadingProgress = true;
-        setTimeout(() => (this.loadingProgress = false), 20000);
+        setTimeout(() => (this.loadingProgress = false), 10000);
       } else {
         ref
           .get()
           .then(books => {
             this.book = books.data();
             this.read = books.data().book;
-            this.bookID = books.id;
           })
           .then(() => {
             if (this.book.readers.includes(this.user.data.displayName)) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false,this.dialog= true), 25000);
+              setTimeout(() => (this.overlay = false,this.dialog= true), 10000);
             } else if (this.book.readers.includes(this.user.data.uid)) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false,this.dialog= true), 25000);
-            } else if (this.book.author == this.user.data.displayName) {
+              setTimeout(() => (this.overlay = false,this.dialog= true), 10000);
+            } else if (this.book.author == this.readerName) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false,this.dialog= true), 25000);
+              setTimeout(() => (this.overlay = false,this.dialog= true), 10000);
             } else {
               this.overlay = false;
               this.$router.push({
@@ -326,8 +346,8 @@ export default {
 
     goBack() {
       this.$router.go(-1);
-      let saved = [this.read, this.page, this.pageCount];
-      localStorage.setItem(this.bookName, JSON.stringify(saved));
+              let saved = [this.read, this.page, this.pageCount];
+              localStorage.setItem(this.bookName, JSON.stringify(saved));
     },
 
     goPage(){
@@ -347,8 +367,8 @@ export default {
       window.addEventListener(
         "beforeunload",
         () => {
-          let saved = [this.read, this.page, this.pageCount];
-          localStorage.setItem(this.bookName, JSON.stringify(saved));
+              let saved = [this.read, this.page, this.pageCount];
+              localStorage.setItem(this.bookName, JSON.stringify(saved));
         },
         false
       );
@@ -376,8 +396,8 @@ export default {
   },
 
   beforeDestroy() {
-    let saved = [this.read, this.page, this.pageCount];
-    localStorage.setItem(this.bookName, JSON.stringify(saved));
+              let saved = [this.read, this.page, this.pageCount];
+              localStorage.setItem(this.bookName, JSON.stringify(saved));
   }
 };
 </script>

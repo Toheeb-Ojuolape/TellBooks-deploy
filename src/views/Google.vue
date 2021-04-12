@@ -74,7 +74,7 @@ import db from "../main";
 import slugify from "slugify";
 
 export default {
-  name: "ForgotPassword",
+  name: "Google",
   data() {
     return {
       loading: false,

@@ -4,7 +4,7 @@
     <v-card>
       <v-toolbar class="md-4 hidden-md-and-down ">
         <v-toolbar-title
-          class="ml-14 my-5 font-weight-black"
+          class="ml-14 my-5 font-weight-bold"
           height="500px"
           style="font-size:22px"
         >
@@ -45,9 +45,6 @@
 
         <v-spacer />
 
-        <v-btn to="/shelf" icon>
-          <v-icon color="#008140">mdi-magnify</v-icon>
-        </v-btn>
 
         <v-btn
           rounded
@@ -212,7 +209,7 @@
 
     <p
       style="padding-top:40px;margin-bottom:-20px;padding-left:40px; font-size:19px"
-      class="font-weight-black headline hidden-lg-and-up"
+      class="font-weight-bold headline hidden-lg-and-up"
     >
       New Books
     </p>
@@ -248,7 +245,7 @@
       color="white"
     >
       <v-slide-item
-        v-for="(book, i) in books"
+        v-for="(book, i) in limitBooks"
         :key="i"
         v-slot:default="{ active, toggle }"
       >
@@ -261,6 +258,25 @@
           @click="toggle"
         >
           <v-img
+            v-if="book.filetype == 'Audio'"
+            elevation="24"
+            hover
+            width="145px"
+            height="230px"
+            :src="book.bookcover"
+            @click="audioPage(i,book)"
+          />
+          <v-img
+           v-if="book.filetype == 'Chatbook'"
+            elevation="24"
+            hover
+            width="145px"
+            height="230px"
+            :src="book.bookcover"
+            @click="chatPage(i, book)"
+          />
+           <v-img
+           v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
             elevation="24"
             hover
             width="145px"
@@ -294,7 +310,7 @@
         ><v-icon>mdi-plus</v-icon></v-btn
       >
       <p
-        class="font-weight-black"
+        class="font-weight-bold"
         style="font-size:21px;margin-top:-20px;padding-left:30px"
       >
         View Publications
@@ -316,7 +332,7 @@
         ><v-icon>mdi-gift</v-icon></v-btn
       >
       <p
-        class="font-weight-black"
+        class="font-weight-bold"
         style="font-size:21px;margin-top:-20px;padding-left:30px"
       >
         My Gifts
@@ -330,7 +346,7 @@
       color="#e2e3ec"
       flat
       class="mx-8 hidden-lg-and-up"
-      @click="audio()"
+      to="/audiobooks"
       style="margin-left:40px;margin-top:20px"
       height="200px"
       width="310px"
@@ -339,7 +355,7 @@
         ><v-icon>mdi-headphones</v-icon></v-btn
       >
       <p
-        class="font-weight-black"
+        class="font-weight-bold"
         style="font-size:21px;margin-top:-20px;padding-left:30px"
       >
         AudioBooks
@@ -352,16 +368,16 @@
       color="#fbbec3"
       flat
       class="mx-8 hidden-lg-and-up"
-      @click="chatbooks = true"
+      to="/chatbooks"
       style="margin-left:40px;margin-top:20px"
       height="200px"
       width="310px"
     >
-      <v-btn fab small style="margin:30px;color:white" color="#FF69B4"
+      <v-btn fab small style="margin:30px;color:white" color="#f935a9"
         ><v-icon>mdi-message</v-icon></v-btn
       >
       <p
-        class="font-weight-black"
+        class="font-weight-bold"
         style="font-size:21px;margin-top:-20px;padding-left:30px"
       >
         ChatBooks
@@ -384,7 +400,7 @@
         ><v-icon>mdi-cash-multiple</v-icon></v-btn
       >
       <p
-        class="font-weight-black"
+        class="font-weight-bold"
         style="font-size:21px;margin-top:-20px;padding-left:30px"
       >
         Wallet
@@ -399,7 +415,7 @@
         <v-icon size="100px" color="white">mdi-headphones</v-icon>
         <h1
           style="font-size:23px;padding:10px;color:white"
-          class="font-weight-black"
+          class="font-weight-bold"
         >
           Coming soon!
         </h1>
@@ -416,7 +432,7 @@
         <v-icon size="100px" color="white">mdi-message</v-icon>
         <h1
           style="font-size:23px;padding:10px;color:white"
-          class="font-weight-black"
+          class="font-weight-bold"
         >
           Coming soon!
         </h1>
@@ -472,8 +488,8 @@
 import firebase from "firebase/app";
 import NavBar from "@/components/NavBar";
 import BottomMenu from "@/components/BottomMenu";
-import db from "../main";
-
+// import store from "../store"
+import {mapGetters} from "vuex"
 export default {
   name: "Dashboard",
   components: {
@@ -489,9 +505,7 @@ export default {
       model: null,
       audiobooks: false,
       chatbooks: false,
-      books: [],
       IDs: [],
-      loading: true,
       items: [
         { title: "Dashboard", icon: "mdi-view-dashboard", link: "/dashboard" },
         { title: "Bookshelf", icon: "mdi-bookshelf", link: "/shelf" },
@@ -507,7 +521,7 @@ export default {
         },
         { title: "My Wallet", icon: "mdi-wallet", link: "/wallet" },
         { title: "Settings", icon: "mdi-cogs", link: "/settings" },
-        { title: "Statistics", icon: "mdi-trending-up", link: "/publications" },
+        { title: "Statistics", icon: "mdi-trending-up", link: "/statistics" },
         { title: "Book deals", icon: "mdi-tag", link: "/publications" },
         { title: "Gifts", icon: "mdi-gift", link: "/gift" }
       ],
@@ -550,28 +564,41 @@ export default {
       ]
     };
   },
+  computed:{
+    
+    // map `this.user` to `this.$store.getters.user`
+    ...mapGetters({
+      books: "books",
+      loading:"loading"
+    }),
+
+
+    limitBooks(){
+
+      return this.books.slice(0,5)
+    }
+  },
   mounted() {
     firebase.auth().onAuthStateChanged(user => {
       this.user = user;
       if (!this.user) this.$router.push("/login");
     });
+
   },
-  created() {
-    db.collection("books")
-      .orderBy("timestamp","desc").limit(5)
-      .get()
-      .then(querySnapshot => {
-        this.books = [];
-        querySnapshot.forEach(doc => {
-          this.books.push(doc.data());
-          this.IDs.push(doc.id);
-        });
-      })
-      .then(() => {
-        this.loading = false;
-      });
+
+  created(){
+    this.$store.dispatch('bindBooks')
   },
   methods: {
+
+    chatPage(i,book) {
+     this.bookID = this.IDs[i];
+      this.$router.push({
+        name: "Chat",
+        params: { id: book.slug, book: book, bookID: this.bookID }
+      });
+    },
+    
     bookPage(i, book) {
       this.bookID = this.IDs[i];
       this.$router.push({
@@ -579,8 +606,12 @@ export default {
         params: { id: book.slug, book: book, bookID: this.bookID }
       });
     },
-    audio() {
-      this.audiobooks = true;
+    audioPage(i,book) {
+     this.bookID = this.IDs[i];
+      this.$router.push({
+        name: "Audio",
+        params: { id: book.slug, book: book, bookID: this.bookID }
+      });
     }
   }
 };

@@ -15,7 +15,7 @@
           height="500px"
           style="font-size:22px"
         >
-          {{ authorName }}
+          {{ theauthorName }}
         </v-toolbar-title>
 
         <v-spacer />
@@ -148,7 +148,7 @@
         </v-card>
         <v-col md="7" sm="6" xs="6">
           <v-card style="margin-top:30px;margin-left:30px" width="100%">
-            <p style="font-size:17px;padding:20px">{{ authorName }}'s books</p>
+            <p style="font-size:17px;padding:20px">{{ theauthorName }}'s books</p>
             <v-progress-linear
               value="70%"
               color="#f66c1f"
@@ -164,7 +164,7 @@
               xs="3"
               lg="3"
               style="margin-left:42px;margin-top:25px"
-              v-for="(b, i) in books"
+              v-for="(b, i) in filteredBooks"
               :key="i"
             >
               <v-card elevation="24" height="250" width="170">
@@ -248,7 +248,7 @@
         </div>
       </v-card>
       <v-card style="margin-top:60px;margin-bottom:30px" width="100%">
-        <p style="font-size:17px;padding:20px">{{ authorName }}'s books</p>
+        <p style="font-size:17px;padding:20px">{{ theauthorName }}'s books</p>
         <v-progress-linear value="70%" color="#f66c1f" style="margin-top:-10px">
         </v-progress-linear>
       </v-card>
@@ -259,8 +259,8 @@
           sm="3"
           xs="3"
           lg="3"
-          style="margin-top:25px;margin-bottom:40px"
-          v-for="(b, i) in books"
+          style="margin-top:25px;margin-bottom:90px"
+          v-for="(b, i) in filteredBooks"
           :key="i"
         >
           <v-card elevation="24" height="190" width="120" class="mx-3">
@@ -304,7 +304,8 @@
 import db from "../main";
 import NavBar from "@/components/NavBar";
 import BottomMenu from "@/components/BottomMenu";
-// import { mapGetters } from "vuex"
+import { mapGetters } from "vuex"
+import { unslugify } from "unslugify";
 
 export default {
   components: {
@@ -316,10 +317,8 @@ export default {
     return {
       userData: "",
       user: "",
-      books: [],
       IDs: [],
-      loading: true,
-      authorName: this.$route.params.id
+      authorName: this.$route.params.id,
     };
   },
 
@@ -337,6 +336,35 @@ export default {
                 {property: 'og:image', content:this.userData.photoURL}    
             ]
     };
+  },
+
+  computed:{
+    ...mapGetters({
+      books:"books",
+      loading:"loading"
+    }),
+
+    filteredBooks(){
+      return this.books.filter(book => book.author == this.$route.params.id)
+    },
+   theauthorName(){
+     return unslugify(this.$route.params.id)
+   }
+    
+
+  },
+
+  created() {
+    this.$store.dispatch('bindBooks')
+    
+    db
+      .collection("users")
+      .doc(this.$route.params.id)
+      .get()
+      .then(user => {
+        this.userData = user.data();
+      })
+      
   },
 
   methods: {
@@ -360,25 +388,5 @@ export default {
       this.$router.go(-1);
     }
   },
-
-  created() {
-    db
-      .collection("users")
-      .doc(this.$route.params.id)
-      .get()
-      .then(user => {
-        this.userData = user.data();
-      }),
-      db
-        .collection("books")
-        .where("author", "==", this.$route.params.id)
-        .onSnapshot(querySnapshot => {
-          this.books = [];
-          querySnapshot.forEach(doc => {
-            this.books.push(doc.data());
-            this.IDs.push(doc.id);
-          }, (this.loading = false));
-        });
-  }
 };
 </script>

@@ -44,10 +44,6 @@
 
         <v-spacer />
 
-        <v-btn fab text to="/shelf">
-          <v-icon class="green--text">mdi-magnify</v-icon>
-        </v-btn>
-
         <v-btn
           rounded
           elevation="24"
@@ -77,7 +73,7 @@
               rounded
               v-model="search"
               elevation="24"
-              color="#0066f5"
+              color="#f66c1f"
               label="Search by book title"
               solo
               prepend-inner-icon="mdi-magnify"
@@ -108,7 +104,7 @@
             <v-row>
               <p
                 style="margin-left:30px;margin-top:25px"
-                v-for="(b, i) in filteredBooks"
+                v-for="(b, i) in categoryBooks"
                 :key="i"
               >
                 <v-card elevation="24" height="250" width="170">
@@ -122,7 +118,7 @@
                     color="#f5a623"
                     size="9"
                     readonly
-                    :value="b.rating"
+                    :value="parseFloat(b.rating)"
                     class="margin-bottom:10px"
                   ></v-rating>
                 </v-card>
@@ -146,7 +142,7 @@
                 rounded
                 v-model="search"
                 elevation="24"
-                color="#0066f5"
+                color="#f66c1f"
                 label="Search by book title"
                 solo
                 prepend-inner-icon="mdi-magnify"
@@ -183,7 +179,7 @@
                 xs="3"
                 lg="3"
                 style="margin-left:30px;margin-top:25px;margin-bottom:20px"
-                v-for="(b, i) in filteredBooks"
+                v-for="(b, i) in categoryBooks"
                 :key="i"
               >
                 <v-card elevation="24" height="190" width="120">
@@ -197,7 +193,7 @@
                     color="#f5a623"
                     size="9"
                     readonly
-                    :value="b.rating"
+                    :value="parseFloat(b.rating)"
                     class="margin-bottom:10px"
                   ></v-rating>
                 </v-card>
@@ -212,9 +208,10 @@
 </template>
 
 <script>
-import db from "../main";
+// import db from "../main";
 import BottomMenu from "@/components/BottomMenu";
 import NavBar from "@/components/NavBar";
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -223,31 +220,39 @@ export default {
   },
   data() {
     return {
-      loading: true,
       categoryName: this.$route.params.id,
-      books: [],
       IDs: [],
       search: "",
       model: null,
     };
   },
 
-  created() {
-    db.collection("books")
-      .where("category", "==", this.$route.params.id)
-      .get()
-      .then(querySnapshot => {
-        this.books = [];
-        querySnapshot.forEach(doc => {
-          this.books.push(doc.data());
-          this.IDs.push(doc.id);
-        });
-      })
-      .then(() => {
-        this.loading = false;
-      });
+  computed: {
+    ...mapGetters({
+      books:"books",
+      loading:"loading"
+
+    }),
+
+
+    categoryBooks(){
+      const searchBooks = this.search.toLowerCase().trim();
+      const categoryBooks = this.books.filter(book => book.category == this.categoryName)
+      if (!searchBooks) return categoryBooks;
+
+      return categoryBooks.filter(
+        book => book.title.toLowerCase().indexOf(searchBooks) > -1 );
+    },
+
   },
-  methods: {
+
+  created() {
+   window.scrollTo(0,0);
+    this.$store.dispatch('bindBooks')
+  },
+
+    methods: {
+      
     bookPage(i, b) {
       this.bookID = this.IDs[i];
       this.$router.push({
@@ -259,16 +264,5 @@ export default {
       this.$router.go(-1);
     }
   },
-  computed: {
-    filteredBooks() {
-      const searchBooks = this.search.toLowerCase().trim();
-
-      if (!searchBooks) return this.books;
-
-      return this.books.filter(
-        book => book.title.toLowerCase().indexOf(searchBooks) > -1
-      );
-    }
-  }
 };
 </script>

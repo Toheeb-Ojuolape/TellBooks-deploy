@@ -1,6 +1,8 @@
 <template>
+<v-window v-model="step">
+    <v-window-item :value="1">
   <v-app v-if="book != undefined">
-    <v-toolbar class="md-4 hidden-md-and-down ">
+    <v-toolbar class="hidden-md-and-down ">
       <v-btn @click="goBack" class="ml-16" color="#f66c1f" style="color:white">
         <v-icon color="white">mdi-chevron-left</v-icon>Back
       </v-btn>
@@ -26,7 +28,7 @@
       </v-btn>
     </v-toolbar>
 
-    <v-toolbar flat class="hidden-lg-and-up" color="#fbe4c4">
+    <v-toolbar flat class="mb-3 hidden-lg-and-up">
       <v-btn @click="goBack" style="color:#f66c1f" text>
         <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
       </v-btn>
@@ -64,19 +66,16 @@
         >
           <v-img :src="book.bookcover" height="320px" width="210px" />
         </v-card>
-        
-       
         <v-col
           lg="8"
           md="8"
           class="ml-4"
-         
         >
-         <v-skeleton-loader
-            type="heading,article,text"
-            v-if="loading"
-          ></v-skeleton-loader>
-        <div class="mt-3" v-for="(data, i) in singleBook"
+        <v-skeleton-loader
+          v-if="loading"
+          type="card-avatar, article, actions"
+        ></v-skeleton-loader>
+        <div v-for="(data, i) in singleBook"
           :key="i">
           <h2 style="font-size:32px;margin-top:10px" class="font-weight-bold">
             {{ data.title }}
@@ -95,7 +94,7 @@
             co-author(s): {{ data.coauthor }}
           </p>
           <div style="font-size:13px;margin-top:7px;margin-left:5px">
-            <v-icon>mdi-book-open-page-variant</v-icon>
+            <v-icon class="ml-1">mdi-headphones</v-icon>
             <p style="margin-left:7px">{{ data.readers.length }}</p>
           </div>
           <v-spacer />
@@ -115,39 +114,25 @@
           </div>
 
           <v-btn
-            v-if="data.filetype == 'Epub'"
             small
             rounded
-            color="#f6b911"
+            color="black"
             class="white--text"
           >
-            {{ data.filetype }}
-          </v-btn>
-          <v-btn v-else small rounded color="#e00000" class="white--text">
-            {{ data.filetype }}
+            Audio
           </v-btn>
           <v-btn
             :to="`/category/${data.category}`"
-            v-if="data.filetype == 'Epub'"
             small
             rounded
-            color="#f6b911"
+            color="black"
             class="white--text ml-2"
           >
             {{ data.category }}
           </v-btn>
-          <v-btn
-            :to="`/category/${data.category}`"
-            v-else
-            small
-            rounded
-            color="#e00000"
-            class="white--text ml-2"
-          >
-            {{ data.category }}
-          </v-btn>
+          
 
-          <div style="font-size:14px;margin-top:12px;margin-bottom:12px">
+          <div style="font-size:14px;margin-top:9px;margin-bottom:29px">
             About:<br />
             {{ data.description }}
           </div>
@@ -176,10 +161,11 @@
             v-if="paidUser"
             style="font-size:9px;margin-top:10px"
             color="#f66c1f"
-            :to="`/${book.filetype}/${book.slug}`"
+            @click="step++"
             class="my-5 white--text font-weight-bold body-2"
           >
-            Read Now
+            <v-icon class="mr-2">mdi-headphones</v-icon>
+            Listen Now
           </v-btn>
 
           <v-btn
@@ -206,10 +192,11 @@
             v-if="freepaidUser"
             style="font-size:16px"
             color="#f66c1f"
-            :to="`/${book.filetype}/${book.slug}`"
+            @click="step++"
             class="white--text font-weight-bold body-2"
           >
-            Read Now
+            <v-icon class="mr-2">mdi-headphones</v-icon>
+            Listen Now
           </v-btn>
 
           <v-btn
@@ -219,7 +206,7 @@
             dark
             @click="giftlog"
             style="margin-left:15px"
-            ><v-icon class="mr-2">mdi-gift</v-icon> Gift this book
+            ><v-icon>mdi-gift</v-icon> Gift this book
           </v-btn>
 
           <v-btn
@@ -228,7 +215,7 @@
             color="#008140"
             v-if="notfreeUser && book.downloadable == 'Yes'"
             style="margin-left:5px"
-            to="/notlogged"
+            to="/notloggedin"
           >
             <v-icon color="white">mdi-cloud-download</v-icon>
           </v-btn>
@@ -255,7 +242,7 @@
             <v-icon color="white">mdi-cloud-download</v-icon>
           </v-btn>
 
-          <v-card flat class="mt-3">
+          <v-card flat class="mt-6">
             <v-btn
               dark
               fab
@@ -265,7 +252,6 @@
               target="_blank"
               right
               bottom
-              class="mr-2"
             >
               <v-icon>mdi-facebook</v-icon>
             </v-btn>
@@ -280,7 +266,6 @@
               target="_blank"
               right
               bottom
-              class="mr-2"
             >
               <v-icon>mdi-whatsapp</v-icon>
             </v-btn>
@@ -295,7 +280,6 @@
               target="_blank"
               right
               bottom
-              class="mr-2"
             >
               <v-icon>mdi-twitter</v-icon>
             </v-btn>
@@ -311,9 +295,6 @@
               target="_blank"
               right
               bottom
-              class="mr-2"
-
-
             >
               <v-icon>mdi-linkedin</v-icon>
             </v-btn>
@@ -414,128 +395,235 @@
           </div>
         </v-col>
       </v-row>
+      <p
+        v-if="user == null"
+        style="font-size:18px;text-align:center;padding-top:55px"
+        class="font-weight-light"
+      >
+        Please
+        <router-link
+          to="/notloggedin"
+          style="color:#1773ea;text-decoration:none"
+          >login</router-link
+        >
+        or
+        <router-link to="/notlogged" style="color:#1773ea;text-decoration:none"
+          >create an account</router-link
+        >
+        to leave a review
+      </p>
+      <p
+        v-if="user != null"
+        style="font-size:18px;padding-top:55px;margin-bottom:0px;padding-left:10px"
+        class="font-weight-light"
+      >
+        Leave a review
+      </p>
+      <hr style="margin-left:10px;color:black" width="80px" />
+
+      <v-card flat class="px-40" width="83%">
+        <v-form
+          v-if="user != null"
+          style="margin-left:9px;"
+          @submit.prevent="submitted"
+        >
+          <v-rating
+            half-increments
+            color="yellow darken-3"
+            background-color="grey darken-1"
+            empty-icon="$ratingFull"
+            v-model="rating"
+          ></v-rating>
+          <v-textarea
+            v-model="newReview"
+            name="review"
+            label="Leave a review"
+            color="yellow darken-3"
+            outlined
+          />
+          <v-btn
+            @click="submitted"
+            :disabled="rating == 0"
+            color="#f66c1f"
+            class="white--text"
+          >
+            Submit Review
+          </v-btn>
+        </v-form>
+      </v-card>
+      <v-card flat width="85%" class="my-7 mr-13" style="margin-left:-17px">
+        <ol>
+          <li
+            style="text-decoration:none"
+            v-for="(review, index) in filteredReviews"
+            :key="index"
+          >
+            <v-card elevation="2" class="pa-4 mt-4">
+              <div style="font-size:16px">
+                <v-avatar
+                  width="40px"
+                  height="40px"
+                  style="padding-left:-30px;margin:5px"
+                >
+                  <img :src="review.photoURL"/></v-avatar
+                >{{ String(review.from).slice(0,15)}}
+                <p
+                  style="color:grey;font-size:9px; margin-left:60px;margin-top:-18px"
+                >
+                  {{ review.timestamp }}
+                </p>
+              </div>
+              <v-rating
+                half-increments
+                readonly
+                v-model="review.rating"
+                color="yellow darken-3"
+                x-small
+                style="margin-top:-20px;margin-left:5px"
+              ></v-rating>
+              <p style="font-size:15px;color:grey;margin-left:16px">
+                {{ review.review }}
+              </p>
+            </v-card>
+          </li>
+        </ol>
+      </v-card>
+      <v-btn
+        @click="loadComments()"
+        outlined
+        width="76%"
+        height="50px"
+        color="#f66c1f"
+        tile
+        class="pa-4 ml-3 mt-4 mb-6 text-center"
+        v-if="reviews.length > loadMore"
+        >Load More Comments</v-btn
+      >
+      <!-- End of how comments appear on the page -->
+      <!-- End of book page appearance -->
+
+      <!-- Related books -->
+      <p v-if="related.length != 0" class="headline font-weight-bold ml-2">
+        Related Books
+      </p>
+      <v-row>
+        <p
+          cols="12"
+          md="3"
+          sm="3"
+          xs="3"
+          lg="3"
+          style="margin-left:19px;margin-top:25px;margin-bottom:200px"
+          v-for="(b, i) in related"
+          :key="i"
+        >
+          <v-card elevation="24" height="250" width="170">
+             <v-img
+              v-if="b.filetype == 'Audio'"
+              :src="b.bookcover"
+              height="250"
+              width="170"
+              @click="audioPage(i, b)"
+            />
+
+            <v-img
+              v-if="b.filetype == 'Chatbook'"
+              :src="b.bookcover"
+              height="250"
+              width="170"
+              @click="chatPage(i, b)"
+            />
+            
+            <v-img
+              v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
+              :src="b.bookcover"
+              height="250"
+              width="170"
+              @click="bookPage(i, b)"
+            />
+          </v-card>
+          <v-rating
+            small
+            readonly
+            color="#f5a623"
+            :value="parseFloat(b.rating)"
+          ></v-rating>
+        </p>
+      </v-row>
+
+      
     </v-container>
     <!-- Mobile view -->
     <v-main
-      style="background:#fbe4c4;text-align:center;margin-top:-20px"
+      style="background:#fbe4c4;text-align:center"
       class="hidden-lg-and-up"
     >
-      <v-card
-        elevation="24"
-        height="315px"
-        width="195px"
-        style="max-width:195px;margin:20% auto 20% auto"
-      >
-        <v-img :src="book.bookcover" height="100%" width="100%" />
-      </v-card>
-      <v-card
-        flat
-        style="padding-top:20px;border-radius:5% 5% 0 0"
-      >
-      <v-skeleton-loader
-            type="heading,article,text,text,article"
-            v-if="loading"
-          ></v-skeleton-loader>
-      <div  v-for="(data, i) in singleBook"
-        :key="i">
-        <h2
-          style="font-size:20px;margin-top:10px;max-width:80%;margin:10px auto 5px auto"
-          class="font-weight-bold"
-        >
-          {{ data.title }}
-        </h2>
-
-        <router-link
-          style="text-decoration:none;font-size:16px;color:#f66c1f;margin-left:0px"
-          :to="`/author/${data.author}`"
-        >
-          by {{ authorName }}
-        </router-link>
-        <p style="font-size:13px;padding-top:7px" v-if="data.coauthor != null">
-          co-author(s):<br />
-          {{ data.coauthor }}
-        </p>
-        <v-rating
-          small
-          color="#f5a623"
-          readonly
-          class="mb-2"
-          :value="parseFloat(data.rating)"
-        />
-        <v-card flat>
-          <v-row justify="center" no-gutters>
+     <v-skeleton-loader
+          v-if="loading"
+          type="card-avatar, article, actions"
+        ></v-skeleton-loader>
+    <v-row v-for="(data, i) in singleBook" :key="i">
+    <v-img :src="data.bookcover" gradient="to top right, rgba(0,0,0,.9), rgba(0,0,0,.8)" >
+      <div style="margin-top:70px;color:white;text-align:left;padding:40px;margin-bottom:10%">
+      <router-link :to="`/author/${data.author}`" style="text-decoration:none;color:#f66c1f;font-size:16px;padding-bottom:0px;margin-bottom:0px">{{authorName}}</router-link>
+      <h1 style="font-size:20px;margin-top:0px;padding-top:0px" >{{data.title}}</h1>
+      <v-rating dense small color="#f5a623" class="mb-2" :value="parseFloat(data.rating)" />
+      <p style="font-size:16px">{{String(data.description).slice(0,100)+"..."}}</p>
+      <v-row justify="start" no-gutters>
             <div style="float:left">
-              
               <p
-                class="black--text"
-                style="margin-top:0px;padding-top:0px;font-size:10px"
-              ><v-icon small>mdi-book-open-page-variant</v-icon>
+                class="white--text"
+                style="margin-top:0px;padding-top:0px;font-size:12px"
+              ><v-icon small color="white">mdi-headphones</v-icon>
                 {{ data.readers.length }}
               </p>
             </div>
             <div style="float:left;margin-left:5%">
               <p
-                class="black--text"
-                style="margin-top:0px;padding-top:0px;font-size:10px"
-              ><v-icon small>mdi-comment-text-multiple-outline</v-icon>
+                class="white--text"
+                style="margin-top:0px;padding-top:0px;font-size:12px"
+              ><v-icon small color="white">mdi-comment-text-multiple-outline</v-icon>
                 {{ reviews.length }}
               </p>
             </div>
             <div style="float:left;margin-left:5%">
               <p
                 v-if="data.rating == ''"
-                class="black--text"
-                style="margin-top:0px;padding-top:0px;font-size:10px"
+                class="white--text"
+                style="margin-top:0px;padding-top:0px;font-size:12px"
               >
               <v-icon small color="#f5a623">mdi-star</v-icon>
                 0/5
               </p>
               <p
                 v-else
-                class="black--text"
-                style="margin-top:0px;padding-top:0px;font-size:10px"
+                class="white--text"
+                style="margin-top:0px;padding-top:0px;font-size:12px"
               ><v-icon small color="#f5a623">mdi-star</v-icon>
                 {{ parseInt(data.rating) }}/5
               </p>
             </div>
           </v-row>
-        </v-card>
+      </div>
+      <v-card
+        flat
+        style="padding-top:20px;border-radius:60px 60px 0 0;height:100%"
+      >
         <div style="margin-top:10px;margin-bottom:15px">
           <v-btn
-            v-if="data.filetype == 'Epub'"
             x-small
             rounded
-            color="#f6b911"
+            color="black"
             class="white--text mr-2"
           >
-            {{ data.filetype }}
-          </v-btn>
-          <v-btn
-            v-else
-            x-small
-            rounded
-            color="#e00000"
-            class="white--text mr-2"
-          >
-            {{ data.filetype }}
+            Audio
           </v-btn>
           <v-btn
             :to="`/category/${data.category}`"
-            v-if="data.filetype == 'Epub'"
             x-small
             rounded
-            color="#f6b911"
+            color="black"
             class="white--text mr-3"
-          >
-            {{ data.category }}
-          </v-btn>
-          <v-btn
-            v-else
-            :to="`/category/${data.category}`"
-            x-small
-            rounded
-            color="#e00000"
-            class="white--text"
           >
             {{ data.category }}
           </v-btn>
@@ -604,27 +692,11 @@
 
         <div
           class="hidden-lg-and-up"
-          style="text-align:left;padding:9px;font-size:14px;margin-top:12px;max-width:85%;margin:12px auto auto auto "
+          style="text-align:left;padding:9px;font-size:14px;max-width:85%;margin:24px auto auto auto "
         >
           {{ data.description }}
         </div>
-        </div>
-      </v-card>
-
-      <!-- Display Information about the book ends here -->
-
-      <!-- Start of sharing buttons -->
-
-      <!-- End of sharing button -->
-
-      <!-- This handles gifting -->
-
-      <!-- End of gifting feature -->
-    </v-main>
-
-    <!-- This handles how comments appear on the page -->
-
-    <v-container>
+        <v-container style="text-align:left;max-width:85%;margin:12px auto auto auto">
       <p
         v-if="user == null"
         style="font-size:18px;text-align:center;padding-top:55px"
@@ -688,7 +760,7 @@
             v-for="(review, index) in filteredReviews"
             :key="index"
           >
-            <v-card elevation="6" class="pa-4 mt-4">
+            <v-card elevation="2" class="pa-4 mt-4">
               <div style="font-size:16px">
                 <v-avatar
                   width="40px"
@@ -696,7 +768,7 @@
                   style="padding-left:-30px;margin:5px"
                 >
                   <img :src="review.photoURL"/></v-avatar
-                >{{ review.from}}
+                >{{ String(review.from).slice(0,15)}}
                 <p
                   style="color:grey;font-size:9px; margin-left:60px;margin-top:-18px"
                 >
@@ -733,55 +805,9 @@
       <!-- End of book page appearance -->
 
       <!-- Related books -->
-      <p v-if="related.length != 0" class="headline font-weight-bold hidden-md-and-down ml-2">
-        Related Books
-      </p>
-      <v-row class="hidden-md-and-down">
-        <p
-          cols="12"
-          md="3"
-          sm="3"
-          xs="3"
-          lg="3"
-          style="margin-left:19px;margin-top:25px;margin-bottom:200px"
-          v-for="(b, i) in related"
-          :key="i"
-        >
-          <v-card elevation="24" height="250" width="170">
-            <v-img
-              v-if="b.filetype == 'Audio'"
-              :src="b.bookcover"
-              height="250"
-              width="170"
-              @click="audioPage(i, b)"
-            />
-            <v-img
-             v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
-              :src="b.bookcover"
-              height="250"
-              width="170"
-              @click="bookPage(i, b)"
-            />
-            <v-img
-             v-if="b.filetype == 'Chatbook'"
-              :src="b.bookcover"
-              height="250"
-              width="170"
-              @click="chatPage(i, b)"
-            />
-          </v-card>
-          <v-rating
-            small
-            readonly
-            color="#f5a623"
-            :value="parseFloat(b.rating)"
-          ></v-rating>
-        </p>
-      </v-row>
-
       <p
         v-if="related.length != 0"
-        class="font-weight-bold hidden-lg-and-up"
+        class="font-weight-bold"
         style="font-size:18px;margin-bottom:-10px;padding-left:10px"
       >
         Related Books
@@ -799,7 +825,7 @@
 
       <v-slide-group
         v-model="model"
-        class="pa-2 mt-2 hidden-lg-and-up"
+        class="pa-2 mt-2"
         active-class="success"
         show-arrows
         color="white"
@@ -820,37 +846,35 @@
             @click="toggle"
           >
           <v-img
-              v-if="b.filetype == 'Audio'"
+              v-if="b.filetype=='Audio'"
               elevation="24"
-              hover
               width="120px"
               height="190px"
               :src="b.bookcover"
               @click="audioPage(i, b)"
             />
+
             <v-img
               v-if="b.filetype == 'Chatbook'"
-              elevation="24"
-              hover
-              width="120px"
-              height="190px"
               :src="b.bookcover"
-              @click="chatPage(i,b)"
+              height="190px"
+              width="120px"
+              @click="chatPage(i, b)"
             />
+
             <v-img
               v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
               elevation="24"
-              hover
               width="120px"
               height="190px"
               :src="b.bookcover"
-              @click="bookPage(i,b)"
+              @click="bookPage(i, b)"
             />
             <v-rating
               color="#f5a623"
               size="9"
               readonly
-              :value="parseFloat(book.rating)"
+              :value="parseFloat(b.rating)"
               class="margin-bottom:10px"
             ></v-rating>
 
@@ -868,6 +892,25 @@
         </v-slide-item>
       </v-slide-group>
     </v-container>
+      </v-card>
+      
+
+      <!-- Display Information about the book ends here -->
+
+      <!-- Start of sharing buttons -->
+
+      <!-- End of sharing button -->
+
+      <!-- This handles gifting -->
+
+      <!-- End of gifting feature -->
+      </v-img>
+      </v-row>
+    </v-main>
+
+    <!-- This handles how comments appear on the page -->
+
+    
     <!-- Related books -->
 
     <!-- This is where all the dialog popup boxes will appear -->
@@ -877,7 +920,7 @@
       <v-card v-if="user != null">
         <p
           class="font-weight-bold text-center"
-          style="padding-top:22px;font-size:19px"
+          style="padding-top:18px;font-size:20px"
         >
           Choose Payment Option:
         </p>
@@ -944,23 +987,23 @@
         <v-icon center style="margin-top:30px" color="white" size="80px"
           >mdi-checkbox-marked-circle-outline</v-icon
         >
-        <p class="white--text text-center mt-2 px-4" style="font-size:23px"
+        <p class="font-weight-bold white--text text-center mt-2 px-3" style="font-size:19px"
           >{{ book.title }} has been added to your library!</p
         >
 
-        <p class="text-center white--text">
-          Click the button below to start reading
-        </p>
+        <v-card-text class="text-center white--text">
+          Tap the button below to start listening
+        </v-card-text>
         <v-card-text style="text-align:center">
           <v-spacer></v-spacer>
 
           <v-btn
             color="white"
-            :to="`/${book.filetype}/${book.slug}`"
+            @click="buttonfreeCompleted"
             class="black--text mb-6"
             style="text-align:center"
-          >
-            Read Now
+          ><v-icon class="mr-2">mdi-headphones</v-icon>
+            Listen Now
           </v-btn>
 
           <v-btn
@@ -996,11 +1039,12 @@
 
           <v-btn
             color="white"
-            :to="`/${book.filetype}/${book.slug}`"
+            @click="buttonfreeCompleted"
             class="black--text mb-6"
             style="text-align:center"
           >
-            Read Now
+            <v-icon class="mr-2">mdi-headphones</v-icon>
+            Listen Now
           </v-btn>
 
           <v-btn
@@ -1019,13 +1063,10 @@
     <!-- Log users in popup -->
 
     <!-- This popup handles payment for gift -->
-    <v-dialog v-model="giftdialog" max-width="510" persistent max-height="500">
-      <v-card class="pa-6 text-center" v-if="user != null">
+    <v-dialog v-model="giftdialog" max-width="510" max-height="500">
+      <v-card class="pa-5 text-center" v-if="user != null">
         <p class="font-weight-bold" style="font-size:17px">
           Choose Payment Option:
-        </p>
-        <p style="font-size:14px">
-          Buy {{book.title}} for a friend.
         </p>
         <v-card-actions v-if="book.currency == 'NGN'" class="justify-center">
           <paystack
@@ -1172,10 +1213,11 @@
         v-if="paidUser"
         style="font-size:9px;margin-top:10px;width:80%"
         color="#f66c1f"
-        :to="`/${book.filetype}/${book.slug}`"
+        @click="step++"
         class="my-5 white--text font-weight-bold body-2"
       >
-        Read Now
+        <v-icon class="mr-2">mdi-headphones</v-icon>
+            Listen Now
       </v-btn>
 
       <v-btn
@@ -1183,7 +1225,7 @@
         style="font-size:9px;margin-top:10px"
         class="my-5 white--text font-weight-bold body-2"
         color="#f66c1f"
-        to="/notlogged"
+        to="/notloggedin"
       >
         Add To Library
       </v-btn>
@@ -1203,10 +1245,11 @@
         style="font-size:9px; color:white"
         color="#f66c1f"
         width="80%"
-        :to="`/${book.filetype}/${book.slug}`"
+        @click="step++"
         class="my-5 white--text font-weight-bold body-2"
       >
-        Read Now
+        <v-icon class="mr-2">mdi-headphones</v-icon>
+            Listen Now
       </v-btn>
         <v-btn
           v-if="book.price != 0"
@@ -1224,7 +1267,7 @@
         color="#008140"
         v-if="notfreeUser && book.downloadable == 'Yes'"
         style="margin-left:5px"
-        to="/notlogged"
+        to="/notloggedin"
       >
         <v-icon color="white">mdi-cloud-download</v-icon>
       </v-btn>
@@ -1268,6 +1311,39 @@
       >
     </v-content>
   </v-app>
+  </v-window-item>
+  <v-window-item :value="2">
+  <v-app>
+  <v-toolbar flat>
+      <v-btn @click="step--" style="color:#f66c1f" text>
+        <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
+      </v-btn>
+
+      <v-spacer />
+
+      <v-btn icon @click="like()">
+        <v-icon :color="color">mdi-heart</v-icon>
+      </v-btn>
+    </v-toolbar>
+  <v-main v-for="(data,i) in singleBook" :key="i" style="text-align:center;max-width:100%;margin:auto">
+  <v-skeleton-loader
+          v-if="loading"
+          type="image, article"
+        ></v-skeleton-loader>
+  <v-card height="315px" width="195px" style="margin:auto" elevation="12" class="mb-5">
+  <v-img :src="data.bookcover" height="100%" width="100%" />
+  </v-card>
+  <p class="font-weight-bold" style="font-size:19px;padding-bottom:0px;margin-bottom:0px"> {{data.title}}</p>
+  <router-link :to="`/author/${data.author}`" class="grey--text" style="text-decoration:none;font-size:15px;padding-top:0px;margin-top:0px"> {{authorName}}</router-link>
+  <v-rating color="#f5a623" small :value="parseFloat(data.rating)" dense />
+  </v-main>
+   <vuetify-audio color="#f66c1f" autoPlay v-if="paidUser || freepaidUser" flat :file="book.book"></vuetify-audio>
+   <p v-else class="justify-center font-weight-light" style="text-align:center;padding:auto">Sorry, you haven't bought this book yet so you can't listen to it...</p>
+  </v-app>
+  </v-window-item>
+
+  </v-window>
+    
 </template>
 
 <script>
@@ -1291,10 +1367,13 @@ export default {
     paystack,
     Flutterwave,
     NavBar,
+    VuetifyAudio: () => import('vuetify-audio'),
   },
   data() {
     return {
       user: "",
+      step:1,
+      loadMore:5,
       dialShare: false,
       buttonText: "",
       model: null,
@@ -1344,8 +1423,7 @@ export default {
       freeUser: false,
       freepaidUser: false,
       authorName:"",
-      loadMore:5
-
+      color:"black",
     };
   },
   computed: {
@@ -1433,7 +1511,7 @@ export default {
           this.category = books.data().category;
           this.readers = books.data().readers;
           this.bookID = books.id;
-          this.authorName = unslugify(books.data().author)
+          this.authorName= unslugify(books.data().author)
         })
         .then(() => {
           if (this.book.price != 0 && this.user == null) {
@@ -1520,10 +1598,9 @@ export default {
   //Leaving a comment
   methods: {
 
-   loadComments(){
+    loadComments(){
       this.loadMore += 5
    },
-
 
     makePayment() {
       window.FlutterwaveCheckout({
@@ -1558,22 +1635,27 @@ export default {
         name: "Books",
         params: { id: b.slug, book: b, bookID: this.bookID },
       });
-      location.reload();
     },
-     audioPage(i,b) {
-     this.bookID = this.IDs[i];
+
+    chatPage(i, b) {
+      this.bookID = this.IDs[i];
       this.$router.push({
-        name: "Audio",
-        params: { id: b.slug, book: b, bookID: this.bookID }
+        name: "Chat",
+        params: { id: b.slug, book: b, bookID: this.bookID },
       });
     },
 
-    chatPage(i,b) {
-     this.bookID = this.IDs[i];
+    audioPage(i, b) {
+      this.bookID = this.IDs[i];
       this.$router.push({
-        name: "Chat",
-        params: { id: b.slug, book: b, bookID: this.bookID }
+        name: "Audio",
+        params: { id: b.slug, book: b, bookID: this.bookID },
       });
+      location.reload();
+    },
+
+    like(){
+       this.color="red"
     },
 
     changesInDatabase() {
@@ -1790,6 +1872,11 @@ export default {
         });
     },
 
+    // increaseComments() {
+    //   this.filteredReviews = this.reviews;
+    //   console.log(this.filtered);
+    // },
+
     submitted() {
       db.collection("reviews")
         .add({
@@ -1854,22 +1941,20 @@ export default {
       this.$router.go(-1);
     },
     buttonfreeCompleted(){
-      this.step++
-      this.freeCompleted = false
-      this.completed= false
+      location.reload()
     }
   },
 };
 </script>
 
-<style scope>
+<style scoped>
+.blur{
+    background-color: rgba(255, 255, 255, .2);
+    -webkit-backdrop-filter: blur(6px);
+     backdrop-filter: blur(6px);
+}
 ol {
   list-style-type: none;
-}
-
-.hover:hover{
-  background:#f66c1f;
-  color:white
 }
 
 .v-btn {

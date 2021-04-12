@@ -187,17 +187,17 @@
           </v-btn>
         </template>
 
-        <v-card>
-          <h1 class="headline pa-6">
+        <v-card height=250>
+          <h2 class="font-weight-bold pt-6 px-5">
             Are You Sure About this?
-          </h1>
+          </h2>
 
-          <v-card-text>
-            If you click yes, you will permanently delete your book from our database
-          </v-card-text>
+          <p class="pa-4 pl-5">
+            If you click yes, you will permanently delete your book <br> from our database
+          </p>
 
 
-          <v-card-actions>
+          <v-card-actions class="mb-3">
             <v-spacer />
             <v-btn color="#f66c1f" outlined @click="dialog = false">
               Cancel

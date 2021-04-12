@@ -119,6 +119,7 @@ import EPub from "epubjs";
 import TitleBar from '@/components/TitleBar';
 import db from "../main"
 import {mapGetters} from "vuex"
+import slugify from "slugify"
 
 export default {
   data() {
@@ -181,6 +182,13 @@ export default {
     ...mapGetters({
       user: "user"
     }),
+    readerName(){
+      return slugify(this.user.data.displayName, {
+               replacement: "-",
+          remove: /[$*_+~.()'"!:@]/g,
+          lower: true,
+      })
+    }
   },
 created(){
     this.renderBook()
@@ -254,7 +262,7 @@ created(){
       } else if(this.ebook.readers.includes(this.user.data.uid)){
          this.overlay = true
         setTimeout(() => (this.overlay = false), 7000)
-      } else if(this.ebook.author == this.user.data.displayName){
+      } else if(this.ebook.author == this.readerName){
          this.overlay = true
          setTimeout(() => (this.overlay = false), 7000)
       } else {
@@ -316,11 +324,38 @@ created(){
 
     savePage(){
       window.addEventListener("beforeunload", () => {
-        this.total = (this.book.locations.total/3)
-        let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
-        localStorage.setItem(this.bookName,JSON.stringify(saved))
+        if (this.ebook.readers.includes(this.user.data.displayName)) {
+              this.total = (this.book.locations.total/3)
+              let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
+              localStorage.setItem(this.bookName,JSON.stringify(saved))
+            } if (this.ebook.readers.includes(this.user.data.uid)) {
+             this.total = (this.book.locations.total/3)
+    let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
+    localStorage.setItem(this.bookName,JSON.stringify(saved))
+            } if (this.ebook.author == this.user.data.displayName) {
+              this.total = (this.book.locations.total/3)
+    let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
+    localStorage.setItem(this.bookName,JSON.stringify(saved))
+            }
       },false )
       
+    },
+
+     goBack() {
+      this.$router.go(-1);
+      if (this.book.readers.includes(this.user.data.displayName)) {
+              this.total = (this.book.locations.total/3)
+              let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
+              localStorage.setItem(this.bookName,JSON.stringify(saved))
+            } else if (this.book.readers.includes(this.user.data.uid)) {
+             this.total = (this.book.locations.total/3)
+    let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
+    localStorage.setItem(this.bookName,JSON.stringify(saved))
+            } else if (this.book.author == this.user.data.displayName) {
+              this.total = (this.book.locations.total/3)
+    let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
+    localStorage.setItem(this.bookName,JSON.stringify(saved))
+            }
     },
 
   },
@@ -337,9 +372,20 @@ created(){
   },
 
   beforeDestroy(){
-    this.total = (this.book.locations.total/3)
+    if (this.book.readers.includes(this.user.data.displayName)) {
+              this.total = (this.book.locations.total/3)
+              let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
+              localStorage.setItem(this.bookName,JSON.stringify(saved))
+            } else if (this.book.readers.includes(this.user.data.uid)) {
+             this.total = (this.book.locations.total/3)
     let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
     localStorage.setItem(this.bookName,JSON.stringify(saved))
+            } else if (this.book.author == this.user.data.displayName) {
+              this.total = (this.book.locations.total/3)
+    let saved = [this.read,this.progress,this.total,this.defaultFontSize,this.defaultFont,this.defaultTheme]
+    localStorage.setItem(this.bookName,JSON.stringify(saved))
+            }
+
   }
 };
 </script>

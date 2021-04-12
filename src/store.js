@@ -12,7 +12,10 @@ export default new Vuex.Store({
       data: null,
       usertype : null
     },
-    books:[]
+    books:[],
+    reviews:[],
+    users:[],
+    loading:true,
   },
   getters: {
     user(state){
@@ -23,7 +26,16 @@ export default new Vuex.Store({
     },
     books: (state) => {
       return state.books;
-    }
+    },
+    reviews:(state) => {
+      return state.reviews
+    },
+    users:(state) => {
+      return state.users
+    },
+    loading:(state) =>{
+      return state.loading
+    },
   },
   mutations: {
     SET_LOGGED_IN(state, value) {
@@ -31,6 +43,9 @@ export default new Vuex.Store({
     },
     SET_USER(state, data) {
       state.user.data = data;
+    },
+    SET_LOADING_STATUS(state,status){
+      state.loading = status
     },
     ...vuexfireMutations,
   },
@@ -49,8 +64,15 @@ export default new Vuex.Store({
       }
     },
     bindBooks: firestoreAction(context => {
+      context.commit('SET_LOADING_STATUS',true)
       context.bindFirestoreRef('books',  db.collection("books")
-      .orderBy("timestamp","desc").limit(5))
+      .orderBy("timestamp","desc")).then(() =>{
+      context.commit('SET_LOADING_STATUS',false)
+       
+      })
+    }),
+    bindUsers: firestoreAction(context => {
+      context.bindFirestoreRef('users',  db.collection("users"))
     })
   }
 })

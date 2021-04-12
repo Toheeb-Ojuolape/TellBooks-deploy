@@ -43,10 +43,6 @@
 
         <v-spacer />
 
-        <v-btn fab text to="/shelf">
-          <v-icon class="green--text">mdi-magnify</v-icon>
-        </v-btn>
-
         <v-btn
           rounded
           elevation="24"

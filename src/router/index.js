@@ -24,9 +24,15 @@ import Publish from '@/views/Publish'
 import Wallet from '@/views/Wallet'
 import Settings from '@/views/Settings'
 import Publications from '@/views/Publications'
+import Statistics from '@/views/Statistics'
 import EditBooks from '@/views/EditBooks'
+import Audiobooks from "@/views/Audiobooks"
+import Chatbooks from "@/views/Chatbooks"
 import Books from '@/views/Books'
+import Audio from '@/views/Audio'
+import Chat from '@/views/Chat'
 import Err from '@/views/Err'
+import Error from '@/views/Error'
 
 Vue.use(VueRouter)
 Vue.use(VueMeta)
@@ -128,6 +134,16 @@ const routes = [
     component: Library
   },
   {
+    path: '/audiobooks',
+    name: 'Audiobooks',
+    component: Audiobooks
+  },
+  {
+    path: '/chatbooks',
+    name: 'Chatbooks',
+    component: Chatbooks
+  },
+  {
     path: '/gift',
     name: 'Gift',
     component: Gift
@@ -154,6 +170,11 @@ const routes = [
     component: Publications
   },
   {
+    path: '/statistics',
+    name: 'Statistics',
+    component: Statistics
+  },
+  {
     path: '/settings',
     name: 'Settings',
     component: Settings
@@ -168,11 +189,28 @@ const routes = [
     name: 'Books',
     component: Books
   },
+
+  {
+    path: '/audio/:id',
+    name: 'Audio',
+    component: Audio
+  },
+  {
+    path: '/chatbook/:id',
+    name: 'Chat',
+    component: Chat
+  },
   {
     path: '/404/:id',
     name: 'Err',
     component: Err
   },
+  {
+    path: '/:id',
+    name: 'Error',
+    component: Error
+  },
+
 
 ]
 

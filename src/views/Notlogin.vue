@@ -150,7 +150,7 @@ if (!ui) {
 }
         var uiConfig = {
             signInFlow: 'popup',
-            signInSuccessUrl: "/dashboard",
+            signInSuccessUrl: "/socialsignup",
             signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID, firebase.auth.FacebookAuthProvider.PROVIDER_ID]
         }
         ui.start("#firebaseui-auth-container", uiConfig)
