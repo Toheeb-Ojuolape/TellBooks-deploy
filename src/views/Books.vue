@@ -756,7 +756,7 @@
               @click="audioPage(i, b)"
             />
             <v-img
-             v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
+             v-if="b.filetype == 'Pdf' || b.filetype == 'Epub'"
               :src="b.bookcover"
               height="250"
               width="170"
@@ -838,7 +838,7 @@
               @click="chatPage(i,b)"
             />
             <v-img
-              v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
+              v-if="b.filetype == 'Pdf' || b.filetype == 'Epub'"
               elevation="24"
               hover
               width="120px"

@@ -40,7 +40,7 @@
     <v-container style="margin-bottom:20px">
       <v-row>
         <v-col cols="12" md="5">
-          <v-card color="#FF5733" elevation="24" style="margin-top:100px">
+          <v-card color="#FF5733" elevation="24" style="margin-top:70px">
             <p
               style="font-size:17px; color:white;text-align:center;padding-top:23px"
             >
@@ -156,7 +156,7 @@
 
             <v-card-subtitle class="text-center">
               <p style="font-size:12px">
-                Upload your eBook (epub and pdf formats supported). Max file size 10MB
+                Upload your eBook (epub, pdf, mp3 formats supported). Max file size 10MB
               </p>
               <input
                 type="file"

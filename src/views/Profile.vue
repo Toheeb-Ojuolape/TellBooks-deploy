@@ -163,7 +163,7 @@
             color="#f66c1f"
           />
           <v-btn
-            class="white--text"
+            class="white--text mb-8"
             width="300px"
             elevation="24"
             color="#f66c1f"
@@ -278,6 +278,7 @@ export default {
     });
   },
   created() {
+    window.scrollTo(0,0);
     firebase.auth().onAuthStateChanged(user => {
       this.user = user;
       this.slug = slugify(this.user.displayName, {

@@ -822,27 +822,10 @@
             @click="toggle"
           >
           <v-card flat style="border-radius:10px;text-align:center" height="250" width="195">
-              
+          
+                    
                     <v-img
-                    v-if="b.filetype =='Audio'"
-                    :src="b.bookcover"
-                    gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,1)"
-                    height="100%"
-                    width="100%"
-                    style="border-radius:10px"
-                    @click="audioPage(i, b)">
-
-                  <p v-if="b.title.length > 16" class="white--text font-weight-bold" style="padding-top:95%;padding-bottom:0;margin-bottom:0"> {{String(b.title).slice(0,16)}}...</p>
-                  <p v-else class="white--text font-weight-bold" style="padding-top:95%;padding-bottom:0;margin-bottom:0"> {{b.title}}</p>
-                  <div class="white--text" style="font-size:10px">
-                  <span> {{b.category}}</span>
-                  <span v-if="b.rating != ''" class="white--text pl-3"> <v-icon size="9" style="margin-bottom:2px;margin-right:2px" color="#f5a623">mdi-star</v-icon>{{parseInt(b.rating)}}</span>
-                  <span v-else class="white--text pl-3"> <v-icon size="9" style="margin-bottom:2px;margin-right:2px" color="#f5a623">mdi-star</v-icon>0</span>
-                  </div>
-                  </v-img>
-
-                   <v-img
-                    v-if="b.filetype =='Chatbook'"
+                    v-if="b.filetype == 'Chatbook'"
                     :src="b.bookcover"
                     gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,1)"
                     height="100%"
@@ -860,8 +843,28 @@
                   </v-img>
                     
                     
+                    
                     <v-img
-                    v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
+                    v-if="b.filetype == 'Audio'"
+                    :src="b.bookcover"
+                    gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,1)"
+                    height="100%"
+                    width="100%"
+                    style="border-radius:10px"
+                    @click="audioPage(i, b)">
+
+                  <p v-if="b.title.length > 16" class="white--text font-weight-bold" style="padding-top:95%;padding-bottom:0;margin-bottom:0"> {{String(b.title).slice(0,16)}}...</p>
+                  <p v-else class="white--text font-weight-bold" style="padding-top:95%;padding-bottom:0;margin-bottom:0"> {{b.title}}</p>
+                  <div class="white--text" style="font-size:10px">
+                  <span> {{b.category}}</span>
+                  <span v-if="b.rating != ''" class="white--text pl-3"> <v-icon size="9" style="margin-bottom:2px;margin-right:2px" color="#f5a623">mdi-star</v-icon>{{parseInt(b.rating)}}</span>
+                  <span v-else class="white--text pl-3"> <v-icon size="9" style="margin-bottom:2px;margin-right:2px" color="#f5a623">mdi-star</v-icon>0</span>
+                  </div>
+                  </v-img>
+
+
+                    <v-img
+                    v-if="b.filetype == 'Pdf' || b.filetype =='Epub'"
                     :src="b.bookcover"
                     gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,1)"
                     height="100%"

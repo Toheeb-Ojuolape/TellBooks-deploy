@@ -1067,7 +1067,7 @@
         active-class="success"
         show-arrows
         color="white"
-        style="margin-left:-20px;margin-bottom:30px"
+        style="margin-left:-20px;margin-bottom:60px"
       >
         <v-slide-item
           v-for="(book, i) in filteredFree"

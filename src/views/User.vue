@@ -168,11 +168,26 @@
               :key="i"
             >
               <v-card elevation="24" height="250" width="170">
+               <v-img
+                  v-if="b.filetype == 'Audio'"
+                  :src="b.bookcover"
+                  height="250"
+                  width="170"
+                  @click="audioPage(i, b)"
+                />
                 <v-img
+                  v-if="b.filetype == 'Pdf' || b.filetype =='Epub'"
                   :src="b.bookcover"
                   height="250"
                   width="170"
                   @click="bookPage(i, b)"
+                />
+                <v-img
+                  v-if="b.filetype == 'Chat'"
+                  :src="b.bookcover"
+                  height="250"
+                  width="170"
+                  @click="chatPage(i, b)"
                 />
               </v-card>
             </p>
@@ -252,19 +267,34 @@
         <v-progress-linear value="70%" color="#f66c1f" style="margin-top:-10px">
         </v-progress-linear>
       </v-card>
-      <v-row>
+      <v-row style="margin-bottom:70px">
         <p
           cols="12"
           md="3"
           sm="3"
           xs="3"
           lg="3"
-          style="margin-top:25px;margin-bottom:90px"
+          style="margin-top:10px;margin-bottom:10px"
           v-for="(b, i) in filteredBooks"
           :key="i"
         >
           <v-card elevation="24" height="190" width="120" class="mx-3">
             <v-img
+              v-if="b.filetype == 'Chatbook'"
+              :src="b.bookcover"
+              height="190"
+              width="120"
+              @click="chatPage(i, b)"
+            />
+            <v-img
+              v-if="b.filetype == 'Audio'"
+              :src="b.bookcover"
+              height="190"
+              width="120"
+              @click="audioPage(i, b)"
+            />
+            <v-img
+              v-if="b.filetype =='Pdf' || b.filetype =='Epub'"
               :src="b.bookcover"
               height="190"
               width="120"
@@ -273,7 +303,7 @@
           </v-card>
         </p>
       </v-row>
-      <BottomMenu />
+      <BottomMenu style="margin-top:30px" />
     </v-container>
   </v-app>
   <v-app v-else style="text-align:center">
@@ -381,6 +411,20 @@ export default {
       this.bookID = this.IDs[i];
       this.$router.push({
         name: "Books",
+        params: { id: b.slug, book: b, bookID: this.bookID }
+      });
+    },
+    chatPage(i, b) {
+      this.bookID = this.IDs[i];
+      this.$router.push({
+        name: "Chat",
+        params: { id: b.slug, book: b, bookID: this.bookID }
+      });
+    },
+    audioPage(i, b) {
+      this.bookID = this.IDs[i];
+      this.$router.push({
+        name: "Audio",
         params: { id: b.slug, book: b, bookID: this.bookID }
       });
     },

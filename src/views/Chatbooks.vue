@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <v-main style="background:#fbe4c4">
-        <v-toolbar class="md-4 hidden-md-and-down ">
+    <v-main style="background:#ffd5d5">
+        <v-toolbar flat color="#ffd5d5" class="md-4 hidden-md-and-down ">
           <v-btn
             @click="goBack"
             class="ml-16"
@@ -15,7 +15,7 @@
             height="500px"
             style="font-size:22px"
           >
-            Audio Books
+            ChatBooks
           </v-toolbar-title>
 
           <v-spacer />
@@ -35,9 +35,9 @@
             <v-icon class="mr-1">mdi-plus-circle-outline</v-icon> Publish Book
           </v-btn>
         </v-toolbar>
-        <v-toolbar color="#fbe4c4" flat class="hidden-lg-and-up">
-      <v-btn @click="goBack" style="color:#f66c1f" text>
-        <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
+        <v-toolbar color="#ffd5d5" flat class="hidden-lg-and-up">
+      <v-btn @click="goBack" style="color:#FF69B4" text>
+        <v-icon color="#FF69B4">mdi-chevron-left</v-icon>Back
       </v-btn>
 
       <v-spacer />
@@ -168,9 +168,9 @@
 import BottomMenu from "@/components/BottomMenu";
 import { mapGetters } from "vuex"
 
+
 export default {
   components: {
-
     BottomMenu,
   },
   data: () => ({

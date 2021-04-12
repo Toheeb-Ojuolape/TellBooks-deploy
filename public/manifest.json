@@ -1,5 +1,5 @@
 {
-    "name": "",
+    "name": "Tell! Books",
     "short_name": "Tell! Books",
     "description": "Top Book Publishing platform in Africa",
     "start_url": "/",
@@ -50,6 +50,33 @@
           "sizes": "512x512",
           "type": "image/png",
           "purpose":"maskable"
+        }
+      ],
+    "screenshots" : [
+        {
+          "src": "./img/screenshots/1.png",
+          "sizes": "1800x3200",
+          "type": "image/png"
+        },
+        {
+          "src": "./img/screenshots/2.png",
+          "sizes": "1800x3200",
+          "type": "image/png"
+        },
+        {
+          "src": "./img/screenshots/3.png",
+          "sizes": "1800x3200",
+          "type": "image/png"
+        },
+        {
+          "src": "./img/screenshots/4.png",
+          "sizes": "1800x3200",
+          "type": "image/png"
+        },
+        {
+          "src": "./img/screenshots/5.png",
+          "sizes": "1800x3200",
+          "type": "image/png"
         }
       ],
     "display": "standalone",
