@@ -1551,7 +1551,7 @@ export default {
       if (this.user != null) {
         this.giftdialog = true;
       } else if (this.user == null) {
-        this.router.push("/notlogin");
+        this.router.push("/notlogged");
       }
     },
     bookPage(i, b) {

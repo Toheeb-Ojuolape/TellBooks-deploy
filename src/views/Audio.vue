@@ -216,7 +216,7 @@
             color="#008140"
             v-if="notfreeUser && book.downloadable == 'Yes'"
             style="margin-left:5px"
-            to="/notloggedin"
+            to="/notlogged"
           >
             <v-icon color="white">mdi-cloud-download</v-icon>
           </v-btn>
@@ -1227,7 +1227,7 @@
         style="font-size:9px;margin-top:10px;width:80%"
         class="my-5 white--text font-weight-bold body-2"
         color="#f66c1f"
-        to="/notloggedin"
+        to="/notlogged"
       >
         Add To Library
       </v-btn>
@@ -1269,7 +1269,7 @@
         color="#008140"
         v-if="notfreeUser && book.downloadable == 'Yes'"
         style="margin-left:5px"
-        to="/notloggedin"
+        to="/notlogged"
       >
         <v-icon color="white">mdi-cloud-download</v-icon>
       </v-btn>
@@ -1628,7 +1628,7 @@ export default {
       if (this.user != null) {
         this.giftdialog = true;
       } else if (this.user == null) {
-        this.router.push("/notlogin");
+        this.router.push("/notlogged");
       }
     },
     bookPage(i, b) {
