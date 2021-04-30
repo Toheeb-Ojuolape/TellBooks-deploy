@@ -156,7 +156,7 @@
 
             <v-card-subtitle class="text-center">
               <p style="font-size:12px">
-                Upload your eBook (epub, pdf, mp3 formats supported). Max file size 10MB
+                Upload your eBook/Audiobook (epub, pdf, mp3 formats supported). Max file size 10MB
               </p>
               <input
                 type="file"

@@ -103,6 +103,7 @@
         v-model="books.price"
         solo
         number
+        readonly
         hint="Enter your book price"
       />
 

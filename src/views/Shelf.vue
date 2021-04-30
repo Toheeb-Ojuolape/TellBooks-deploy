@@ -150,9 +150,9 @@
           <v-card
             :color="active ? undefined : 'white'"
             class="ma-4"
-            height="320"
-            width="210"
-            elevation="7"
+            height="390"
+            width="230"
+            elevation="10"
             @click="toggle"
           >
             <v-img
@@ -160,7 +160,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="320px"
               :src="book.bookcover"
               @click="audioPage(i, book)"
             />
@@ -168,7 +168,7 @@
               v-if="book.filetype == 'Chatbook'"
               elevation="24"
               hover
-              width="210px"
+              width="100%"
               height="320px"
               :src="book.bookcover"
               @click="chatPage(i, book)"
@@ -177,17 +177,19 @@
               v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
               elevation="24"
               hover
-              width="210px"
+              width="100%"
               height="320px"
               :src="book.bookcover"
               @click="bookPage(i, book)"
             />
+            <p v-if="book.title.length > 18" style="margin-bottom:0px;padding:10px 10px 0px 10px">{{String(book.title).slice(0,18)}}...</p>
+           <p v-else style="margin-bottom:0px;padding:10px 10px 0px 10px">{{ book.title }}</p>
             <v-rating
               color="#f5a623"
               size="9"
               readonly
               :value="parseFloat(book.rating)"
-              class="margin-bottom:10px"
+              style="margin-bottom:10px;margin-left:5px"
             ></v-rating>
 
             <v-row class="fill-height" align="center" justify="center">
@@ -247,9 +249,9 @@
           <v-card
             :color="active ? undefined : 'white'"
             class="ma-4"
-            height="320"
-            width="210"
-            elevation="7"
+            height="390"
+            width="230"
+            elevation="10"
             @click="toggle"
           >
             <v-img
@@ -257,7 +259,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="230"
               :src="book.bookcover"
               @click="audioPage(i, book)"
             />
@@ -265,7 +267,7 @@
               v-if="book.filetype == 'Chatbook'"
               elevation="24"
               hover
-              width="210px"
+              width="100%"
               height="320px"
               :src="book.bookcover"
               @click="chatPage(i, book)"
@@ -274,17 +276,19 @@
               v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
               elevation="24"
               hover
-              width="210px"
+              width="100%"
               height="320px"
               :src="book.bookcover"
               @click="bookPage(i, book)"
             />
+            <p v-if="book.title.length > 18" style="margin-bottom:0px;padding:10px 10px 0px 10px">{{String(book.title).slice(0,18)}}...</p>
+           <p v-else style="margin-bottom:0px;padding:10px 10px 0px 10px">{{ book.title }}</p>
             <v-rating
               color="#f5a623"
               size="9"
               readonly
               :value="parseFloat(book.rating)"
-              class="margin-bottom:10px"
+              style="margin-bottom:10px;margin-left:5px"
             ></v-rating>
 
             <v-row class="fill-height" align="center" justify="center">
@@ -344,9 +348,9 @@
           <v-card
             :color="active ? undefined : 'white'"
             class="ma-4"
-            height="320"
-            width="210"
-            elevation="7"
+            height="390"
+            width="230"
+            elevation="10"
             @click="toggle"
           >
            <v-img
@@ -362,7 +366,7 @@
               v-if="book.filetype == 'Chatbook'"
               elevation="24"
               hover
-              width="210px"
+              width="100%"
               height="320px"
               :src="book.bookcover"
               @click="chatPage(i, book)"
@@ -371,17 +375,19 @@
             v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
               elevation="24"
               hover
-              width="210px"
+              width="100%"
               height="320px"
               :src="book.bookcover"
               @click="bookPage(i, book)"
             />
+           <p v-if="book.title.length > 18" style="margin-bottom:0px;padding:10px 10px 0px 10px">{{String(book.title).slice(0,18)}}...</p>
+           <p v-else style="margin-bottom:0px;padding:10px 10px 0px 10px">{{ book.title }}</p>
             <v-rating
               color="#f5a623"
               size="9"
               readonly
               :value="parseFloat(book.rating)"
-              class="margin-bottom:10px"
+              style="margin-bottom:10px;margin-left:5px"
             ></v-rating>
 
             <v-row class="fill-height" align="center" justify="center">
@@ -441,9 +447,9 @@
           <v-card
             :color="active ? undefined : 'white'"
             class="ma-4"
-            height="320"
-            width="210"
-            elevation="7"
+            height="390"
+            width="230"
+            elevation="10"
             @click="toggle"
           >
             <v-img
@@ -451,7 +457,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="320px"
               :src="book.bookcover"
               @click="audioPage(i, book)"
             />
@@ -459,7 +465,7 @@
               v-if="book.filetype == 'Chatbook'"
               elevation="24"
               hover
-              width="210px"
+              width="100%"
               height="320px"
               :src="book.bookcover"
               @click="chatPage(i, book)"
@@ -468,17 +474,19 @@
               v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
               elevation="24"
               hover
-              width="210px"
+              width="100%"
               height="320px"
               :src="book.bookcover"
               @click="bookPage(i, book)"
             />
+            <p v-if="book.title.length > 18" style="margin-bottom:0px;padding:10px 10px 0px 10px">{{String(book.title).slice(0,18)}}...</p>
+           <p v-else style="margin-bottom:0px;padding:10px 10px 0px 10px">{{ book.title }}</p>
             <v-rating
               color="#f5a623"
               size="9"
               readonly
               :value="parseFloat(book.rating)"
-              class="margin-bottom:29px"
+              style="margin-bottom:10px;margin-left:5px"
             ></v-rating>
 
             <v-row class="fill-height" align="center" justify="center">
@@ -538,9 +546,9 @@
           <v-card
             :color="active ? undefined : 'white'"
             class="ma-4"
-            height="320"
-            width="210"
-            elevation="7"
+            height="390"
+            width="230"
+            elevation="10"
             @click="toggle"
           >
             <v-img
@@ -548,7 +556,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="320px"
               :src="book.bookcover"
               @click="audioPage(i, book)"
             />
@@ -556,7 +564,7 @@
               v-if="book.filetype == 'Chatbook'"
               elevation="24"
               hover
-              width="210px"
+              width="100%"
               height="320px"
               :src="book.bookcover"
               @click="chatPage(i, book)"
@@ -565,17 +573,19 @@
               v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
               elevation="24"
               hover
-              width="210px"
+              width="100%"
               height="320px"
               :src="book.bookcover"
               @click="bookPage(i, book)"
             />
+           <p v-if="book.title.length > 18" style="margin-bottom:0px;padding:10px 10px 0px 10px">{{String(book.title).slice(0,18)}}...</p>
+           <p v-else style="margin-bottom:0px;padding:10px 10px 0px 10px">{{ book.title }}</p>
             <v-rating
               color="#f5a623"
               size="9"
               readonly
               :value="parseFloat(book.rating)"
-              class="margin-bottom:10px"
+              style="margin-bottom:10px;margin-left:5px"
             ></v-rating>
 
             <v-row class="fill-height" align="center" justify="center">
@@ -693,16 +703,16 @@
           <v-card
             :color="active ? undefined : 'white'"
             class="ma-4"
-            height="190"
-            width="120"
-            elevation="7"
+            height="250"
+            width="150"
+            elevation="10"
             @click="toggle"
           >
             <v-img
               v-if="book.filetype == 'Audio'"
               elevation="24"
               hover
-              width="120"
+              width="150"
               height="190"
               :src="book.bookcover"
               @click="audioPage(i, book)"
@@ -712,7 +722,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="chatPage(i, book)"
             />
@@ -721,16 +731,18 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="bookPage(i, book)"
             />
+            <p v-if="book.title.length > 18" style="font-size:12px;margin-bottom:0px;padding:10px 10px 0px 10px">{{String(book.title).slice(0,18)}}...</p>
+           <p v-else style="font-size:12px;margin-bottom:0px;padding:10px 10px 0px 10px">{{ book.title }}</p>
             <v-rating
               color="#f5a623"
               size="9"
               readonly
               :value="parseFloat(book.rating)"
-              class="margin-bottom:10px"
+              style="margin-bottom:10px;margin-left:5px"
             ></v-rating>
 
             <v-row class="fill-height" align="center" justify="center">
@@ -789,9 +801,9 @@
           <v-card
             :color="active ? undefined : 'white'"
             class="ma-4"
-            height="190px"
-            width="120px"
-            elevation="7"
+            height="250px"
+            width="150px"
+            elevation="10"
             @click="toggle"
           >
             <v-img
@@ -799,7 +811,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="audioPage(i, book)"
             />
@@ -808,7 +820,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="chatPage(i, book)"
             />
@@ -817,16 +829,18 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="bookPage(i, book)"
             />
+            <p v-if="book.title.length > 16" style="font-size:12px;margin-bottom:0px;padding:10px 10px 0px 10px">{{String(book.title).slice(0,16)}}...</p>
+           <p v-else style="font-size:12px;margin-bottom:0px;padding:10px 10px 0px 10px">{{ book.title }}</p>
             <v-rating
               color="#f5a623"
               size="9"
               readonly
               :value="parseFloat(book.rating)"
-              class="margin-bottom:10px"
+              style="margin-bottom:10px;margin-left:5px"
             ></v-rating>
 
             <v-row class="fill-height" align="center" justify="center">
@@ -885,9 +899,9 @@
           <v-card
             :color="active ? undefined : 'white'"
             class="ma-4"
-            height="190"
-            width="120"
-            elevation="7"
+            height="250"
+            width="150"
+            elevation="10"
             @click="toggle"
           >
             <v-img
@@ -895,7 +909,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="audioPage(i, book)"
             />
@@ -904,7 +918,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="chatPage(i, book)"
             />
@@ -913,16 +927,18 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="bookPage(i, book)"
             />
+            <p v-if="book.title.length > 16" style="font-size:12px;margin-bottom:0px;padding:10px 10px 0px 10px">{{String(book.title).slice(0,16)}}...</p>
+           <p v-else style="font-size:12px;margin-bottom:0px;padding:10px 10px 0px 10px">{{ book.title }}</p>
             <v-rating
               color="#f5a623"
               size="9"
               readonly
               :value="parseFloat(book.rating)"
-              class="margin-bottom:10px"
+              style="margin-bottom:10px;margin-left:5px"
             ></v-rating>
 
             <v-row class="fill-height" align="center" justify="center">
@@ -974,16 +990,16 @@
         style="margin-left:-20px"
       >
         <v-slide-item
-          v-for="(book, i) in filteredFree"
+          v-for="(book, i) in filteredBooks"
           :key="i"
           v-slot:default="{ active, toggle }"
         >
           <v-card
             :color="active ? undefined : 'white'"
             class="ma-4"
-            height="190"
-            width="120"
-            elevation="7"
+            height="250"
+            width="150"
+            elevation="10"
             @click="toggle"
           >
             <v-img
@@ -991,7 +1007,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="audioPage(i, book)"
             />
@@ -1000,7 +1016,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="chatPage(i, book)"
             />
@@ -1009,16 +1025,18 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="bookPage(i, book)"
             />
+           <p v-if="book.title.length > 16" style="font-size:12px;margin-bottom:0px;padding:10px 10px 0px 10px">{{String(book.title).slice(0,16)}}...</p>
+           <p v-else style="font-size:12px;margin-bottom:0px;padding:10px 10px 0px 10px">{{ book.title }}</p>
             <v-rating
               color="#f5a623"
               size="9"
               readonly
               :value="parseFloat(book.rating)"
-              class="margin-bottom:10px"
+              style="margin-bottom:10px;margin-left:5px"
             ></v-rating>
 
             <v-row class="fill-height" align="center" justify="center">
@@ -1077,9 +1095,9 @@
           <v-card
             :color="active ? undefined : 'white'"
             class="ma-4"
-            height="190"
-            width="120"
-            elevation="7"
+            height="250"
+            width="150"
+            elevation="10"
             @click="toggle"
           >
             <v-img
@@ -1087,7 +1105,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="audioPage(i, book)"
             />
@@ -1096,7 +1114,7 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="chatPage(i, book)"
             />
@@ -1105,16 +1123,18 @@
               elevation="24"
               hover
               width="100%"
-              height="100%"
+              height="190"
               :src="book.bookcover"
               @click="bookPage(i, book)"
             />
+            <p v-if="book.title.length > 16" style="font-size:12px;margin-bottom:0px;padding:10px 10px 0px 10px">{{String(book.title).slice(0,16)}}...</p>
+           <p v-else style="font-size:12px;margin-bottom:0px;padding:10px 10px 0px 10px">{{ book.title }}</p>
             <v-rating
               color="#f5a623"
               size="9"
               readonly
               :value="parseFloat(book.rating)"
-              class="margin-bottom:10px"
+              style="margin-bottom:10px;margin-left:5px"
             ></v-rating>
 
             <v-row class="fill-height" align="center" justify="center">
@@ -1199,7 +1219,7 @@ export default {
 
     filteredTop() {
       const searchBooks = this.search.toLowerCase().trim();
-      const topBooks = this.books.filter(book => book.rating >= 3)
+      const topBooks = this.books.filter(book => book.rating >= 3).slice(0,5)
       if (!searchBooks) return topBooks;
       return topBooks.filter(
         book => book.title.toLowerCase().indexOf(searchBooks) > -1
@@ -1208,7 +1228,7 @@ export default {
 
     filteredBest(){
       const searchBooks = this.search.toLowerCase().trim();
-      const bestBooks = this.books.filter(book => book.readers.length >= 20)
+      const bestBooks = this.books.filter(book => book.readers.length >= 20).slice(0,5)
       if (!searchBooks) return bestBooks;
 
       return bestBooks.filter(
@@ -1218,7 +1238,7 @@ export default {
 
     filteredTell(){
       const searchBooks = this.search.toLowerCase().trim();
-      const tellBooks = this.books.filter(book => book.author == "tell")
+      const tellBooks = this.books.filter(book => book.author == "tell").slice(0,5)
       if (!searchBooks) return tellBooks;
 
       return tellBooks.filter(
@@ -1228,7 +1248,7 @@ export default {
 
     filteredFree(){
       const searchBooks = this.search.toLowerCase().trim();
-      const freeBooks = this.books.filter(book => book.price == 0)
+      const freeBooks = this.books.filter(book => book.price == 0).slice(0,5)
       if (!searchBooks) return freeBooks;
 
       return freeBooks.filter(
@@ -1243,6 +1263,7 @@ export default {
  created() {
   window.scrollTo(0,0);
   this.$store.dispatch('bindBooks')
+
   },
   methods: {
 

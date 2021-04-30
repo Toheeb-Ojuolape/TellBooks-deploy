@@ -1,7 +1,7 @@
 module.exports = {
   publicPath: "./",
   transpileDependencies: [
-    'vuetify'
+    'vuetify','vuex-persist'
   ],
     pwa: {
       themeColor: "#f66c1f",

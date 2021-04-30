@@ -118,6 +118,7 @@
             rounded
             color="black"
             class="white--text"
+            to="/audiobooks"
           >
             Audio
           </v-btn>
@@ -402,7 +403,7 @@
       >
         Please
         <router-link
-          to="/notloggedin"
+          to="/notlogged"
           style="color:#1773ea;text-decoration:none"
           >login</router-link
         >
@@ -419,7 +420,7 @@
       >
         Leave a review
       </p>
-      <hr style="margin-left:10px;color:black" width="80px" />
+      <hr v-if="user != null" style="margin-left:10px;color:black" width="80px" />
 
       <v-card flat class="px-40" width="83%">
         <v-form
@@ -615,6 +616,7 @@
             rounded
             color="black"
             class="white--text mr-2"
+            to="/audiobooks"
           >
             Audio
           </v-btn>
@@ -704,7 +706,7 @@
       >
         Please
         <router-link
-          to="/notloggedin"
+          to="/notlogged"
           style="color:#1773ea;text-decoration:none"
           >login</router-link
         >
@@ -721,7 +723,7 @@
       >
         Leave a review
       </p>
-      <hr style="margin-left:10px;color:black" width="80px" />
+      <hr v-if="user != null" style="margin-left:10px;color:black" width="80px" />
 
       <v-card flat class="px-40" width="83%">
         <v-form
@@ -1222,7 +1224,7 @@
 
       <v-btn
         v-if="notfreeUser"
-        style="font-size:9px;margin-top:10px"
+        style="font-size:9px;margin-top:10px;width:80%"
         class="my-5 white--text font-weight-bold body-2"
         color="#f66c1f"
         to="/notloggedin"

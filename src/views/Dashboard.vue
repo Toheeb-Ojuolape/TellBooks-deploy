@@ -342,6 +342,7 @@
         for you by friends
       </p>
     </v-card>
+
     <v-card
       color="#e2e3ec"
       flat
@@ -351,9 +352,13 @@
       height="200px"
       width="310px"
     >
+    
       <v-btn fab small style="margin:30px;color:white" color="black"
         ><v-icon>mdi-headphones</v-icon></v-btn
-      >
+      ><v-badge
+          color="green"
+          content="New"
+        />
       <p
         class="font-weight-bold"
         style="font-size:21px;margin-top:-20px;padding-left:30px"
@@ -375,7 +380,10 @@
     >
       <v-btn fab small style="margin:30px;color:white" color="#f935a9"
         ><v-icon>mdi-message</v-icon></v-btn
-      >
+      > <v-badge
+          color="green"
+          content="New"
+        />
       <p
         class="font-weight-bold"
         style="font-size:21px;margin-top:-20px;padding-left:30px"
@@ -588,6 +596,7 @@ export default {
 
   created(){
     this.$store.dispatch('bindBooks')
+
   },
   methods: {
 

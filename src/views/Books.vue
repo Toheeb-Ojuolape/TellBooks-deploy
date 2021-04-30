@@ -430,7 +430,7 @@
       </v-card>
       <v-card
         flat
-        style="padding-top:20px;border-radius:5% 5% 0 0"
+        style="padding-top:20px;border-radius:7% 7% 0 0"
       >
       <v-skeleton-loader
             type="heading,article,text,text,article"
@@ -632,7 +632,7 @@
       >
         Please
         <router-link
-          to="/notloggedin"
+          to="/notlogged"
           style="color:#1773ea;text-decoration:none"
           >login</router-link
         >
@@ -649,7 +649,7 @@
       >
         Leave a review
       </p>
-      <hr style="margin-left:10px;color:black" width="80px" />
+      <hr v-if="user != null" style="margin-left:10px;color:black" width="80px" />
 
       <v-card flat class="px-40" width="83%">
         <v-form
@@ -696,7 +696,9 @@
                   style="padding-left:-30px;margin:5px"
                 >
                   <img :src="review.photoURL"/></v-avatar
-                >{{ review.from}}
+                >
+                <span v-if="review.from.length >15">{{ String(review.from).slice(0,15)}}...</span>
+                <span v-else>{{review.from}}</span>
                 <p
                   style="color:grey;font-size:9px; margin-left:60px;margin-top:-18px"
                 >
@@ -944,7 +946,7 @@
         <v-icon center style="margin-top:30px" color="white" size="80px"
           >mdi-checkbox-marked-circle-outline</v-icon
         >
-        <p class="white--text text-center mt-2 px-4" style="font-size:23px"
+        <p class="white--text text-center mt-2 px-5" style="font-size:23px"
           >{{ book.title }} has been added to your library!</p
         >
 
@@ -1072,7 +1074,7 @@
           >mdi-checkbox-marked-circle-outline</v-icon
         >
         <v-card-text class="white--text text-center mt-2" style="font-size:23px"
-          >Payment Successfully!</v-card-text
+          >Payment Successful!</v-card-text
         >
 
         <v-card-text class="text-center white--text">
@@ -1180,7 +1182,7 @@
 
       <v-btn
         v-if="notfreeUser"
-        style="font-size:9px;margin-top:10px"
+        style="font-size:9px;margin-top:10px;width:80%"
         class="my-5 white--text font-weight-bold body-2"
         color="#f66c1f"
         to="/notlogged"

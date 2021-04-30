@@ -21,7 +21,7 @@
                         rounded
                         color="#f66c1f"
                         class="white--text"
-                        to="/signup"
+                        to="/notlogged"
                         style="font-size:14px;margin-top:100px"
                       >
                         Sign Up
@@ -101,8 +101,8 @@
                   <v-btn text to="/forgotpassword" style="font-size:12px">
                     Forgot Password?
                   </v-btn>
-                  <p text style="font-size:15px; margin-top:10px" to="/login" > 
-                  Don't have an account? <router-link to="/signup" style="color:#f66c1f;text-decoration:none"> Signup</router-link>
+                  <p text style="font-size:15px; margin-top:10px" to="/notlogged" > 
+                  Don't have an account? <router-link to="/notlogged" style="color:#f66c1f;text-decoration:none"> Signup</router-link>
                  </p>
                 </v-col>
               </v-row>
@@ -166,7 +166,7 @@ if (!ui) {
             if (this.email && this.password) {
                firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() =>{
 
-                this.$router.go(-1)
+                this.$router.go(-2)
 
                      }).catch(error => {
                        console.log(error)

@@ -118,6 +118,7 @@
             rounded
             color="#FF69B4"
             class="white--text"
+            to="/chatbooks"
           >
             Chatbook
           </v-btn>
@@ -375,7 +376,7 @@
       >
         Please
         <router-link
-          to="/notloggedin"
+          to="/notlogged"
           style="color:#1773ea;text-decoration:none"
           >login</router-link
         >
@@ -392,7 +393,7 @@
       >
         Leave a review
       </p>
-      <hr style="margin-left:10px;color:black" width="80px" />
+      <hr v-if="user != null" style="margin-left:10px;color:black" width="80px" />
 
       <v-card flat class="px-40" width="83%">
         <v-form
@@ -591,6 +592,7 @@
             outlined
             color="#FF69B4"
             class="mr-2"
+            to="/chatbooks"
           >
             Chatbook
           </v-btn>
@@ -680,7 +682,7 @@
       >
         Please
         <router-link
-          to="/notloggedin"
+          to="/notlogged"
           style="color:#1773ea;text-decoration:none"
           >login</router-link
         >
@@ -697,7 +699,7 @@
       >
         Leave a review
       </p>
-      <hr style="margin-left:10px;color:black" width="80px" />
+      <hr v-if="user != null" style="margin-left:10px;color:black" width="80px" />
 
       <v-card flat class="px-40" width="83%">
         <v-form
@@ -996,14 +998,14 @@
         >
 
         <v-card-text class="text-center white--text">
-          Tap the button below to start listening
+          Tap the button below to start reading
         </v-card-text>
         <v-card-text style="text-align:center">
           <v-spacer></v-spacer>
 
           <v-btn
             color="white"
-            @click="buttonfreeCompleted"
+            @click="step++"
             class="black--text mb-6"
             style="text-align:center"
           >
@@ -1290,7 +1292,7 @@
   <v-window-item style="background:black" :value="2">
   <v-app style="background:#212121">
   <v-main class="darkOverlay" v-for="(data,i) in singleBook" :key="i" style="background:black;max-width:100%;margin:auto">
-  <v-toolbar flat dark>
+  <v-toolbar flat fixed dark>
       <v-btn @click="step--" style="color:#f66c1f" text>
         <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
       </v-btn>
@@ -1312,17 +1314,31 @@
   >
   <!-- Chat content goes here -->
   <div v-for="(messages,i) in limitedChat" :key="i">
-  <v-card class="animate__animated animate__zoomInRight animate__faster" v-if="messages.first" :color="messages.color" style="max-width:75%;padding:10px 10px 10px 20px;border-radius:15px 15px 0px 15px;float:right;margin:20px">
+  <div class="d-flex align-end flex-column">
+  <v-card class="animate__animated animate__zoomInRight animate__faster" v-if="messages.first" :color="messages.color" style="max-width:75%;padding:10px 20px 10px 20px;border-radius:15px 15px 0px 15px;float:right;margin:5px 20px 0px 20px">
   <div style="font-weight:600">{{messages.name}}</div>
   <div>{{messages.message}}</div>
   </v-card>
-  <v-card class="animate__animated animate__zoomInLeft animate__faster" v-if="messages.second" :color="messages.color" style="max-width:75%;padding:10px 10px 10px 10px;border-radius:15px 15px 15px 0px;float:left;margin:20px">
+ </div> 
+  <div class="d-flex align-start flex-column mb-3">
+  <v-card class="animate__animated animate__zoomInLeft animate__faster" v-if="messages.second" :color="messages.color" style="max-width:75%;padding:10px 20px 10px 20px;border-radius:15px 15px 15px 0px;float:left;margin:0px 20px 0px 20px">
   <div style="font-weight:600">{{messages.name}}</div>
   <div>{{messages.message}}</div>
   </v-card>
-  <div v-if="messages.text" class="white--text" style="float:left;margin:10px 20% 10px 20%">
-  <div>{{messages.message}}</div>
   </div>
+  <div v-if="messages.text" style="margin:0px 20px 0px 20px">
+  <div class="white--text d-flex align-start flex-column">{{messages.message}}</div>
+  </div>
+  <div v-if="messages.other" class="d-flex align-end flex-column" style="margin:0px 20px 5px 20px">
+  <div class="white--text d-flex align-end flex-column">{{messages.message}}</div>
+  </div>
+  <div v-if="messages.image" style="margin:0px 20px 0px 20px">
+  <img height=170 width=170 :src="messages.img">
+  </div>
+  <div v-if="messages.imageother" class="d-flex align-end flex-column" style="margin:0px 20px 20px 20px">
+  <img class="white--text d-flex align-end flex-column" height=170 width=170 :src="messages.img">
+  </div>
+
   </div>
 
    <div v-if="pageClicked" class="white--text" style="width:100%;margin:57% 35% 57% 35%">
@@ -1331,7 +1347,59 @@
     <hr style="height:2px;width:4%;float:left;margin-left:10px;margin-top:10px">
    </div>
 
-  <!-- <audio ref="myAudio" style="visibility:hidden" src="https://www.stockringtone.com/download/messages-ringtones/4114/Whatsapp_Message_Ringtone_Mp3_Ringtone">
+    <div class="text-center">
+    <v-bottom-sheet
+      v-if="readMore == parseInt(chat.length) +1"
+      v-model="sheet"
+    >
+      <v-sheet
+        class="text-center"
+        height="250px"
+        style="border-radius:30px 30px 0px 0px;padding:30px"
+      >
+      <div class="mt-4">
+          Did You Enjoy reading this story? Then give <router-link style="text-decoration:none;margin-left:0px;font-size:16px;color:#f66c1f"
+            :to="`/author/${data.author}`"> {{authorName}}</router-link> a review
+        </div>
+
+      <v-card flat class="px-49" width="100%">
+        <v-form
+          v-if="user != null"
+          style="margin-left:9px;"
+          @submit.prevent="submitted"
+        >
+          <v-rating
+            half-increments
+            color="yellow darken-3"
+            background-color="grey darken-1"
+            empty-icon="$ratingFull"
+            v-model="rating"
+          ></v-rating>
+          <v-text-field
+            v-model="newReview"
+            name="review"
+            label="Leave a review"
+            color="yellow darken-3"
+            solo
+            style="width:100%;margin-bottom:0px"
+          />
+          <v-btn
+            @click="submitted"
+            :loading="loadButton"
+            :disabled="rating == 0"
+            color="#f66c1f"
+            class="white--text"
+            style="margin-top:-18px"
+          >
+            Submit Review
+          </v-btn>
+        </v-form>
+      </v-card>
+      </v-sheet>
+    </v-bottom-sheet>
+  </div>
+
+  <!-- <audio autoplay loop style="visibility:hidden" src="../assets/message.mp3">
   Your browser does not support HTML5 video.
 </audio> -->
 
@@ -1426,7 +1494,9 @@ export default {
       color:"white",
       chat:[],
       pageClicked:true,
-       readMore:0
+       readMore:0,
+       sheet:true,
+       loadButton:false
     };
   },
   computed: {
@@ -1611,6 +1681,12 @@ export default {
 
     loadComments(){
       this.loadMore += 5
+   },
+
+   reviewStory(){
+     this.step--
+     this.sheet=false
+     window.scrollTo(0,100);
    },
 
     makePayment() {
@@ -1888,6 +1964,8 @@ export default {
     // },
 
     submitted() {
+      this.loadButton = true
+
       db.collection("reviews")
         .add({
           on: this.$route.params.id,
@@ -1906,7 +1984,12 @@ export default {
             .update({
               rating: this.totalrating / this.reviews.length,
             });
-        });
+        }).then(() => {
+           this.step--
+           window.scrollTo(0,100);
+           this.loadButton = false
+           this.sheet=false
+        })
     },
 
     callback(response) {
@@ -1963,6 +2046,7 @@ export default {
     },
      buttonfreeCompleted(){
       location.reload()
+      this.step = 2
     },
 
    

@@ -307,7 +307,7 @@ export default {
         this.pageCount = parseFloat(readingProgress[2])
         this.overlay = false;
         this.loadingProgress = true;
-        setTimeout(() => (this.loadingProgress = false), 10000);
+        setTimeout(() => (this.loadingProgress = false), 16000);
       } else {
         ref
           .get()
@@ -318,13 +318,13 @@ export default {
           .then(() => {
             if (this.book.readers.includes(this.user.data.displayName)) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false,this.dialog= true), 10000);
+              setTimeout(() => (this.overlay = false,this.dialog= true), 16000);
             } else if (this.book.readers.includes(this.user.data.uid)) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false,this.dialog= true), 10000);
+              setTimeout(() => (this.overlay = false,this.dialog= true), 16000);
             } else if (this.book.author == this.readerName) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false,this.dialog= true), 10000);
+              setTimeout(() => (this.overlay = false,this.dialog= true), 16000);
             } else {
               this.overlay = false;
               this.$router.push({

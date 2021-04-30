@@ -77,7 +77,7 @@
           </v-col>
           <v-col md="2">
             <div class="caption grey--text">
-              Book Downloads
+              Book Reads
             </div>
             <div>{{ book.readers.length }}</div>
           </v-col>

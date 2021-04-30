@@ -11,14 +11,14 @@
                 style="margin-left:12px; padding-left:-30px;padding-right:20px;padding-top:-60px;padding-bottom:8px"
               >
                 <p
-                  style="font-size:24px;margin-top:-6px"
+                  style="font-size:20px;margin-top:0px"
                   class="font-weight-bold text-center black--text"
                 >
                   Create An Account
                 </p>
 
                 <p
-                  style="font-size:14px;margin-top:-14px"
+                  style="font-size:14px;margin-top:-16px;margin-bottom:0px;padding-bottom:0px"
                   class="font-bold text-center black--text"
                 >
                   Ready for your next adventure? <b>Sign Up!</b>
@@ -67,7 +67,7 @@
                     prepend-inner-icon="mdi-lock"
                     color="#f66c1f"
                     :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="[rules.required, rules.min]"
+                    :rules="[rules.required]"
                     :type="show ? 'text' : 'password'"
                     name="password"
                     label="Enter your password"
@@ -80,7 +80,7 @@
                     block
                     color="#f66c1f"
                     class="white--text"
-                    elevation="24"
+                    elevation="12"
                     @click="pressed"
                     style="font-size:16px; margin-top:-9px"
                     :loading="loading"
@@ -110,12 +110,12 @@
                 <v-btn
                   text
                   style="font-size:12px"
-                  class="text-center font-weight-thin my-3"
+                  class="text-center"
                   to="/forgotpassword"
                 >
                   Forgot password?
                 </v-btn>
-                <p text style="font-size:15px; margin-top:-10px" to="/login">
+                <p text style="font-size:15px" to="/login">
                   Already have an account?
                   <router-link
                     to="/login"

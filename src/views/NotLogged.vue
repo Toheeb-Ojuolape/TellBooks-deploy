@@ -8,13 +8,13 @@
               <v-row>
                 <v-col md="5" class="text-center" style="margin-left:12px; padding-left:-30px;padding-right:20px;padding-top:-60px;padding-bottom:8px">
                  <p      
-                  style="font-size:24px;margin-top:-6px"             
+                  style="font-size:20px;margin-top:-4px"             
                   class="font-weight-bold text-center black--text">
                     Create An Account
                   </p>
 
                   <p      
-                  style="font-size:14px;margin-top:-14px"             
+                  style="font-size:14px;margin-top:-16px"             
                   class="font-bold text-center black--text">
                     Ready for your next adventure? <b>Sign Up!</b>
                   </p>
@@ -62,7 +62,7 @@
                       prepend-inner-icon="mdi-lock"
                       color="#f66c1f"
                       :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                      :rules="[rules.required, rules.min]"
+                      :rules="[rules.required]"
                       :type="show ? 'text' : 'password'"
                       name="password"
                       label="Enter your password"
@@ -75,7 +75,7 @@
                       block
                       color="#f66c1f"
                       class="white--text"
-                      elevation="24"
+                      elevation="12"
                       @click="pressed"
                       style="font-size:16px; margin-top:-9px"
                       :loading="loading"
@@ -105,11 +105,11 @@
                   <v-btn
                   text
                   style="font-size:12px"
-                   class="text-center font-weight-thin my-3" to="/forgotpassword">
+                   class="text-center" to="/forgotpassword">
                     Forgot password?
                   </v-btn>
-                  <p text style="font-size:15px; margin-top:-10px" to="/login" > 
-                  Already have an account? <router-link to="/login" style="color:#2D860F;text-decoration:none"> Login</router-link>
+                  <p text style="font-size:15px; margin-top:-5px" to="/notloggedin" > 
+                  Already have an account? <router-link to="/notloggedin" style="color:#2D860F;text-decoration:none"> Login</router-link>
                  </p>
                 </v-col>
 
@@ -129,7 +129,7 @@
                         rounded
                         outlined
                         color="white"
-                        to="/login"
+                        to="/notloggedin"
                         style="font-size:12px;text-align:center;margin-top:209px"
                       >
                         Log In

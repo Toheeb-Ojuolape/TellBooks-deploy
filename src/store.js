@@ -2,8 +2,18 @@ import { vuexfireMutations, firestoreAction } from 'vuexfire'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import  db  from '@/main'
+// import VuexPersistence from 'vuex-persist'
+
 
 Vue.use(Vuex)
+
+
+// const vuexLocal = new VuexPersistence({
+//   strictMode: true, 
+//   storage: window.localStorage,
+//   reducer: (state) => state.books,
+//   filter: (mutation) => mutation.type == 'SET_BOOKS'
+// })
 
 export default new Vuex.Store({
   state: {
@@ -44,6 +54,9 @@ export default new Vuex.Store({
     SET_USER(state, data) {
       state.user.data = data;
     },
+    SET_BOOKS(state,status){
+      state.books = status
+    },
     SET_LOADING_STATUS(state,status){
       state.loading = status
     },
@@ -74,5 +87,6 @@ export default new Vuex.Store({
     bindUsers: firestoreAction(context => {
       context.bindFirestoreRef('users',  db.collection("users"))
     })
-  }
+  },
+  // plugins: [vuexLocal.plugin]
 })
