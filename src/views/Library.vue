@@ -272,6 +272,14 @@
                     <h1
                       style="font-size:16px;padding-left:8px"
                       class="font-weight-bold"
+                      v-if="stayBook.title.length > 15"
+                    >
+                      {{ String(stayBook.title).slice(0,15) }}...
+                    </h1>
+                    <h1 
+                      v-else
+                      style="font-size:16px;padding-left:8px"
+                      class="font-weight-bold"
                     >
                       {{ stayBook.title }}
                     </h1>
@@ -334,7 +342,15 @@
                     tile
                     style="margin-left:-10px;margin-top:10px;padding:9px"
                   >
+                    <h1 
+                     v-if="book.title.length > 15"
+                      style="font-size:16px;padding-left:8px"
+                      class="font-weight-bold"
+                    >
+                      {{ String(book.title).slice(0,15) }}....
+                    </h1>
                     <h1
+                      v-else
                       style="font-size:16px;padding-left:8px"
                       class="font-weight-bold"
                     >

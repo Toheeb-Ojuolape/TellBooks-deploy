@@ -453,7 +453,7 @@
                       style="padding-left:-30px;margin:5px"
                     >
                       <img :src="review.photoURL"/></v-avatar
-                    >{{ String(review.from).slice(0, 15) }}
+                    >{{ String(review.from).slice(0, 15) }}...
                     <p
                       style="color:grey;font-size:9px; margin-left:60px;margin-top:-18px"
                     >
@@ -794,7 +794,13 @@
                               style="padding-left:-30px;margin:5px"
                             >
                               <img :src="review.photoURL"/></v-avatar
-                            >{{ String(review.from).slice(0, 12) }}
+                            >
+                            <span v-if="review.from.length > 10">
+                            {{ String(review.from).slice(0, 10) }}...
+                            </span>
+                            <span v-else>
+                            {{ review.from }}
+                            </span>
                             <p
                               style="color:grey;font-size:9px; margin-left:60px;margin-top:-14px"
                             >

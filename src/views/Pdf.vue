@@ -1,34 +1,30 @@
 <template>
   <v-app v-if="book != null">
-    <v-overlay v-if="book != null" :value="overlay" opacity="1">
-      <v-progress-circular
-        :rotate="360"
-        :size="190"
-        :width="20"
-        :value="value"
-        style="text-align:center;font-size:19px;color:#f66c1f;margin-left:30px"
-      >
-        {{ value }}%
-      </v-progress-circular>
-      <p style="font-size:21px; padding-top:10px;text-align:center">
-        Loading your ebook...<br/>
-        <span style="font-size:9px">Pdf files usually take a while to load. Abeg No vex..</span>
+    <v-overlay v-if="loadedRatio < 1" :value="overlay" :opacity="1 - loadedRatio">
+      <div v-if="loadedRatio < 1" style="background-color: #f66c1f; color: white; text-align: center"
+     :style="{ width: loadedRatio * 100 + '%' }">
+     {{ Math.floor(loadedRatio * 100) }}%
+     </div>
+      <p v-if="loadedRatio < 1" style="font-size:21px; padding-top:10px;text-align:center">
+        Loading your ebook...
+        <br>
+        <span style="font-size:10px">
+        Pdf files usually take a while to load. Abeg No vex..
+        </span>
       </p>
     </v-overlay>
 
-    <v-overlay v-if="book != null" :value="loadingProgress" opacity="1">
-      <v-progress-circular
-        :size="150"
-        :width="10"
-        indeterminate
-        style="text-align:center;font-size:19px;color:#f66c1f;margin-left:30px"
-      ></v-progress-circular>
-      <p style="font-size:21px; padding-top:10px;text-align:center">
+    <v-overlay  v-if="loadedRatio < 1" :value="loadingProgress" :opacity="1 - loadedRatio">
+    <div v-if="loadedRatio < 1" style="background-color: #f66c1f; color: white; text-align: center"
+     :style="{ width: loadedRatio * 100 + '%' }">
+     {{ Math.floor(loadedRatio * 100) }}%
+     </div>
+      <p v-if="loadedRatio < 1" style="font-size:21px; padding-top:10px;text-align:center">
         Loading Reading Progress
       </p>
     </v-overlay>
 
-    <v-dialog v-model="dialog" max-width="500">
+    <v-dialog v-if="this.loadedRatio == 1" v-model="dialog" max-width="500">
       <v-card elevation="24" color="black" class="pa-7 text-center">
         <v-icon size="100px" color="white">mdi-book-open</v-icon>
         <h1
@@ -93,7 +89,10 @@
         :page="page"
         :rotate="rotate"
         @num-pages="pageCount = $event"
-        @page-loaded="currentPage = $event"/>
+        @page-loaded="currentPage = $event"
+        @link-clicked="page = $event"
+        @progress="loadedRatio = $event"
+        />
         </div>
     </v-main>
     <v-dialog v-model="goTo" max-width="370" max-height="500" persistent>
@@ -233,7 +232,7 @@ export default {
       switch1: false,
       reading: false,
       color: "#262a41",
-      dialog:false,
+      dialog:true,
       read: "",
       readers: [],
       items: [
@@ -250,6 +249,7 @@ export default {
         { title: "Go to Library", link: "/library", icon: "mdi-bookshelf" }
       ],
       page: 1,
+      loadedRatio: 0,
       rotate: 0,
       ifShow: false,
       overlay: true,
@@ -262,7 +262,7 @@ export default {
       value: 0,
       bookName: this.$route.params.id,
       message: "",
-      loadingProgress: false
+      loadingProgress: true
     };
   },
 
@@ -289,13 +289,14 @@ export default {
   created() {
     this.$store.dispatch('bindBooks')
     this.renderBook();
+    
   },
 
   methods: {
 
     startReading(){
         this.dialog = false 
-        this.page = this.page +1
+        this.page = this.page+1
     },
     renderBook() {
       let ref = db.collection("books").doc(this.$route.params.id);
@@ -306,9 +307,10 @@ export default {
         this.page = parseFloat(readingProgress[1]);
         this.pageCount = parseFloat(readingProgress[2])
         this.overlay = false;
-        this.loadingProgress = true;
-        setTimeout(() => (this.loadingProgress = false), 16000);
+        this.dialog = false
+        
       } else {
+        this.loadingProgress = false
         ref
           .get()
           .then(books => {
@@ -318,13 +320,13 @@ export default {
           .then(() => {
             if (this.book.readers.includes(this.user.data.displayName)) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false,this.dialog= true), 16000);
+              // setTimeout(() => (this.overlay = false,this.dialog= true), 16000);
             } else if (this.book.readers.includes(this.user.data.uid)) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false,this.dialog= true), 16000);
+              // setTimeout(() => (this.overlay = false,this.dialog= true), 16000);
             } else if (this.book.author == this.readerName) {
               this.overlay = true;
-              setTimeout(() => (this.overlay = false,this.dialog= true), 16000);
+              // setTimeout(() => (this.overlay = false,this.dialog= true), 16000);
             } else {
               this.overlay = false;
               this.$router.push({

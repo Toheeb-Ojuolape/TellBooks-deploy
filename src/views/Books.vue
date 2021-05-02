@@ -699,6 +699,7 @@
                 >
                 <span v-if="review.from.length >15">{{ String(review.from).slice(0,15)}}...</span>
                 <span v-else>{{review.from}}</span>
+              
                 <p
                   style="color:grey;font-size:9px; margin-left:60px;margin-top:-18px"
                 >
@@ -852,7 +853,7 @@
               color="#f5a623"
               size="9"
               readonly
-              :value="parseFloat(book.rating)"
+              :value="parseFloat(b.rating)"
               class="margin-bottom:10px"
             ></v-rating>
 
@@ -1559,8 +1560,8 @@ export default {
       this.$router.push({
         name: "Books",
         params: { id: b.slug, book: b, bookID: this.bookID },
-      });
-      location.reload();
+      })
+       location.reload()
     },
      audioPage(i,b) {
      this.bookID = this.IDs[i];

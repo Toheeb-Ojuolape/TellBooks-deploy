@@ -3,7 +3,7 @@
     <v-main style="background:#f66c1f">
       <h1
         class="font-weight-bold white--text"
-        style="margin:20px;font-size:42px;padding-top:270px"
+        style="margin:10px 20px 10px 20px;font-size:42px;padding-top:270px"
       >
         Sorry, this book is not in your library
       </h1>
@@ -13,10 +13,10 @@
       <v-btn
         x-large
         elevation="24"
-        style="margin-top:30px;font-size:20px;color:#f66c1f"
+        style="margin-top:15px;font-size:20px;color:#f66c1f;margin-bottom:70px"
         :to="`/books/${bookName}`"
       >
-        Get {{ bookName }}</v-btn
+        Get this book</v-btn
       >
     </v-main>
   </v-app>
