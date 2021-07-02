@@ -84,10 +84,10 @@ export default {
 
   methods: {
    signout() {
+    sessionStorage.removeItem('vuex')
      firebase.auth().signOut().then(result => {
        console.log(result)
        this.user=''
-       localStorage.removeItem('vuex')
       this.$router.push('/')
      })
    }

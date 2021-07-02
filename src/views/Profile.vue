@@ -862,7 +862,7 @@ export default {
       this.$router.go(-1);
     },
     logOut() {
-     localStorage.removeItem('vuex')
+     sessionStorage.removeItem('vuex')
      firebase.auth().signOut().then(result => {
        console.log(result)
        this.user=''
