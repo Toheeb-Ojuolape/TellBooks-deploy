@@ -2,18 +2,30 @@ import { vuexfireMutations, firestoreAction } from 'vuexfire'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import  db  from '@/main'
-// import VuexPersistence from 'vuex-persist'
+import VuexPersistence from 'vuex-persist'
 
 
 Vue.use(Vuex)
 
 
-// const vuexLocal = new VuexPersistence({
-//   strictMode: true, 
-//   storage: window.localStorage,
-//   reducer: (state) => state.books,
-//   filter: (mutation) => mutation.type == 'SET_BOOKS'
-// })
+const badMutations = [
+  'SET_LOGGED_IN',
+  'SET_USER',
+  'SET_BOOKS',
+  'SET_LOADING_STATUS',
+  'vuexfireMutations'
+]
+
+const storedBooks = JSON.parse(sessionStorage.getItem('vuex'))
+
+
+
+const vuexLocal = new VuexPersistence({
+  strictMode: true, 
+  storage: window.sessionStorage,
+  reducer: (state) => state.books,
+  filter: (mutation) => (badMutations.indexOf(mutation.type) === -1)
+})
 
 export default new Vuex.Store({
   state: {
@@ -78,15 +90,29 @@ export default new Vuex.Store({
     },
     bindBooks: firestoreAction(context => {
       context.commit('SET_LOADING_STATUS',true)
-      context.bindFirestoreRef('books',  db.collection("books")
-      .orderBy("timestamp","desc")).then(() =>{
-      context.commit('SET_LOADING_STATUS',false)
-       
-      })
+      if(storedBooks == null){
+        context.bindFirestoreRef('books',  db.collection("books")
+        .orderBy("timestamp","desc")).then(() =>{
+        context.commit('SET_LOADING_STATUS',false)
+        })
+      } else if (storedBooks != null){
+        context.commit('SET_BOOKS', storedBooks)
+        context.commit('SET_LOADING_STATUS',false)
+      }  
     }),
+
+    fetchBooks: firestoreAction(context => {
+      context.commit('SET_LOADING_STATUS',true)
+        context.bindFirestoreRef('books',  db.collection("books")
+        .orderBy("timestamp","desc")).then(() =>{
+        context.commit('SET_LOADING_STATUS',false)
+        })
+    }),
+
+
     bindUsers: firestoreAction(context => {
       context.bindFirestoreRef('users',  db.collection("users"))
     })
   },
-  // plugins: [vuexLocal.plugin]
+  plugins: [vuexLocal.plugin]
 })

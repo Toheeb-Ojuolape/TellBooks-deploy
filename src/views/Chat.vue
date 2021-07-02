@@ -2,14 +2,28 @@
   <v-window v-model="step">
     <v-window-item :value="1">
       <v-app v-if="book != undefined">
-        <v-toolbar class="hidden-md-and-down ">
+      <v-row class="hidden-sm-and-down" no-gutters>
+      <v-col
+        v-if="person != null"
+        class="hidden-sm-and-down"
+        md="1"
+        sm="1"
+        lg="1"
+      >
+        <NavBar />
+      </v-col>
+
+      <v-spacer/>
+      <v-col :md="md" :lg="lg" :sm="sm" >
+      <div style="margin:10px 40px 0px 0px;padding:0px 10px 0px 100px">
+        <v-toolbar flat>
           <v-btn
+           text
+           width="10px"
             @click="goBack"
-            class="ml-16"
             color="#f66c1f"
-            style="color:white"
           >
-            <v-icon color="white">mdi-chevron-left</v-icon>Back
+            <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
           </v-btn>
           <v-toolbar-title
             class="mx-14 my-5"
@@ -22,7 +36,7 @@
           <v-spacer />
 
           <v-btn fab text to="/shelf">
-            <v-icon class="green--text">mdi-magnify</v-icon>
+            <v-icon color="#f66c1f">mdi-magnify</v-icon>
           </v-btn>
 
           <v-btn
@@ -36,34 +50,9 @@
             <v-icon class="mr-1">mdi-plus-circle-outline</v-icon>Publish Book
           </v-btn>
         </v-toolbar>
-
-        <v-toolbar flat class="mb-3 hidden-lg-and-up">
-          <v-btn @click="goBack" style="color:#f66c1f" text>
-            <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
-          </v-btn>
-
-          <v-spacer />
-
-          <v-btn icon to="/shelf">
-            <v-icon color="#f66c1f">mdi-magnify</v-icon>
-          </v-btn>
-
-          <v-btn
-            rounded
-            elevation="12"
-            to="/publish"
-            color="white"
-            class=" mr-6"
-            style="font-size:15px;color:#f66c1f"
-          >
-            <v-icon class="mr-1" color="#f66c1f">mdi-plus-circle-outline</v-icon
-            >Publish
-          </v-btn>
-        </v-toolbar>
-        <NavBar />
-        <v-container class="hidden-md-and-down">
+        <v-container >
           <!-- Display Information about the book start -->
-          <v-row class="hidden-md-and-down">
+          <v-row>
             <v-card
               cols="12"
               lg="4"
@@ -80,29 +69,29 @@
                 v-if="loading"
                 type="card-avatar, article, actions"
               ></v-skeleton-loader>
-              <div v-for="(data, i) in singleBook" :key="i">
+              <div>
                 <h2
                   style="font-size:32px;margin-top:10px"
                   class="font-weight-bold"
                 >
-                  {{ data.title }}
+                  {{ book.title }}
                 </h2>
 
                 <router-link
                   style="text-decoration:none;margin-left:0px;font-size:16px;color:#f66c1f"
-                  :to="`/author/${data.author}`"
+                  :to="`/author/${book.author}`"
                 >
                   by {{ authorName }}
                 </router-link>
                 <p
                   style="font-size:14px;padding-top:7px"
-                  v-if="data.coauthor != null"
+                  v-if="book.coauthor != null"
                 >
-                  co-author(s): {{ data.coauthor }}
+                  co-author(s): {{ book.coauthor }}
                 </p>
                 <div style="font-size:13px;margin-top:7px;margin-left:5px">
                   <v-icon class="ml-1">mdi-eye</v-icon>
-                  <p style="margin-left:7px">{{ data.readers.length }}</p>
+                  <p style="margin-left:7px">{{ book.readers.length }}</p>
                 </div>
                 <v-spacer />
                 <div style="font-size:12px;margin-left:75px;margin-top:-58px">
@@ -130,26 +119,26 @@
                   Chatbook
                 </v-btn>
                 <v-btn
-                  :to="`/category/${data.category}`"
+                  :to="`/category/${book.category}`"
                   small
                   rounded
                   color="#fbbec3"
                   style="color:#FF69B4"
                   class="ml-2"
                 >
-                  {{ data.category }}
+                  {{ book.category }}
                 </v-btn>
 
                 <div style="font-size:14px;margin-top:9px;margin-bottom:29px">
                   About:<br />
-                  {{ data.description }}
+                  {{ book.description }}
                 </div>
 
                 <v-btn
-                  v-if="notUser"
+                  v-if="book.price != 0 && person == null"
                   style="font-size:9px;margin-top:10px"
                   color="#f66c1f"
-                  to="/notlogged"
+                  @click="signup = !signup"
                   class="my-5 white--text font-weight-bold body-2"
                 >
                   Buy for {{ book.currency }} {{ book.price }}
@@ -176,11 +165,11 @@
                 </v-btn>
 
                 <v-btn
-                  v-if="notfreeUser"
+                  v-if="book.price == 0 && person == null"
                   class="white---text font-weight-bold body-2"
                   style="font-size:16px;color:white"
                   color="#f66c1f"
-                  to="/notlogged"
+                  @click="signup = !signup"
                 >
                   Add To Library
                 </v-btn>
@@ -377,40 +366,42 @@
             </v-col>
           </v-row>
           <p
-            v-if="user == null"
+            v-if="person == null"
             style="font-size:18px;text-align:center;padding-top:55px"
             class="font-weight-light"
           >
             Please
-            <router-link
-              to="/notlogged"
-              style="color:#1773ea;text-decoration:none"
-              >login</router-link
+            <v-btn
+              @click="login =! login"
+              style="color:#f66c1f;text-decoration:none"
+              text
+              >login</v-btn
             >
             or
-            <router-link
-              to="/notlogged"
-              style="color:#1773ea;text-decoration:none"
-              >create an account</router-link
+            <v-btn
+              @click="signup =! signup"
+              style="color:#f66c1f;text-decoration:none"
+              text
+              >create an account</v-btn
             >
             to leave a review
           </p>
           <p
-            v-if="user != null"
+            v-if="person != null"
             style="font-size:18px;padding-top:55px;margin-bottom:0px;padding-left:10px"
             class="font-weight-light"
           >
             Leave a review
           </p>
           <hr
-            v-if="user != null"
+            v-if="person != null"
             style="margin-left:10px;color:black"
             width="80px"
           />
 
           <v-card flat class="px-40" width="83%">
             <v-form
-              v-if="user != null"
+              v-if="person != null"
               style="margin-left:9px;"
               @submit.prevent="submitted"
             >
@@ -445,7 +436,7 @@
                 v-for="(review, index) in filteredReviews"
                 :key="index"
               >
-                <v-card elevation="2" class="pa-4 mt-4">
+                <v-card flat class="pa-4 mt-4">
                   <div style="font-size:16px">
                     <v-avatar
                       width="40px"
@@ -453,7 +444,7 @@
                       style="padding-left:-30px;margin:5px"
                     >
                       <img :src="review.photoURL"/></v-avatar
-                    >{{ String(review.from).slice(0, 15) }}...
+                    >{{ String(review.from) }}
                     <p
                       style="color:grey;font-size:9px; margin-left:60px;margin-top:-18px"
                     >
@@ -472,6 +463,7 @@
                     {{ review.review }}
                   </p>
                 </v-card>
+                <v-divider></v-divider>
               </li>
             </ol>
           </v-card>
@@ -506,23 +498,6 @@
             >
               <v-card elevation="24" height="250" width="170">
                 <v-img
-                  v-if="b.filetype == 'Audio'"
-                  :src="b.bookcover"
-                  height="250"
-                  width="170"
-                  @click="audioPage(i, b)"
-                />
-
-                <v-img
-                  v-if="b.filetype == 'Chatbook'"
-                  :src="b.bookcover"
-                  height="250"
-                  width="170"
-                  @click="chatPage(i, b)"
-                />
-
-                <v-img
-                  v-if="book.filetype == 'Pdf' || book.filetype == 'Epub'"
                   :src="b.bookcover"
                   height="250"
                   width="170"
@@ -538,40 +513,68 @@
             </p>
           </v-row>
         </v-container>
+        </div>
+        </v-col>
+        </v-row>
         <!-- Mobile view -->
         <v-main
           style="background:#fbe4c4;text-align:center"
-          class="hidden-lg-and-up"
+          class="hidden-md-and-up"
         >
+
+        <v-toolbar flat class="mb-3">
+          <v-btn @click="goBack" style="color:#f66c1f" text>
+            <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
+          </v-btn>
+
+          <v-spacer />
+
+          <v-btn icon to="/shelf">
+            <v-icon color="#f66c1f">mdi-magnify</v-icon>
+          </v-btn>
+
+          <v-btn
+            rounded
+            elevation="12"
+            to="/publish"
+            color="white"
+            class=" mr-6"
+            style="font-size:15px;color:#f66c1f"
+          >
+            <v-icon class="mr-1" color="#f66c1f">mdi-plus-circle-outline</v-icon
+            >Publish
+          </v-btn>
+        </v-toolbar>
+        
           <v-skeleton-loader
             v-if="loading"
             type="card-avatar, article, actions"
           ></v-skeleton-loader>
-          <v-row v-for="(data, i) in singleBook" :key="i">
+          <v-row>
             <v-img
-              :src="data.bookcover"
+              :src="book.bookcover"
               gradient="to top right, rgba(0,0,0,.9), rgba(0,0,0,.8)"
             >
               <div
                 style="margin-top:70px;color:white;text-align:left;padding:40px;margin-bottom:10%"
               >
                 <router-link
-                  :to="`/author/${data.author}`"
+                  :to="`/author/${book.author}`"
                   style="text-decoration:none;color:#f66c1f;font-size:16px;padding-bottom:0px;margin-bottom:0px"
                   >{{ authorName }}</router-link
                 >
                 <h1 style="font-size:20px;margin-top:0px;padding-top:0px">
-                  {{ data.title }}
+                  {{ book.title }}
                 </h1>
                 <v-rating
                   dense
                   small
                   color="#f5a623"
                   class="mb-2"
-                  :value="parseFloat(data.rating)"
+                  :value="parseFloat(book.rating)"
                 />
                 <p style="font-size:16px">
-                  {{ String(data.description).slice(0, 100) + "..." }}
+                  {{ String(book.description).slice(0, 100) + "..." }}
                 </p>
                 <v-row justify="start" no-gutters>
                   <div style="float:left">
@@ -580,7 +583,7 @@
                       style="margin-top:0px;padding-top:0px;font-size:12px"
                     >
                       <v-icon small color="white">mdi-eye</v-icon>
-                      {{ data.readers.length }}
+                      {{ book.readers.length }}
                     </p>
                   </div>
                   <div style="float:left;margin-left:5%">
@@ -596,7 +599,7 @@
                   </div>
                   <div style="float:left;margin-left:5%">
                     <p
-                      v-if="data.rating == ''"
+                      v-if="book.rating == ''"
                       class="white--text"
                       style="margin-top:0px;padding-top:0px;font-size:12px"
                     >
@@ -609,7 +612,7 @@
                       style="margin-top:0px;padding-top:0px;font-size:12px"
                     >
                       <v-icon small color="#f5a623">mdi-star</v-icon>
-                      {{ parseInt(data.rating) }}/5
+                      {{ parseInt(book.rating) }}/5
                     </p>
                   </div>
                 </v-row>
@@ -630,13 +633,13 @@
                     Chatbook
                   </v-btn>
                   <v-btn
-                    :to="`/category/${data.category}`"
+                    :to="`/category/${book.category}`"
                     x-small
                     rounded
                     color="#FF69B4"
                     class="white--text mr-3"
                   >
-                    {{ data.category }}
+                    {{ book.category }}
                   </v-btn>
                 </div>
                 <div>
@@ -662,7 +665,7 @@
                     color="green"
                     x-small
                     :href="
-                      `https://wa.me/?text=Read%20${data.title}%20by%20${data.author}%20on%20tellbooks%20${pageUrl}`
+                      `https://wa.me/?text=Read%20${book.title}%20by%20${book.author}%20on%20tellbooks%20${pageUrl}`
                     "
                     target="_blank"
                     right
@@ -677,7 +680,7 @@
                     color="#1da1f2"
                     x-small
                     :href="
-                      `https://twitter.com/intent/tweet?text=Read%20${data.title}%20by%20${data.author}%20on%20tellbooks&url=${pageUrl}`
+                      `https://twitter.com/intent/tweet?text=Read%20${book.title}%20by%20${book.author}%20on%20tellbooks&url=${pageUrl}`
                     "
                     target="_blank"
                     right
@@ -693,7 +696,7 @@
                     color="#2663ac"
                     x-small
                     :href="
-                      `https://www.linkedin.com/shareArticle?mini=true&title=Read%20${data.title}%20by%20${data.author}%20on%20tellbooks&url=${pageUrl}`
+                      `https://www.linkedin.com/shareArticle?mini=true&title=Read%20${book.title}%20by%20${book.author}%20on%20tellbooks&url=${pageUrl}`
                     "
                     target="_blank"
                     right
@@ -707,46 +710,48 @@
                   class="hidden-lg-and-up"
                   style="text-align:left;padding:9px;font-size:14px;max-width:85%;margin:24px auto auto auto "
                 >
-                  {{ data.description }}
+                  {{ book.description }}
                 </div>
                 <v-container
                   style="text-align:left;max-width:85%;margin:12px auto auto auto"
                 >
                   <p
-                    v-if="user == null"
+                    v-if="person == null"
                     style="font-size:18px;text-align:center;padding-top:55px"
                     class="font-weight-light"
                   >
                     Please
-                    <router-link
-                      to="/notlogged"
-                      style="color:#1773ea;text-decoration:none"
-                      >login</router-link
+                    <v-btn
+                      @click="login =! login"
+                      text
+                      style="color:#f66c1f;text-decoration:none"
+                      >login</v-btn
                     >
                     or
-                    <router-link
-                      to="/notlogged"
-                      style="color:#1773ea;text-decoration:none"
-                      >create an account</router-link
+                    <v-btn
+                      @click="signup =! signup"
+                      text
+                      style="color:#f66c1f;text-decoration:none"
+                      >create an account</v-btn
                     >
                     to leave a review
                   </p>
                   <p
-                    v-if="user != null"
+                    v-if="person != null"
                     style="font-size:18px;padding-top:55px;margin-bottom:0px;padding-left:10px"
                     class="font-weight-light"
                   >
                     Leave a review
                   </p>
                   <hr
-                    v-if="user != null"
+                    v-if="user.data != null"
                     style="margin-left:10px;color:black"
                     width="80px"
                   />
 
                   <v-card flat class="px-40" width="83%">
                     <v-form
-                      v-if="user != null"
+                      v-if="person != null"
                       style="margin-left:9px;"
                       @submit.prevent="submitted"
                     >
@@ -884,101 +889,6 @@
                           width="195"
                         >
                           <v-img
-                            v-if="b.filetype == 'Chatbook'"
-                            :src="b.bookcover"
-                            gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,1)"
-                            height="100%"
-                            width="100%"
-                            style="border-radius:10px"
-                            @click="chatPage(i, b)"
-                          >
-                            <p
-                              v-if="b.title.length > 16"
-                              class="white--text font-weight-bold"
-                              style="padding-top:95%;padding-bottom:0;margin-bottom:0"
-                            >
-                              {{ String(b.title).slice(0, 16) }}...
-                            </p>
-                            <p
-                              v-else
-                              class="white--text font-weight-bold"
-                              style="padding-top:95%;padding-bottom:0;margin-bottom:0"
-                            >
-                              {{ b.title }}
-                            </p>
-                            <div class="white--text" style="font-size:10px">
-                              <span> {{ b.category }}</span>
-                              <span
-                                v-if="b.rating != ''"
-                                class="white--text pl-3"
-                              >
-                                <v-icon
-                                  size="9"
-                                  style="margin-bottom:2px;margin-right:2px"
-                                  color="#f5a623"
-                                  >mdi-star</v-icon
-                                >{{ parseInt(b.rating) }}</span
-                              >
-                              <span v-else class="white--text pl-3">
-                                <v-icon
-                                  size="9"
-                                  style="margin-bottom:2px;margin-right:2px"
-                                  color="#f5a623"
-                                  >mdi-star</v-icon
-                                >0</span
-                              >
-                            </div>
-                          </v-img>
-
-                          <v-img
-                            v-if="b.filetype == 'Audio'"
-                            :src="b.bookcover"
-                            gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,1)"
-                            height="100%"
-                            width="100%"
-                            style="border-radius:10px"
-                            @click="audioPage(i, b)"
-                          >
-                            <p
-                              v-if="b.title.length > 16"
-                              class="white--text font-weight-bold"
-                              style="padding-top:95%;padding-bottom:0;margin-bottom:0"
-                            >
-                              {{ String(b.title).slice(0, 16) }}...
-                            </p>
-                            <p
-                              v-else
-                              class="white--text font-weight-bold"
-                              style="padding-top:95%;padding-bottom:0;margin-bottom:0"
-                            >
-                              {{ b.title }}
-                            </p>
-                            <div class="white--text" style="font-size:10px">
-                              <span> {{ b.category }}</span>
-                              <span
-                                v-if="b.rating != ''"
-                                class="white--text pl-3"
-                              >
-                                <v-icon
-                                  size="9"
-                                  style="margin-bottom:2px;margin-right:2px"
-                                  color="#f5a623"
-                                  >mdi-star</v-icon
-                                >{{ parseInt(b.rating) }}</span
-                              >
-                              <span v-else class="white--text pl-3">
-                                <v-icon
-                                  size="9"
-                                  style="margin-bottom:2px;margin-right:2px"
-                                  color="#f5a623"
-                                  >mdi-star</v-icon
-                                >0</span
-                              >
-                            </div>
-                          </v-img>
-
-                          <v-img
-                            v-if="b.filetype == 'Pdf' || b.filetype == 'Epub'"
                             :src="b.bookcover"
                             gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,1)"
                             height="100%"
@@ -1066,7 +976,7 @@
         <!-- Payment Popup for buying books -->
 
         <v-dialog v-model="dialog" persistent max-width="500">
-          <v-card v-if="user != null">
+          <v-card v-if="person != null">
             <p
               class="font-weight-bold text-center"
               style="padding-top:18px;font-size:20px"
@@ -1077,8 +987,8 @@
             <v-card-actions class="justify-center">
               <flutterwave
                 :is-production="isProduction"
-                :name="user.displayName"
-                :email="user.email"
+                :name="user.data.displayName"
+                :email="user.data.email"
                 :amount="book.price"
                 :reference="referenceFlutter"
                 flw-key="FLWPUBK-f92a354d64f5b330062fe7928f4321f6-X"
@@ -1096,7 +1006,7 @@
             >
               <paystack
                 :amount="book.price * 100"
-                :email="user.email"
+                :email="user.data.email"
                 :paystackkey="paystackkey"
                 :reference="reference"
                 :callback="callback"
@@ -1109,12 +1019,12 @@
               </paystack>
             </v-card-actions>
 
-            <v-card-actions class="justify-center">
+            <v-card-actions v-if="person != null" class="justify-center">
               <v-btn
                 color="#48c857"
                 class="white--text justify-center"
                 :href="
-                  `https://api.whatsapp.com/send?phone=2348167299743&text=Hi%20tellbooks.%20I%20would%20like%20to%20buy%20${book.title}%20by%20${book.author}%20for%20₦${book.price}.%20My%20name%20is%20${user.displayName}`
+                  `https://api.whatsapp.com/send?phone=2348167299743&text=Hi%20tellbooks.%20I%20would%20like%20to%20buy%20${book.title}%20by%20${book.author}%20for%20₦${book.price}.%20My%20name%20is%20${user.data.displayName}`
                 "
               >
                 <v-icon class="white--text ma-2">mdi-whatsapp</v-icon>Pay with
@@ -1217,7 +1127,7 @@
 
         <!-- This popup handles payment for gift -->
         <v-dialog v-model="giftdialog" max-width="510" max-height="500">
-          <v-card class="pa-5 text-center" v-if="user != null">
+          <v-card class="pa-5 text-center" v-if="user.data != null">
             <p class="font-weight-bold" style="font-size:17px">
               Choose Payment Option:
             </p>
@@ -1227,7 +1137,7 @@
             >
               <paystack
                 :amount="book.price * 100"
-                :email="user.email"
+                :email="user.data.email"
                 :paystackkey="paystackkey"
                 :reference="referencegift"
                 :callback="callbackgift"
@@ -1239,12 +1149,12 @@
                 </v-btn>
               </paystack>
             </v-card-actions>
-            <v-card-actions class="justify-center">
+            <v-card-actions v-if="person != null" class="justify-center">
               <v-btn
                 color="#48c857"
                 class="white--text justify-center"
                 :href="
-                  `https://api.whatsapp.com/send?phone=2348167299743&text=Hi%20tellbooks.%20I%20would%20like%20to%20gift%20${book.title}%20by%20${book.author}%20for%20₦${book.price}.%20My%20name%20is%20${user.displayName}`
+                  `https://api.whatsapp.com/send?phone=2348167299743&text=Hi%20tellbooks.%20I%20would%20like%20to%20gift%20${book.title}%20by%20${book.author}%20for%20₦${book.price}.%20My%20name%20is%20${user.data.displayName}`
                 "
               >
                 <v-icon class="white--text ma-2">mdi-whatsapp</v-icon>Pay with
@@ -1328,6 +1238,43 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
+
+        <v-dialog persistent max-width="400px" v-model="signup">
+      <div style="padding:0px 16px 0px 0px" class="d-flex justify-end">
+        <v-btn
+          fab
+          depressed
+          style="margin-left:85%;text-align:end;margin-bottom:10px"
+          small
+          right
+          color="white"
+          @click="signup = !signup"
+          ><v-icon>mdi-close</v-icon>
+        </v-btn>
+      </div>
+      <Signup @loginPop="loginPop" />
+    </v-dialog>
+    
+
+    <v-dialog persistent max-width="400px" v-model="login">
+      <div style="padding:0px 16px 0px 0px" class="d-flex justify-end">
+        <v-btn
+          fab
+          depressed
+          style="margin-left:85%;text-align:end;margin-bottom:10px"
+          small
+          right
+          color="white"
+          @click="login = !login"
+          ><v-icon>mdi-close</v-icon>
+        </v-btn>
+      </div>
+      <Login @signupPop="signupPop" />
+    </v-dialog>
+
+
+
         <!-- End of entire gifting process -->
         <v-dialog v-model="snackbar" width="300px">
           <v-card color="red" class="pa-5">
@@ -1347,13 +1294,13 @@
         </v-dialog>
         <!-- Bottom NavBar -->
 
-        <div class="navbar hidden-lg-and-up">
+        <div class="navbar hidden-md-and-up">
           <v-btn
-            v-if="notUser"
+            v-if="book.price != 0 && person == null"
             style="font-size:9px;margin-bottom:20px; color:white"
             width="65%"
             color="#f66c1f"
-            to="/notlogged"
+            @click="signup =! signup"
             class="my-5 white--text font-weight-bold body-2"
           >
             Buy for {{ book.currency }} {{ book.price }}
@@ -1381,11 +1328,11 @@
           </v-btn>
 
           <v-btn
-            v-if="notfreeUser"
+            v-if="book.price == 0 && person == null"
             style="font-size:9px;margin-top:10px;width:80%"
             class="my-5 white--text font-weight-bold body-2"
             color="#f66c1f"
-            to="/notlogged"
+            @click="signup =! signup"
           >
             Add To Library
           </v-btn>
@@ -1449,18 +1396,16 @@
       <v-app style="background:#212121">
         <v-main
           class="darkOverlay"
-          v-for="(data, i) in singleBook"
-          :key="i"
           style="background:black;max-width:100%;margin:auto"
         >
           <v-toolbar flat fixed dark>
             <v-btn @click="step--" style="color:#f66c1f" text>
               <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
             </v-btn>
-            <span v-if="data.title.length > 16"
-              >{{ String(data.title).slice(0, 16) }}...</span
+            <span v-if="book.title.length > 16"
+              >{{ String(book.title).slice(0, 16) }}...</span
             >
-            <span v-else>{{ data.title }}</span>
+            <span v-else>{{ book.title }}</span>
             <v-spacer />
 
             <v-btn icon @click="like()">
@@ -1469,7 +1414,7 @@
           </v-toolbar>
           <v-img
             gradient="to top right, rgba(0,0,0,.9), rgba(0,0,0,.8)"
-            :src="data.bookcover"
+            :src="book.bookcover"
             height="100%"
             width="100%"
             style="max-width:695px"
@@ -1576,7 +1521,7 @@
 
             <div class="text-center">
               <v-bottom-sheet
-                v-if="readMore > parseInt(chat.length)"
+                v-if="readMore > parseInt(book.chat.length)"
                 v-model="sheet"
               >
                 <v-sheet
@@ -1588,7 +1533,7 @@
                     Did You Enjoy reading this story? Then give
                     <router-link
                       style="text-decoration:none;margin-left:0px;font-size:16px;color:#f66c1f"
-                      :to="`/author/${data.author}`"
+                      :to="`/author/${book.author}`"
                     >
                       {{ authorName }}</router-link
                     >
@@ -1597,7 +1542,7 @@
 
                   <v-card flat class="px-49" width="100%">
                     <v-form
-                      v-if="user != null"
+                      v-if="user.data != null"
                       style="margin-left:9px;"
                       @submit.prevent="submitted"
                     >
@@ -1614,7 +1559,8 @@
                         label="Leave a review"
                         color="yellow darken-3"
                         solo
-                        style="width:100%;margin-bottom:0px"
+                        style="float:left;width:80%;margin-bottom:0px"
+                        
                       />
                       <v-btn
                         @click="submitted"
@@ -1622,9 +1568,12 @@
                         :disabled="rating == 0"
                         color="#f66c1f"
                         class="white--text"
-                        style="margin-top:-18px"
+                      style="float:left;margin-left:5px;margin-top:0px"
+                        fab
+                        small
+                        
                       >
-                        Submit Review
+                        <v-icon>mdi-send</v-icon>
                       </v-btn>
                     </v-form>
                   </v-card>
@@ -1657,16 +1606,19 @@ import NavBar from "@/components/NavBar";
 import moment from "moment";
 import { mapGetters } from "vuex";
 import { unslugify } from "unslugify";
+import Signup from '@/components/Signup';
+import Login from '@/components/Login'
 
 export default {
   components: {
     paystack,
     Flutterwave,
     NavBar,
+    Signup,
+    Login
   },
   data() {
     return {
-      user: "",
       step: 1,
       loadMore: 5,
       dialShare: false,
@@ -1681,7 +1633,6 @@ export default {
       giftcompleted: false,
       name: "",
       flutterwaveRef: "",
-      book: "",
       category: "",
       price: "",
       readers: [],
@@ -1717,45 +1668,50 @@ export default {
       paidUser: false,
       freeUser: false,
       freepaidUser: false,
-      authorName: "",
       color: "white",
       chat: [],
       pageClicked: true,
       readMore: 0,
       sheet: true,
       loadButton: false,
+      lg:12,
+      sm:12,
+      md:12,
+      login:false,
+      signup:false,
+      person:""
     };
   },
   computed: {
     ...mapGetters({
       books: "books",
       loading: "loading",
+      user:"user"
     }),
 
     pageTitle() {
       return unslugify(this.$route.params.id);
     },
-
     filteredReviews() {
       return this.reviews.slice(0, this.loadMore);
     },
-    singleBook() {
-      return this.books.filter((book) => book.slug == this.bookName);
+    book() {
+      return this.books.filter((book) => book.slug == this.bookName)[0];
     },
 
+    authorName(){
+      return unslugify(this.book.author)
+    },
+
+
     related() {
-      const single = this.books.filter((book) => book.slug == this.bookName);
-      single.forEach((book) => {
-        let category = book.category;
-        return category;
-      });
       return this.books
-        .filter((book) => book.category == this.category)
-        .filter((book) => book.slug != this.bookName);
+        .filter((book) => book.category == this.book.category)
+        .filter((book) => book.slug != this.bookName).slice(0,5);
     },
 
     limitedChat() {
-      return this.chat.slice(0, this.readMore);
+      return this.book.chat.slice(0, this.readMore);
     },
 
     reference() {
@@ -1794,66 +1750,60 @@ export default {
       this.changesInDatabase();
     },
   },
-  mounted() {
+   mounted() {
     firebase.auth().onAuthStateChanged((user) => {
-      this.user = user;
+      if(user !=null){
+        this.sm=10
+        this.md=10
+        this.lg=10
+      }
     });
   },
   //fetching the  book's details
   created() {
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
     this.$store.dispatch("bindBooks");
-
-    firebase.auth().onAuthStateChanged((user) => {
-      this.user = user;
-
-      db.collection("books")
-        .doc(this.bookName)
-        .get()
-        .then((books) => {
-          this.book = books.data();
-          this.chat = books.data().chat;
-          this.category = books.data().category;
-          this.readers = books.data().readers;
-          this.bookID = books.id;
-          this.authorName = unslugify(books.data().author);
-        })
-        .then(() => {
-          if (this.book.price != 0 && this.user == null) {
+     firebase.auth().onAuthStateChanged((user) => {
+      this.person = user
+      if(user !=null){
+        this.sm=10
+        this.md=10
+        this.lg=10
+      }
+      if (this.book.price != 0 && this.person == null) {
             this.notUser = true;
           }
           if (
             this.book.price != 0 &&
-            this.user != null &&
-            !this.book.readers.includes(this.user.uid)
+            this.person != null &&
+            !this.book.readers.includes(this.person.uid)
           ) {
             this.yesUser = true;
           }
           if (
             this.book.price != 0 &&
-            this.user != null &&
-            this.readers.includes(this.user.uid)
+            this.person != null &&
+            this.book.readers.includes(this.person.uid)
           ) {
             this.paidUser = true;
           }
-          if (this.book.price == 0 && this.user == null) {
+          if (this.book.price == 0 && this.person == null) {
             this.notfreeUser = true;
           }
           if (
             this.book.price == 0 &&
-            this.user != null &&
-            !this.book.readers.includes(this.user.uid)
+            this.person != null &&
+            !this.book.readers.includes(this.person.uid)
           ) {
             this.freeUser = true;
           }
           if (
             this.book.price == 0 &&
-            this.user != null &&
-            this.book.readers.includes(this.user.uid)
+            this.person != null &&
+            this.book.readers.includes(this.person.uid)
           ) {
             this.freepaidUser = true;
           }
-        });
     });
 
     db.collection("reviews")
@@ -1911,6 +1861,22 @@ export default {
       this.loadMore += 5;
     },
 
+
+    showUserdata(){ 
+      this.console.log(this.user.data)
+    },
+   
+
+   loginPop(){
+      this.login = true
+      this.signup = false
+    },
+    signupPop(){
+      this.signup = true
+      this.login = false
+    },
+
+
     reviewStory() {
       this.step--;
       this.sheet = false;
@@ -1938,42 +1904,40 @@ export default {
     },
 
     giftlog() {
-      if (this.user != null) {
+      if (this.user.data != null) {
         this.giftdialog = true;
-      } else if (this.user == null) {
-        this.router.push("/notlogged");
+      } else if (this.user.data == null) {
+        this.signup = ! this.signup
       }
     },
-    chatPage(i, b) {
-      this.bookID = this.IDs[i];
-      this.$router.push({
-        name: "Chat",
-        params: { id: b.slug, book: b, bookID: this.bookID },
-      });
-    },
-
+    
     bookPage(i, b) {
       this.bookID = this.IDs[i];
-      this.$router.push({
-        name: "Books",
-        params: { id: b.slug, book: b, bookID: this.bookID },
-      });
+      if (b.filetype == "Audio") {
+        this.$router.push({
+          name: "Audio",
+          params: { id: b.slug, book: b, bookID: this.bookID },
+        });
+      } else if (b.filetype == "Chatbook") {
+        this.$router.push({
+          name: "Chat",
+          params: { id: b.slug, book: b, bookID: this.bookID },
+        });
+      } else {
+        this.$router.push({
+          name: "Books",
+          params: { id: b.slug, book: b, bookID: this.bookID },
+        });
+      }
     },
 
-    audioPage(i, b) {
-      this.bookID = this.IDs[i];
-      this.$router.push({
-        name: "Audio",
-        params: { id: b.slug, book: b, bookID: this.bookID },
-      });
-    },
 
     like() {
       this.color = "red";
     },
 
     changesInDatabase() {
-      this.pointer = slugify(this.user.displayName, {
+      this.pointer = slugify(this.user.data.displayName, {
         replacement: "-",
         remove: /[$*_+~.()'"!:@]/g,
         lower: true,
@@ -1982,13 +1946,13 @@ export default {
       db.collection("books")
         .doc(this.$route.params.id)
         .update({
-          readers: firebase.firestore.FieldValue.arrayUnion(this.user.uid),
+          readers: firebase.firestore.FieldValue.arrayUnion(this.user.data.uid),
         })
         .then(() => {
           db.collection("users")
             .doc(this.pointer)
             .update({
-              books: firebase.firestore.FieldValue.arrayUnion(this.bookID),
+              books: firebase.firestore.FieldValue.arrayUnion(this.bookName),
             });
         })
         .then(() => {
@@ -2003,7 +1967,7 @@ export default {
               SecureToken: "ac498295-32fa-4869-839c-42afcca0ca2b",
               To: `${this.book.email}`,
               From: "Teniola from Tell! Books | books@tell.africa",
-              Subject: `${this.user.displayName} just bought your book, ${this.book.title}`,
+              Subject: `${this.user.data.displayName} just bought your book, ${this.book.title}`,
               Body: `<div style="color: #444444; font-weight: normal;">
   <div style="max-width: 560px; padding: 20px; background: #ffffff; border-radius: 5px; margin: 40px auto; font-family: Source Sans Pro,Source Sans Serif; font-size: 15px; color: #666;">
   <div style="color: #444444; font-weight: normal;">
@@ -2012,7 +1976,7 @@ export default {
   <p style="text-align: left;">1 min read |</p>
   
   <h2 style="color: #666666; text-align: left;"><span style="color: #000000;">Hi ${this.book.author}<strong>,</strong></span></h2>
-  <p style="text-align: left;">${this.user.displayName} just bought your book, ${this.book.title} ,on Tell! Books.</p><br>
+  <p style="text-align: left;">${this.user.data.displayName} just bought your book, ${this.book.title} ,on Tell! Books.</p><br>
   <p style="text-align:left"> To withdraw or view your earnings, click the button below</p>
   
   <br>
@@ -2072,7 +2036,7 @@ export default {
               .doc(this.name)
               .get()
               .then((doc) => {
-                if (doc.data().books.includes(this.bookID)) {
+                if (doc.data().books.includes(this.bookName)) {
                   this.error = `Sorry, ${this.name} already has this book in their library`;
                   this.snackbar = true;
                   this.loading = false;
@@ -2081,7 +2045,7 @@ export default {
                     .doc(this.name)
                     .update({
                       books: firebase.firestore.FieldValue.arrayUnion(
-                        this.bookID
+                        this.bookName
                       ),
                     })
                     .catch((error) => {
@@ -2114,7 +2078,7 @@ export default {
                                     To: `${this.recipient.email}`,
                                     From:
                                       "Teni from Tell! Books | books@tell.africa",
-                                    Subject: `${this.user.displayName} just bought a book for you!`,
+                                    Subject: `${this.user.data.displayName} just bought a book for you!`,
                                     Body: `<div style="color: #444444; font-weight: normal;">
   <div style="max-width: 560px; padding: 20px; background: #ffffff; border-radius: 5px; margin: 40px auto; font-family: Source Sans Pro,Source Sans Serif; font-size: 15px; color: #666;">
   <div style="color: #444444; font-weight: normal;">
@@ -2123,7 +2087,7 @@ export default {
   <p style="text-align: left;">1 min read |</p>
   
   <h2 style="color: #666666; text-align: left;"><span style="color: #000000;">Hi ${this.name}<strong>,</strong></span></h2>
-  <p style="text-align: left;">${this.user.displayName} just bought the book, ${this.book.title} for you on Tell! Books.</p><br>
+  <p style="text-align: left;">${this.user.data.displayName} just bought the book, ${this.book.title} for you on Tell! Books.</p><br>
   <p style="text-align:left"> To read the book, click the button below to navigate to your gift tab:</p>
   
   <br>
@@ -2198,8 +2162,8 @@ export default {
         .add({
           on: this.$route.params.id,
           review: this.newReview,
-          from: this.user.displayName,
-          photoURL: this.user.photoURL,
+          from: this.user.data.displayName,
+          photoURL: this.user.data.photoURL,
           rating: this.rating,
           timestamp: Date.now(),
         })
@@ -2237,7 +2201,7 @@ export default {
     },
 
     addToLibrary() {
-      this.pointer = slugify(this.user.displayName, {
+      this.pointer = slugify(this.user.data.displayName, {
         replacement: "-",
         remove: /[$*_+~.()'"!:@]/g,
         lower: true,
@@ -2246,13 +2210,13 @@ export default {
       db.collection("books")
         .doc(this.$route.params.id)
         .update({
-          readers: firebase.firestore.FieldValue.arrayUnion(this.user.uid),
+          readers: firebase.firestore.FieldValue.arrayUnion(this.user.data.uid),
         })
         .then(() => {
           db.collection("users")
             .doc(this.pointer)
             .update({
-              books: firebase.firestore.FieldValue.arrayUnion(this.bookID),
+              books: firebase.firestore.FieldValue.arrayUnion(this.bookName),
             });
         })
         .then(() => {
@@ -2266,7 +2230,7 @@ export default {
     startStory() {
       (this.pageClicked = false), (this.readMore += 1);
 
-      if(this.readMore > this.chat.length){
+      if(this.readMore > this.book.chat.length){
           this.sheet = true
         }
 
@@ -2302,7 +2266,6 @@ body {
 
 .navbar {
   overflow: hidden;
-  background-color: white;
   position: fixed;
   text-align: center;
   bottom: 0;

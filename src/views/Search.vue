@@ -3,7 +3,7 @@
   <v-row class="hidden-sm-and-down" no-gutters>
       <v-col
         class="hidden-sm-and-down"
-        v-if="person != null"
+        v-if="user != null"
         md="1"
         sm="1"
         lg="1"
@@ -14,43 +14,35 @@
       <v-col :md="md" :sm="sm" :lg="lg">
         <div style="margin:10px 40px 0px 0px;padding:0px 10px 0px 100px">
     <v-card flat>
-      <v-toolbar flat class="md-4 hidden-md-and-down ">
+      <v-toolbar flat class="md-4 hidden-sm-and-down ">
         <v-btn
           @click="goBack"
-          color="#f66c1f"
           text
+          color="#f66c1f"
+         
         >
           <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
         </v-btn>
-        <v-toolbar-title
-          class="mx-14 my-5 font-weight-black"
-          height="500px"
-          style="font-size:22px"
-        >
-          Category: {{ categoryName }}
-        </v-toolbar-title>
 
         <v-spacer />
-
-        <v-btn fab text to="/shelf">
-          <v-icon class="green--text">mdi-magnify</v-icon>
-        </v-btn>
 
         <v-btn
           rounded
           elevation="24"
           to="/publish"
           color="#f66c1f"
-          class="white--text mr-5"
+          class="white--text"
           style="font-size:15px;"
         >
           <v-icon class="mr-1">mdi-plus-circle-outline</v-icon> Publish Book
         </v-btn>
       </v-toolbar>
+
+      
     </v-card>
     <v-main>
-    <!-- laptop view -->
-      <v-container class="hidden-md-and-down">
+      <!-- laptop view -->
+      <v-container class="hidden-sm-and-down">
         <v-card
           width="1500px"
           height="300px"
@@ -58,18 +50,20 @@
           class="mt-9 text-center"
           flat
         >
-          <v-img style="padding-top:40px" width="1500px" height="350px">
+             <v-form v-on:submit.prevent="find()">
             <v-text-field
               rounded
-              v-model="search"
+              :value="search"
+              v-model="findSearch"
               elevation="24"
               color="#f66c1f"
               label="Search by book title"
               solo
               prepend-inner-icon="mdi-magnify"
-              style="padding-top:150px;padding-left:70px;padding:100px"
+              style="padding-top:150px;padding-left:70px;padding:100px 100px 0px 100px"
             />
-          </v-img>
+            </v-form>
+         <p> You searched for the term "{{key}}"</p>
         </v-card>
         <v-row v-if="loading">
           <v-col v-for="n in 3" :key="n">
@@ -94,7 +88,7 @@
             <v-row>
               <p
                 style="margin-left:30px;margin-top:25px"
-                v-for="(b, i) in categoryBooks"
+                v-for="(b, i) in filteredBooks"
                 :key="i"
               >
                 <v-card elevation="24" height="250" width="170">
@@ -142,7 +136,7 @@
           >Publish
         </v-btn>
       </v-toolbar>
-      <v-container style="margin-bottom:30px">
+      <v-container  style="margin-bottom:30px">
         <v-card
           width="1500px"
           height="250px"
@@ -150,25 +144,28 @@
           class="mt-9 text-center"
           flat
         >
-          <v-img style="padding-top:40px" width="1500px" height="250px">
-            <v-layout flat style="margin-top:40px" transparent>
-              <v-text-field
-                rounded
-                v-model="search"
-                elevation="24"
-                color="#f66c1f"
-                label="Search by book title"
-                solo
-                prepend-inner-icon="mdi-magnify"
-                style="padding-top:100px;padding-bottom:50px;padding:25px"
-              />
-            </v-layout>
-          </v-img>
+            <div style="text:align:center;padding-top:80px">
+          <v-form @submit.prevent="find()">
+            <v-text-field
+              style="padding:0px 20px 0px 33px;font-size:17px;margin:0px 10px 0px 0px"
+              solo
+              label="Search books by title, author name or category"
+              clearable
+              max-width="900px"
+              color="#008140"
+              rounded
+              v-model="findSearch"
+              append-icon="mdi-magnify"
+              @click:append="find()"
+            />
+          </v-form>
+        </div>
+           <p style="margin-top:0px;padding-top:0px"> You searched for the term "{{key}}"</p>
         </v-card>
         <v-row v-if="loading">
           <v-col v-for="n in 3" :key="n">
             <v-skeleton-loader
-              class="mb-6 mt-4 "
+              class="mb-6 mt-4"
               type="image,article"
               v-if="loading"
             ></v-skeleton-loader>
@@ -177,7 +174,7 @@
         <v-row v-if="loading">
           <v-col v-for="n in 3" :key="n">
             <v-skeleton-loader
-              class="mb-6 mt-4 "
+              class="mb-6 mt-4"
               type="image,article"
               v-if="loading"
             ></v-skeleton-loader>
@@ -193,7 +190,7 @@
                 xs="3"
                 lg="3"
                 style="margin-left:30px;margin-top:25px;margin-bottom:20px"
-                v-for="(b, i) in categoryBooks"
+                v-for="(b, i) in filteredBooks"
                 :key="i"
               >
                 <v-card elevation="24" height="190" width="120">
@@ -217,7 +214,7 @@
         </v-row>
       </v-container>
     </v-main>
-    <BottomMenu />
+    <BottomMenu class="hidden-md-and-up"/>
   </v-app>
 </template>
 
@@ -225,56 +222,55 @@
 // import db from "../main";
 import BottomMenu from "@/components/BottomMenu";
 import NavBar from "@/components/NavBar";
-import firebase from 'firebase/app';
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
+import firebase from 'firebase/app'
+import { unslugify } from "unslugify";
 
 export default {
   components: {
     BottomMenu,
-    NavBar
+    NavBar,
   },
   data() {
     return {
-      categoryName: this.$route.params.id,
+      searchKey: this.$route.params.id,
       IDs: [],
       search: "",
+      findSearch:"",
       model: null,
       md:12,
       sm:12,
       lg:12,
-      person:""
+      person:"",
+      filteredBooks:[]
     };
   },
 
   computed: {
     ...mapGetters({
-      books:"books",
-      loading:"loading",
-      user:'user'
-
+      books: "books",
+      loading: "loading",
+      user:"user"
     }),
 
-
-    categoryBooks(){
-      const searchBooks = this.search.toLowerCase().trim();
-      const categoryBooks = this.books.filter(book => book.category == this.categoryName)
-      if (!searchBooks) return categoryBooks;
-
-      return categoryBooks.filter(
-        book => book.title.toLowerCase().indexOf(searchBooks) > -1 );
-    },
-
+    // filteredBooks() {
+    //   const searchBooks = this.search.toLowerCase().trim();
+    //   if (!searchBooks) return this.books;
+    //   return this.books.filter(
+    //     (book) =>
+    //       book.title.toLowerCase().indexOf(searchBooks) > -1 ||
+    //       (unslugify(book.author)).toLowerCase().indexOf(searchBooks) > -1
+    //   );
+    // },
+    key(){
+        return this.$route.query.key.toLowerCase().trim()
+    }
   },
 
-  created() {
-   window.scrollTo(0,0);
-    this.$store.dispatch('bindBooks')
-  },
-
-  mounted() {
+   mounted() {
     firebase.auth().onAuthStateChanged((user) => {
       this.person = user;
-      if(user !=null){
+      if(this.person !=null){
         this.sm=10
         this.md=10
         this.lg=10
@@ -282,8 +278,31 @@ export default {
     });
   },
 
-    methods: {
-     bookPage(i, b) {
+  created() {
+    window.scrollTo(0, 0);
+    this.$store.dispatch("bindBooks");
+    this.search = this.$route.query.key
+    this.filteredBooks = this.books.filter(
+        (book) => 
+        book.title.toLowerCase().indexOf(this.key) > -1 ||
+          (unslugify(book.author)).toLowerCase().indexOf(this.key) > -1
+    )
+  },
+
+  methods: {
+
+    find() {
+      this.$router.push(`/search?key=${this.findSearch}`)
+      if(this.search != this.$route.query.key){
+       this.filteredBooks = this.books.filter(
+        (book) =>
+          book.title.toLowerCase().indexOf(this.key) > -1 ||
+          (unslugify(book.author)).toLowerCase().indexOf(this.key) > -1
+      );
+    }
+    },
+
+    bookPage(i, b) {
       this.bookID = this.IDs[i];
       if (b.filetype == "Audio") {
         this.$router.push({
@@ -305,7 +324,7 @@ export default {
 
     goBack() {
       this.$router.go(-1);
-    }
+    },
   },
 };
 </script>

@@ -1,14 +1,28 @@
 <template>
-  <v-app id="inspire">
-    <v-card>
-      <v-toolbar class="md-4 hidden-md-and-down ">
+  <v-app>
+   <!-- Laptop view -->
+   <v-row  class="hidden-sm-and-down" no-gutters>
+      <v-col
+        class="hidden-sm-and-down"
+        v-if="person != null"
+        md="1"
+        sm="1"
+        lg="1"
+      >
+        <NavBar />
+      </v-col>
+      <v-spacer/>
+      <v-col md="10" sm="10" lg="10">
+      <div style="margin:10px 0px 0px 110px;padding:0px 160px 0px 0px">
+    <v-card flat>
+      <v-toolbar flat>
         <v-btn
           @click="goBack"
-          class="ml-16"
-          color="#FF4E07"
-          style="color:white"
+          color="#f66c1f"
+          text
+          width="10px"
         >
-          <v-icon color="white">mdi-chevron-left</v-icon>Back
+          <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
         </v-btn>
         <v-toolbar-title
           class="mx-14 my-5 font-weight-black"
@@ -20,27 +34,11 @@
 
         <v-spacer />
       </v-toolbar>
-
-      <v-toolbar class="md-4 hidden-lg-and-up" color="#f66c1f">
-        <v-btn @click="goBack" style="color:white" text>
-          <v-icon color="white">mdi-chevron-left</v-icon>Back
-        </v-btn>
-        <v-toolbar-title
-          class="mx-14 my-5 white--text font-weight-black"
-          height="500px"
-          style="font-size:17px"
-        >
-          Publish
-        </v-toolbar-title>
-
-        <v-spacer />
-      </v-toolbar>
     </v-card>
-   <NavBar />
     <v-container style="margin-bottom:20px">
       <v-row>
         <v-col cols="12" md="5">
-          <v-card color="#FF5733" elevation="24" style="margin-top:70px">
+          <v-card color="#f66c1f" elevation="24" style="margin-top:70px">
             <p
               style="font-size:17px; color:white;text-align:center;padding-top:23px"
             >
@@ -194,7 +192,7 @@
             </p>
 
             <v-btn
-              :disabled="disabled"
+           
               large
               block
               elevation="10"
@@ -220,9 +218,9 @@
               <v-icon center style="margin-top:30px" color="white" size="80px"
                 >mdi-checkbox-marked-circle-outline</v-icon
               >
-              <v-card-text class="headline white--text text-center mt-2"
+              <p style="font-size:27px" class="font-weight-bold white--text text-center mt-2"
                 >Book Published <br />
-                Successfully!</v-card-text
+                Successfully!</p
               >
 
               <v-card-text class="text-center white--text">
@@ -247,10 +245,225 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+
+          <v-dialog v-model="failure" max-width="500">
+      <v-card elevation="24" color="red" class="pa-7 text-center">
+        <v-icon size="100px" color="white">mdi-close-circle</v-icon>
+        <h1
+          style="font-size:23px;padding:10px;color:white"
+          class="font-weight-black"
+        >
+        Book Not Published
+        </h1>
+        <p style="font-size:15px;color:white">
+          {{message}}
+        </p>
+        <v-btn @click="failure = false" elevation="24"> Ok</v-btn>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="socialsignup">
+        <SocialSignup />
+        </v-dialog>
         </v-col>
       </v-row>
     </v-container>
-    <BottomMenu />
+    </div>
+    </v-col>
+    </v-row>
+    <v-main class="hidden-md-and-up">
+    <v-toolbar flat>
+        <v-btn @click="goBack" color="#f66c1f" text>
+          <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
+        </v-btn>
+        <v-toolbar-title
+          class="mx-14 my-5 black--text font-weight-black"
+          height="500px"
+          style="font-size:17px"
+        >
+          Publish
+        </v-toolbar-title>
+
+        <v-spacer />
+      </v-toolbar>
+    
+
+    <v-container style="margin-bottom:20px">
+      <v-row>
+        <v-col cols="12" md="5">
+          <v-card color="#f66c1f" elevation="24" style="margin-top:70px">
+            <p
+              style="font-size:17px; color:white;text-align:center;padding-top:23px"
+            >
+              Upload Book cover
+            </p>
+            <v-card-subtitle class="text-center">
+              <input
+                type="file"
+                label="Upload your book cover (png, jpg accepted)"
+                accept="image/*"
+                required
+                @change="previewImage"
+              />
+            </v-card-subtitle>
+
+            <v-card-subtitle class="white--text"
+              >Progress:
+              {{ uploadValue.toFixed() + "%" }} complete</v-card-subtitle
+            >
+
+            <v-progress-linear
+              color="#48c857"
+              :value="uploadValue"
+              stream
+              striped
+            />
+
+            <v-btn
+              color="white"
+              tile
+              block
+              class="black--text"
+              :disabled="imageData == null"
+              :loading="imgloading"
+              @click="onUpload"
+            >
+              {{ text }}
+            </v-btn>
+          </v-card>
+        </v-col>
+        <v-col md="7">
+          <v-form ref="form" v-model="valid" :lazy-validation="lazy">
+            <v-text-field
+              v-model="title"
+              solo
+              label="Book Title"
+              :rules="titleRules"
+              required
+            />
+            <v-select
+              v-model="filetype"
+              :items="bookfile"
+              :rules="fileRules"
+              label="file type"
+              color="#f66c1f"
+            ></v-select>
+
+            <v-select
+              v-model="categories"
+              :items="bookcategories"
+              label="Book Category"
+              chips
+              color="#f66c1f"
+            ></v-select>
+
+            <v-text-field
+              v-model="price"
+              solo
+              label="Book price (in local currency)"
+              required
+              :rules="feeRules"
+              type="number"
+              hint="if your book is free, enter 0"
+            />
+
+            <v-textarea
+              v-model="description"
+              color="black"
+              solo
+              counter
+              auto-grow
+              label="Book Description"
+              required
+              :rules="descriptionRules"
+            />
+
+            <v-select
+              v-model="language"
+              :items="selectlanguage"
+              label="Language"
+              color="#f66c1f"
+            ></v-select>
+
+            <v-text-field
+              v-model="coauthor"
+              text
+              solo
+              prepend-inner-icon="mdi-account"
+              label="Names of coauthors (if applicable)"
+              dense
+              clearable
+              color="#f66c1f"
+            />
+            <v-select
+              v-model="downloadable"
+              color="#f66c1f"
+              :items="choices"
+              label="Do you want your book to be downloadable"
+              hint="Advisable only for FREE books"
+            />
+
+            <br />
+
+            <v-card-subtitle class="text-center">
+              <p style="font-size:12px">
+                Upload your eBook/Audiobook (epub, pdf, mp3 formats supported). Max file size 10MB
+              </p>
+              <input
+                type="file"
+                label="Upload your ebook (pdf & Epub supported)"
+                @change="previewFile"
+              />
+            </v-card-subtitle>
+
+            <v-card-subtitle
+              >Progress: {{ fileValue.toFixed() + "%" }}</v-card-subtitle
+            >
+
+            <v-progress-linear
+              color="#48c857"
+              :value="fileValue"
+              stream
+              striped
+            />
+
+            <v-btn
+              color="#FF5733"
+              block
+              class="white--text"
+              :disabled="fileData == null"
+              :loading="fileloading"
+              @click="fileUpload"
+            >
+              {{ textFile }}
+            </v-btn>
+
+            <br />
+            <br />
+            <p>
+              {{ error }}
+            </p>
+
+            <v-btn
+           
+              large
+              block
+              elevation="10"
+              raised
+              :loading="loading"
+              color="#f66c1f"
+              class="px-5 white--text"
+              @click="create"
+              style="margin-bottom:90px;margin-top:-30px"
+            >
+              Publish
+            </v-btn>
+         </v-form>
+        </v-col>
+      </v-row>
+    </v-container>
+    
+    </v-main>
+    <BottomMenu class="hidden-md-and-up" />
   </v-app>
 </template>
 
@@ -261,16 +474,20 @@ import slugify from "slugify";
 import BottomMenu from "@/components/BottomMenu";
 import db from "../main";
 import NavBar from '@/components/NavBar'
+import SocialSignup from '@/components/SocialSignup'
 
 export default {
   components: {
     BottomMenu,
     NavBar,
+    SocialSignup
   },
   data() {
     return {
       dialog: false,
       files: [],
+      message:"",
+      falure:false,
       choices: ["Yes", "No"],
       filetype: "",
       bookfile: ["Epub", "Pdf", "Audio"],
@@ -301,7 +518,7 @@ export default {
       error: "",
       slug: null,
       author: null,
-      title: null,
+      title: '',
       price: null,
       readers: [],
       description: null,
@@ -323,11 +540,7 @@ export default {
         v => !!v || "Description is required",
         v => (v && v.length <= 300) || "Description must be max. 300 characters"
       ],
-
       feeRules: [v => !!v || "Price is required"],
-
-      users: this.$route.params.id,
-
       imgloading: false,
       imageData: null,
       picture: null,
@@ -338,25 +551,26 @@ export default {
       fileData: null,
       file: null,
       fileUploaded: false,
-      user: "",
+      person: "",
       userData: "",
       pointer: "",
       disabled:true,
+      socialsignup:false,
+      failure:false,
 
     };
   },
 
   mounted() {
     firebase.auth().onAuthStateChanged(user => {
-      this.user = user;
-      if (!this.user) this.$router.push("/login");
+      this.person = user;
+      if (!this.person) this.$router.push("/login");
     });
   },
 
   created() {
-    firebase.auth().onAuthStateChanged(user => {
-      this.user = user;
-      this.pointer = slugify(this.user.displayName, {
+    
+      this.pointer = slugify(this.user.data.displayName, {
         replacement: "-",
         remove: /[$*_+~.()'"!:@]/g,
         lower: true
@@ -367,18 +581,43 @@ export default {
         .get()
         .then(doc => {
           this.userData = doc.data();
-        });
-    });
+        }).then(() =>{
+          if(this.userData == null){
+            this.socialsignup = true
+          }
+        })
+    
   },
   methods: {
     create() {
+      if(this.filetype == ""){
+       this.failure = true
+       this.message = "You need to choose your book file type"
+       console.log(this.message)
+      } else if(this.title == null){
+        this.failure = true
+        this.message ="Sorry, Book title is required"
+      }
+       else if(this.imageData == null){
+        this.failure = true
+        this.message ="You need to upload your book cover."
+      }
+
+      else if(this.description == null){
+        this.failure = true
+        this.message ="Book description is required"
+      }
+      else if(this.categories == null){
+        this.failure = true
+        this.message ="Please select a category for your book"
+      }else{
       this.loading = true;
       (this.slug = slugify(this.title, {
         replacement: "-",
         remove: /[$*_+~.()'"!:@]/g,
         lower: true
       })),
-        (this.author = slugify(this.user.displayName, {
+        (this.author = slugify(this.user.data.displayName, {
           replacement: "-",
           remove: /[$*_+~.()'"!:@]/g,
           lower: true
@@ -400,8 +639,8 @@ export default {
                 price: this.price,
                 description: this.description,
                 author: this.author,
-                photoURL: this.user.photoURL,
-                email: this.user.email,
+                photoURL: this.user.data.photoURL,
+                email: this.user.data.email,
                 readers: [],
                 currency: this.userData.currency,
                 rating: "",
@@ -428,6 +667,7 @@ export default {
               });
           }
         });
+        }
     },
     previewImage(event) {
       this.uploadValue = 0;

@@ -61,7 +61,6 @@
           </v-btn>
         </v-toolbar>
       </v-card>
-      <NavBar />
       <v-container style="margin-bottom:20px">
       <v-list shaped class="mb-6">
       <v-list-item-group>
@@ -302,14 +301,13 @@
 <script>
 import firebase from "firebase/app";
 import ColorModePicker from "@/components/ColorModePicker";
-import NavBar from "@/components/NavBar";
 import BottomMenu from "@/components/BottomMenu";
 
 
 export default {
   components: {
     ColorModePicker,
-    NavBar,
+ 
     BottomMenu
   },
   data() {

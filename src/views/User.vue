@@ -1,14 +1,14 @@
 <template>
   <v-app v-if="userData != undefined">
-    <v-card>
-      <v-toolbar class="md-4 hidden-md-and-down ">
+    <v-card flat>
+      <v-toolbar flat class="md-4 hidden-md-and-down ">
         <v-btn
           @click="goBack"
-          class="ml-16"
           color="#f66c1f"
-          style="color:white"
+          text
+          class="ml-8"
         >
-          <v-icon color="white">mdi-chevron-left</v-icon>Back
+          <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
         </v-btn>
         <v-toolbar-title
           class="mx-14 my-5 font-weight-black"
@@ -35,7 +35,7 @@
           <v-icon class="mr-1">mdi-plus-circle-outline</v-icon> Publish Book
         </v-btn>
       </v-toolbar>
-      <v-toolbar class="md-4 hidden-lg-and-up" color="white">
+      <v-toolbar flat class="md-4 hidden-lg-and-up">
         <v-btn @click="goBack" style="color:#f66c1f" text>
           <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
         </v-btn>
@@ -43,7 +43,7 @@
         <v-spacer />
 
         <v-btn fab text to="/shelf">
-          <v-icon class="green--text">mdi-magnify</v-icon>
+          <v-icon color="#f66c1f">mdi-magnify</v-icon>
         </v-btn>
 
         <v-btn
@@ -59,7 +59,6 @@
         </v-btn>
       </v-toolbar>
     </v-card>
-    <NavBar />
     <!-- Desktop view -->
     <v-container class="hidden-md-and-down">
       <v-row>
@@ -332,14 +331,12 @@
 
 <script>
 import db from "../main";
-import NavBar from "@/components/NavBar";
 import BottomMenu from "@/components/BottomMenu";
 import { mapGetters } from "vuex"
 import { unslugify } from "unslugify";
 
 export default {
   components: {
-    NavBar,
     BottomMenu
   },
 
@@ -407,26 +404,24 @@ export default {
     sendMail() {
       window.open("mailto:" + this.userData.email);
     },
-    bookPage(i, b) {
+     bookPage(i, b) {
       this.bookID = this.IDs[i];
-      this.$router.push({
-        name: "Books",
-        params: { id: b.slug, book: b, bookID: this.bookID }
-      });
-    },
-    chatPage(i, b) {
-      this.bookID = this.IDs[i];
-      this.$router.push({
-        name: "Chat",
-        params: { id: b.slug, book: b, bookID: this.bookID }
-      });
-    },
-    audioPage(i, b) {
-      this.bookID = this.IDs[i];
-      this.$router.push({
-        name: "Audio",
-        params: { id: b.slug, book: b, bookID: this.bookID }
-      });
+      if (b.filetype == "Audio") {
+        this.$router.push({
+          name: "Audio",
+          params: { id: b.slug, book: b, bookID: this.bookID },
+        });
+      } else if (b.filetype == "Chatbooks") {
+        this.$router.push({
+          name: "Chat",
+          params: { id: b.slug, book: b, bookID: this.bookID },
+        });
+      } else {
+        this.$router.push({
+          name: "Books",
+          params: { id: b.slug, book: b, bookID: this.bookID },
+        });
+      }
     },
     goBack() {
       this.$router.go(-1);

@@ -6,19 +6,20 @@ import Home from '@/views/Home'
 import App from '@/views/App'
 import Pdf from '@/views/Pdf'
 import User from '@/views/User'
-import Signup from '@/views/Signup'
-import NotLogged from '@/views/NotLogged'
-import Notlogin from '@/views/Notlogin'
-import Login from '@/views/Login'
+import Signup from '../views/Auth/Signup.vue'
+import NotLogged from '../views/Auth/NotLogged'
+import Notlogin from '../views/Auth/Notlogin'
+import Login from '../views/Auth/Login'
 import Dashboard from '@/views/Dashboard'
-import ForgotPassword from '@/views/ForgotPassword'
-import ResetPassword from '@/views/ResetPassword'
-import Google from '@/views/Google'
-import SocialSignup from '@/views/SocialSignup'
-import Library from '@/views/Library'
+import ForgotPassword from '../views/Auth/ForgotPassword'
+import ResetPassword from '../views/Auth/ResetPassword'
+import Google from '../views/Auth/Google'
+import SocialSignup from '../views/Auth/SocialSignup'
+import Library from '../views/Library'
 import Gift from '@/views/Gift'
 import Profile from '@/views/Profile'
 import Shelf from '@/views/Shelf'
+import Search from '@/views/Search'
 import Category from '@/views/Category'
 import Publish from '@/views/Publish'
 import Wallet from '@/views/Wallet'
@@ -124,6 +125,11 @@ const routes = [
     component: Category
   },
   {
+    path: '/search',
+    name: 'Search',
+    component: Search
+  },
+  {
     path: '/reset-password',
     name: 'ResetPassword',
     component: ResetPassword
@@ -196,7 +202,7 @@ const routes = [
     component: Audio
   },
   {
-    path: '/chatbook/:id',
+    path: '/chatbooks/:id',
     name: 'Chat',
     component: Chat
   },

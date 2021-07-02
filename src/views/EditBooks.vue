@@ -1,19 +1,19 @@
 /* eslint-disable no-undef */
 <template>
   <v-app v-if="pointer == books.author">
-  <v-card>
-  <v-toolbar class="md-4 hidden-md-and-down ">
-       <v-btn @click="goBack" class="ml-16" color="#f66c1f" style="color:white"> 
-       <v-icon color="white">mdi-chevron-left</v-icon>Back
+  <v-card flat>
+  <v-toolbar flat class="md-4 hidden-md-and-down ">
+       <v-btn text @click="goBack" color="#f66c1f"> 
+       <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
        </v-btn>
       <v-toolbar-title class="mx-14 " height="500px" style="font-size:17px">
-       Edit {{ books.title }}
+       Editing {{ books.title }}
       </v-toolbar-title>
 
        <v-spacer />
 
-      <v-btn icon>
-        <v-icon class="green--text">mdi-magnify</v-icon>
+      <v-btn icon to="/shelf">
+        <v-icon color="#f66c1f">mdi-magnify</v-icon>
       </v-btn>
 
         <v-btn rounded elevation="24" to="/publish" color="#f66c1f" class="white--text mr-5" style="font-size:15px;">
@@ -22,23 +22,22 @@
 
     </v-toolbar>
 
-    <v-toolbar class="md-4 hidden-lg-and-up" color="#f66c1f">
-    <v-btn @click="goBack" style="color:white" text>
-       <v-icon color="white">mdi-chevron-left</v-icon>
-       </v-btn>
+    <v-toolbar flat class="md-4 hidden-lg-and-up">
+    <v-btn  @click="goBack" color="#f66c1f"  text>
+       <v-icon color="#f66c1f">mdi-chevron-left</v-icon>
+       Back</v-btn>
      
       <v-spacer />
 
-      <v-btn icon>
-        <v-icon class="white--text">mdi-magnify</v-icon>
+      <v-btn icon to="/shelf">
+        <v-icon color="#f66c1f">mdi-magnify</v-icon>
       </v-btn>
 
-      <v-btn rounded elevation="24" to="/publish" color="white" class=" mr-5" style="font-size:15px;color:#f66c1f">
+      <v-btn rounded elevation="12" to="/publish" color="white" class=" mr-5" style="font-size:15px;color:#f66c1f">
         <v-icon class="mr-1" color="#f66c1f">mdi-plus-circle-outline</v-icon>Publish
       </v-btn>
     </v-toolbar>
     </v-card>
-    <NavBar/>
 
 
     <v-container>
@@ -88,15 +87,13 @@
           label="file type"
           color="#f66c1f"
         ></v-select>
-
+        <label>Current category is "{{books.category}}"</label>
         <v-select
           v-model="books.category"
           :items="bookcategories"
-          label="Book Category"
-          chips
-          :hint="`Current category: ${books.category}`"
+          label="Change Category"
           color="#f66c1f"
-          class="mb-3"
+          
         ></v-select>
         
         <v-text-field
@@ -104,7 +101,7 @@
         solo
         number
         readonly
-        hint="Enter your book price"
+        hint="Book price cannot be changed, yet"
       />
 
 
@@ -126,7 +123,6 @@
         ></v-select>
 
          <v-select
-         v-if="books.downloadable != null"
           v-model="books.downloadable"
           :items="choice"
           label="Do You want your book to be downloadable?"
@@ -137,7 +133,7 @@
         <v-card style="font-size:17px;" color="#cee9fe">
        <p style="font-size:15px;padding-top:25px; margin-bottom:2px; text-align:center"> Click here to change your book file </p>
       <v-card-subtitle class="text-center">
-      <input type="file" label="Upload your ebook (pdf & Epub supported)" @change="previewFile">
+      <input type="file" label="Upload your ebook (Pdf, Epub & Audio supported)" @change="previewFile">
       </v-card-subtitle>
        <v-card-subtitle>Progress: {{ fileValue.toFixed()+"%" }}</v-card-subtitle>
 
@@ -182,6 +178,7 @@
             outlined
             color="#f66c1f"
             v-on="on"
+            style="margin-bottom:50px"
           >
             <v-icon>mdi-delete</v-icon>
             Delete
@@ -294,18 +291,17 @@
 import db from '../main'
 import firebase from 'firebase/app'
 import BottomMenu from '@/components/BottomMenu'
-import NavBar from '@/components/NavBar'
 import slugify from 'slugify'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
-  NavBar,
   BottomMenu
   },
     data(){
      return{
        books:[],
-       user:"",
+       person:"",
        dialog: false,
        cover:false,
        imageData: null,
@@ -332,11 +328,17 @@ export default {
      }
     },
 
+    computed:{
+      ...mapGetters({
+        user:"user"
+      })
+    },
+
   
     created(){
       firebase.auth().onAuthStateChanged(user => {
-    this.user = user
-    this.pointer = slugify(this.user.displayName, { 
+    this.person = user
+    this.pointer = slugify(this.person.displayName, { 
                  replacement:"-",
                  remove:/[$*_+~.()'"!:@]/g,
                  lower:true

@@ -1,12 +1,9 @@
 <template>
-  <v-container v-if="user.data != null" class="hidden-md-and-down">
+  <v-container v-if="user.data != null" class="hidden-sm-and-down">
     <v-navigation-drawer
-      v-model="drawer"
-      color="#071602"
-      :expand-on-hover="expandOnHover"
       :mini-variant="miniVariant"
       :right="right"
-      :permanent="permanent"
+      permanent
       absolute
     >
       <v-list dense nav class="py-0">
@@ -16,11 +13,11 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title style="margin-top:12px;color:white">
+            <v-list-item-title style="margin-top:12px">
               Good day, <strong>{{ user.data.displayName }} </strong>
             </v-list-item-title>
             <v-list-item-subtitle>
-            <v-btn text to="/profile" style="color:white; font-size:9px;margin-right:100px;margin-top:-12px;margin-left:-14px">Edit Profile
+            <v-btn color="#f66c1f" class="white--text pa-2" rounded small to="/profile" style="height:10px;font-size:9px">Edit Profile
             </v-btn>
             </v-list-item-subtitle>
           </v-list-item-content>
@@ -30,16 +27,21 @@
 
         <v-list-item v-for="item in items" :key="item.title" :to="item.link">
           <v-list-item-icon>
-            <v-icon color="white">{{ item.icon }}</v-icon>
+            <v-icon color="#f66c1f">{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
-          <v-list-item-content class="white--text">
-            <v-list-item-title class="white--text">{{ item.title }}</v-list-item-title>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-btn text class="grey--text mx--3" @click="signout">
-          <v-icon style="margin-left:-14px;color:white">mdi-logout</v-icon>
-        </v-btn>
+        <v-list-item @click="signout">
+        <v-list-item-icon>
+        <v-icon color="#f66c1f">mdi-logout</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+        <v-list-item-title>Log out</v-list-item-title>
+        </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
   </v-container>
@@ -55,7 +57,6 @@ export default {
   name: 'NavBar',
   data() {
     return {
-      drawer: true,
       items: [
         { title: "Dashboard", icon: "mdi-view-dashboard",link:'/dashboard' },
         { title: "Bookshelf", icon: "mdi-bookshelf",link:'/shelf' },
@@ -65,15 +66,11 @@ export default {
         { title: "Audiobooks", icon: "mdi-headphones", link:'/audiobooks' },
         { title: "Chatbooks", icon: "mdi-message", link:'/chatbooks' },
         { title: "My Wallet", icon: "mdi-wallet", link:'/wallet' },
-        { title: "Settings", icon: "mdi-cogs",link:'/settings' },
         { title: "Statistics", icon: "mdi-trending-up", link:'/statistics' },
-        { title: "Book deals", icon: "mdi-tag", link:'/publications' },
       ],
       right: false,
-      permanent: true,
-      miniVariant: true,
-      expandOnHover: true,
       background: false,
+      miniVariant:false
     }
    
   },
@@ -90,6 +87,7 @@ export default {
      firebase.auth().signOut().then(result => {
        console.log(result)
        this.user=''
+       localStorage.removeItem('vuex')
       this.$router.push('/')
      })
    }

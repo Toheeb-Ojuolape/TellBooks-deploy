@@ -33,6 +33,8 @@
    methods:{
     darkMode() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      localStorage.setItem('nightmode',this.$vuetify.theme.dark)
+      console.log(!this.$vuetify.theme.dark)
     }
    }
   }

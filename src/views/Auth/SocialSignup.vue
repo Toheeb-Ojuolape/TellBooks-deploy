@@ -55,7 +55,7 @@
                       class="px-5 white--text mb-14"
                       @click="pressed"
                     >
-                      Go To Dashboard
+                      Continue
                     </v-btn>
                   </v-card-actions>
                 </v-col>
@@ -70,11 +70,11 @@
 
 <script>
 import firebase from "firebase/app";
-import db from "../main";
+import db from "../../main";
 import slugify from "slugify";
 
 export default {
-  name: "Google",
+  name: "SocialSignup",
   data() {
     return {
       loading: false,
@@ -146,11 +146,11 @@ export default {
             { merge: true }
           )
           .then(() => {
-            this.$router.push("/dashboard");
+            this.$router.go(-1);
           });
       });
     }
-  },
+  }
 };
 </script>
 

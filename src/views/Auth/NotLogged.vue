@@ -151,7 +151,7 @@ import 'firebase/auth'
 import * as firebaseui from "firebaseui"
 import "firebaseui/dist/firebaseui.css"
 import 'firebase/firestore'
-import db from '../main'
+import db from '../../main'
 
 
 export default {

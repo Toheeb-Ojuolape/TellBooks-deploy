@@ -1,248 +1,369 @@
 <template>
   <v-app>
-   <v-card>
-  <v-toolbar class="md-4 hidden-md-and-down ">
-       <v-btn @click="goBack" class="ml-16" color="#f66c1f" style="color:white"> 
-       <v-icon color="white">mdi-chevron-left</v-icon>Back
-       </v-btn>
-      <v-toolbar-title class="mx-14 my-5 font-weight-black" height="500px" style="font-size:22px">
-        Wallet
-      </v-toolbar-title>
+  <v-main class="hidden-sm-and-down">
+  <v-row no-gutters>
+      <v-col
+        class="hidden-sm-and-down"
+        v-if="person != null"
+        md="1"
+        sm="1"
+        lg="1"
+      >
+        <NavBar />
+      </v-col>
+     <v-spacer/>
+    <v-col md="10" sm="10" lg="10">
+    <div style="margin:10px 0px 0px 110px;padding:0px 160px 0px 0px">
+    <v-card flat>
+      <v-toolbar flat class="md-4 hidden-sm-and-down">
+        <v-btn
+          text
+          @click="goBack"
+        
+          color="#f66c1f"
+        >
+          <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
+        </v-btn>
+        <v-toolbar-title
+          flat
+          class="mx-14 my-5 font-weight-black"
+          height="500px"
+          style="font-size:22px"
+        >
+          Wallet
+        </v-toolbar-title>
 
-       <v-spacer />
+        <v-spacer />
 
-      <v-btn fab text to="/shelf">
-        <v-icon class="green--text">mdi-magnify</v-icon>
-      </v-btn>
+        <v-btn fab text to="/shelf">
+          <v-icon class="green--text">mdi-magnify</v-icon>
+        </v-btn>
 
-        <v-btn rounded elevation="24" to="/publish" color="#f66c1f" class="white--text mr-5" style="font-size:15px;">
-        <v-icon class="mr-1">mdi-plus-circle-outline</v-icon> Publish Book
-      </v-btn>
-
-    </v-toolbar>
-
-    <v-toolbar class="md-4 hidden-lg-and-up" color="white">
-    <v-btn @click="goBack" style="color:#f66c1f" text>
-       <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
-       </v-btn>
-      
-
-      <v-spacer />
-
-      <v-btn fab text to="/shelf">
-        <v-icon class="green--text">mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn rounded elevation="24" to="/publish" color="#f66c1f" class=" mr-5" style="font-size:15px;color:white">
-        <v-icon class="mr-1" color="white">mdi-plus-circle-outline</v-icon>Publish
-      </v-btn>
-    </v-toolbar>
+        <v-btn
+          rounded
+          elevation="24"
+          to="/publish"
+          color="#f66c1f"
+          class="white--text mr-5"
+          style="font-size:15px;"
+        >
+          <v-icon class="mr-1">mdi-plus-circle-outline</v-icon> Publish Book
+        </v-btn>
+      </v-toolbar>
     </v-card>
-    <NavBar />
-    <v-container>
-          <v-progress-linear :indeterminate="loading" color="#f66c1f" striped/>
-          <v-card color="#0066f5" elevation="24" class="text-center justify-center py-11">
-            <h1  style="text-align:center; color:white;font-size:46px;padding-top:20px">
-              Wallet
-            </h1>
-            <v-spacer /> 
-            <h4 class="caption white--text" style="text-align:center;font-size:14px">
-              Your earnings:
-            </h4>
-            <h1 class="white--text" style="text-align:center;font-size:30px">
-             {{ writer.currency }} {{ earnings - totalWithdrawals }}
-            </h1>
-            <v-card-actions class="justify-center" style="text-align:center"> 
-              <v-btn class="justify-center" style="text-align:center" @click='withdrawal=true'>
-                Request withdrawal
-              </v-btn>
-            </v-card-actions> 
-          </v-card>
-    <p style="font-size:12px;margin-left:2px;margin:10px;color:#022b69">*Please note that withdrawal to bank account incurs <span class="font-weight-bold">2.5% of withdrawn amount</span> as processing and transfer charges</p>
+    <v-container style="margin:auto 13% 0px 13%">
+      <v-card
+        elevation="24"
+        class="blueGradient text-center justify-center py-11"
+        width="500px"
+      >
+        <h1
+          style="text-align:center; color:white;font-size:46px;padding-top:20px"
+        >
+          Wallet
+        </h1>
+        <v-spacer />
+        <h4
+          class="caption white--text"
+          style="text-align:center;font-size:14px"
+        >
+          Your earnings:
+        </h4>
+        <h1 class="white--text" style="text-align:center;font-size:30px">
+          {{ writer.currency }} {{ earnings - totalWithdrawals }}
+        </h1>
+        <v-card-actions class="justify-center" style="text-align:center">
+          <v-btn
+            class="justify-center"
+            style="text-align:center"
+            @click="withdrawal = true"
+          >
+            Request withdrawal
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <p style="font-size:12px;margin-left:2px;margin:10px;color:#022b69">
+        *Please note that withdrawal to bank account incurs
+        <span class="font-weight-bold">2.5% of withdrawn amount</span><br> as
+        processing and transfer charges
+      </p>
     </v-container>
-    <v-dialog v-if="earnings >0" max-width="500"
-    v-model="withdrawal">
-    <v-card elevation='24' class="pa-8" :loading="loading">
-    <v-form>
-    <v-text-field
-    v-model='amount'
-    label="How much would you like to withdraw?"
-    color="#1877f2"
-    prepend-inner-icon='mdi-cash'
-    type="number"
-     />
-    <v-text-field
-    v-model='bank'
-    label="Bank Name"
-    color="#1877f2"
-    prepend-inner-icon='mdi-bank'
-     />
-     <v-text-field
-    v-model='accountnumber'
-    label="Account number?"
-    color="#1877f2"
-    type='number'
-    prepend-inner-icon='mdi-account-circle'
-     />
+    <v-dialog v-if="earnings > 0" max-width="500" v-model="withdrawal">
+      <v-card elevation="24" class="pa-8" :loading="loading">
+        <v-form>
+          <v-text-field
+            v-model="amount"
+            label="How much would you like to withdraw?"
+            color="#1877f2"
+            prepend-inner-icon="mdi-cash"
+            type="number"
+          />
+          <v-text-field
+            v-model="bank"
+            label="Bank Name"
+            color="#1877f2"
+            prepend-inner-icon="mdi-bank"
+          />
+          <v-text-field
+            v-model="accountnumber"
+            label="Account number?"
+            color="#1877f2"
+            type="number"
+            prepend-inner-icon="mdi-account-circle"
+          />
 
-     <v-btn @click="withdraw" color="#1877f2" class="white--text" :disabled="accountnumber == ''" :loading='loading'>Withdraw</v-btn>
-
-    </v-form>
-    </v-card>
+          <v-btn
+            @click="withdraw"
+            color="#1877f2"
+            class="white--text"
+            :disabled="accountnumber == ''"
+            :loading="loading"
+            >Withdraw</v-btn
+          >
+        </v-form>
+      </v-card>
     </v-dialog>
-<v-dialog v-else v-model="withdrawal" max-width="500">
-    <v-card elevation="24" color="red" class="pa-7 text-center">
-    <v-icon size="100px" color='white'>mdi-close-circle</v-icon>
-    <h1 style="font-size:23px;padding:10px;color:white" class="font-weight-black"> No available balance</h1>
-    <p style="font-size:15px;color:white">Sorry, {{user.displayName}}, you cannot request withdrawal because you have no money in your wallet.</p>
-    <v-btn @click='withdrawal=false' elevation="24"> Ok</v-btn>
-    
-   </v-card>
-      
-    
-    
+    <v-dialog v-else v-model="withdrawal" max-width="500">
+      <v-card elevation="24" color="red" class="pa-7 text-center">
+        <v-icon size="100px" color="white">mdi-close-circle</v-icon>
+        <h1
+          style="font-size:23px;padding:10px;color:white"
+          class="font-weight-black"
+        >
+          No available balance
+        </h1>
+        <p style="font-size:15px;color:white">
+          Sorry, {{ user.displayName }}, you cannot request withdrawal because
+          you have no money in your wallet.
+        </p>
+        <v-btn @click="withdrawal = false" elevation="24"> Ok</v-btn>
+      </v-card>
     </v-dialog>
-
-
 
     <v-dialog v-model="success" max-width="500">
-    <v-card elevation="24" color="#1877f2" class="pa-7 text-center">
-    <v-icon size="100px" color='white'>mdi-checkbox-multiple-marked-circle-outline</v-icon>
-    <h1 style="font-size:23px;padding:10px;color:white" class="font-weight-black"> Withdrawal request successful!</h1>
-    <p style="font-size:15px;color:white">Your payment request has been received and is currently being processed.
-    You should receive payment in less than <span class="font-weight-black">36 hours.</span></p>
-    <v-btn @click='success=false' elevation="24"> Ok</v-btn>
-    
-   </v-card>
-    
-    
+      <v-card elevation="24" color="#1877f2" class="pa-7 text-center">
+        <v-icon size="100px" color="white"
+          >mdi-checkbox-multiple-marked-circle-outline</v-icon
+        >
+        <h1
+          style="font-size:23px;padding:10px;color:white"
+          class="font-weight-black"
+        >
+          Withdrawal request successful!
+        </h1>
+        <p style="font-size:15px;color:white">
+          Your payment request has been received and is currently being
+          processed. You should receive payment in less than
+          <span class="font-weight-black">36 hours.</span>
+        </p>
+        <v-btn @click="success = false" elevation="24"> Ok</v-btn>
+      </v-card>
     </v-dialog>
-    <v-snackbar v-model="snackbar" :timeout='timeout'>
-     {{ text }}
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      {{ text }}
     </v-snackbar>
-    <BottomMenu />
+     </div>
+    </v-col>
+    </v-row>
+    </v-main>
+
+    <!-- Mobile view -->
+    <v-main class="hidden-md-and-up">
+    <v-toolbar flat class="md-4 hidden-md-and-up" color="white">
+        <v-btn @click="goBack" style="color:#f66c1f" text>
+          <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
+        </v-btn>
+
+        <v-spacer />
+
+        <v-btn fab text to="/shelf">
+          <v-icon class="green--text">mdi-magnify</v-icon>
+        </v-btn>
+
+        <v-btn
+          rounded
+          elevation="24"
+          to="/publish"
+          color="#f66c1f"
+          class=" mr-5"
+          style="font-size:15px;color:white"
+        >
+          <v-icon class="mr-1" color="white">mdi-plus-circle-outline</v-icon
+          >Publish
+        </v-btn>
+      </v-toolbar>
+      <v-container style="text-align:center">
+      <v-card
+        elevation="24"
+        class="blueGradient text-center justify-center py-11"
+        width="500px"
+      >
+        <h1
+          style="text-align:center; color:white;font-size:46px;padding-top:20px"
+        >
+          Wallet
+        </h1>
+        <v-spacer />
+        <h4
+          class="caption white--text"
+          style="text-align:center;font-size:14px"
+        >
+          Your earnings:
+        </h4>
+        <h1 class="white--text" style="text-align:center;font-size:30px">
+          {{ writer.currency }} {{ earnings - totalWithdrawals }}
+        </h1>
+        <v-card-actions class="justify-center" style="text-align:center">
+          <v-btn
+            class="justify-center"
+            style="text-align:center"
+            @click="withdrawal = true"
+          >
+            Request withdrawal
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <p style="font-size:12px;margin-left:2px;margin:10px;color:#022b69">
+        *Please note that withdrawal to bank account incurs
+        <span class="font-weight-bold">2.5% of withdrawn amount</span> as
+        processing and transfer charges
+      </p>
+    </v-container>
+    
+    
+    
+    </v-main>
+    <BottomMenu class="hidden-md-and-up" />
   </v-app>
 </template>
 
 <script>
-import firebase from 'firebase/app'
-import db from '../main'
-import NavBar from '@/components/NavBar'
-import slugify from 'slugify'
-import BottomMenu from '@/components/BottomMenu'
-import Vue from 'vue'
+import firebase from "firebase/app";
+import db from "../main";
+import NavBar from "@/components/NavBar";
+import slugify from "slugify";
+import BottomMenu from "@/components/BottomMenu";
+import Vue from "vue";
 // eslint-disable-next-line no-unused-vars
-import Loadscript from 'vue-plugin-load-script'
+import Loadscript from "vue-plugin-load-script";
+import { mapGetters } from 'vuex';
 
 export default {
-    components: { 
-     NavBar,
-     BottomMenu
-    },
-    data ()  {
-        return {
-          user:"",
-          sales:[],
-          earnings:0,
-          books:[],
-          author:'',
-          name:"",
-          currency:'',
-          withdrawal:false,
-          amount:null,
-          bank:'',
-          loading:false,
-          accountnumber:"",
-          text:"",
-          snackbar:'',
-          timeout:2000,
-          success:false,
-          writer:'',
-          totalWithdrawals:0,
-          cardloading:true,
-        }
-    },
+  components: {
+    NavBar,
+    BottomMenu,
+  },
+  data() {
+    return {
+      person: "",
+      sales: [],
+      earnings: 0,
+      books: [],
+      author: "",
+      name: "",
+      currency: "",
+      withdrawal: false,
+      amount: null,
+      bank: "",
+      loading: false,
+      accountnumber: "",
+      text: "",
+      snackbar: "",
+      timeout: 2000,
+      success: false,
+      writer: "",
+      totalWithdrawals: 0,
+      cardloading: true,
+    };
+  },
 
-    mounted() {
-  firebase.auth().onAuthStateChanged(user => {
-    this.user = user
-    if(!this.user)
-    this.$router.push('/login')
-  })
+  computed:{
+    ...mapGetters({
+      user:'user'
+    })
+  },
 
-},
+  mounted() {
+    firebase.auth().onAuthStateChanged((user) => {
+      this.person = user;
+      if (!this.person) this.$router.push("/login");
+    });
+  },
 
- created () {
-     this.loading=true
-      firebase.auth().onAuthStateChanged(user => {
-    this.user=user
-    this.author = slugify(this.user.displayName, {
-                 replacement:"-",
-                 remove:/[$*_+~.()'"!:@]/g,
-                 lower:true
-               })
+  created() {
+    this.loading = true;
+      this.author = slugify(this.user.data.displayName, {
+        replacement: "-",
+        remove: /[$*_+~.()'"!:@]/g,
+        lower: true,
+      });
 
-   db.collection("books")
-            .where("author", "==",this.author)
+      db.collection("books")
+        .where("author", "==", this.author)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.books.push(doc.data());
+            this.currency = doc.data().currency;
+            this.price = doc.data().price;
+            this.reads = doc.data().readers.length;
+            this.earnings +=
+              (0.9 * (doc.data().price * doc.data().readers.length)) / 10;
+          });
+        })
+        .then(() => {
+          db.collection("users")
+            .doc(this.author)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    this.books.push(doc.data())
-                    this.currency = doc.data().currency
-                    this.price = doc.data().price
-                    this.reads = doc.data().readers.length
-                    this.earnings += (8.5 * (doc.data().price * doc.data().readers.length))/10
-                })
-     
-            
-            }).then (() =>{
-              db.collection("users").doc(this.author).get()
-              .then(writer =>{
-                this.writer = writer.data()
-                this.totalWithdrawals = this.writer.withdrawals.reduce(function(a,b){
+            .then((writer) => {
+              this.writer = writer.data();
+              this.totalWithdrawals = this.writer.withdrawals.reduce(function(
+                a,
+                b
+              ) {
                 return a + b;
-              }, 0 )
-                 
-              })
-            }).then(() => {
-                this.loading=false
-              })
-      
-})
- },
- methods:{
-   goBack(){
-          this.$router.go(-1)
-        },
-    
-    withdraw(){
-     Vue.loadScript("https://smtpjs.com/v3/smtp.js")
-     .then(() => {
-      // eslint-disable-next-line no-undef
-      Email.send({
-       SecureToken : "ac498295-32fa-4869-839c-42afcca0ca2b",
-       To : `toheebojuolape7@gmail.com`,
-       From : `Teniola from Tell! Books | books@tell.africa`,
-       Subject : `${this.user.displayName} would like to withdraw ${this.writer.currency} ${this.amount}`,
-       Body : `<h1> ${this.user.displayName} would like to withdraw ${this.writer.currency} ${this.amount}.</h1>
+              },
+              0);
+            });
+        })
+        .then(() => {
+          this.loading = false;
+        });
+  },
+  methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
+
+    withdraw() {
+      Vue.loadScript("https://smtpjs.com/v3/smtp.js")
+        .then(() => {
+          // eslint-disable-next-line no-undef
+          Email.send({
+            SecureToken: "ac498295-32fa-4869-839c-42afcca0ca2b",
+            To: `toheebojuolape7@gmail.com`,
+            From: `Teniola from Tell! Books | books@tell.africa`,
+            Subject: `${this.user.data.displayName} would like to withdraw ${this.writer.currency} ${this.amount}`,
+            Body: `<h1> ${this.user.data.displayName} would like to withdraw ${this.writer.currency} ${this.amount}.</h1>
               
-              <p>Account details are Bank Name= ${this.bank} , Account Number= ${this.accountnumber} </p>`
-})
-    }).then(() => {
-      // eslint-disable-next-line no-undef
-      Email.send({
-       SecureToken : "ac498295-32fa-4869-839c-42afcca0ca2b",
-       To : `${this.user.email}`,
-       From : `Teniola from Tell! Books | books@tell.africa`,
-       Subject : `Withdrawal request of ${this.writer.currency} ${this.amount} received!`,
-       Body : `<div style="color: #444444; font-weight: normal;">
+              <p>Account details are Bank Name= ${this.bank} , Account Number= ${this.accountnumber} </p>`,
+          });
+        })
+        .then(() => {
+          // eslint-disable-next-line no-undef
+          Email.send({
+            SecureToken: "ac498295-32fa-4869-839c-42afcca0ca2b",
+            To: `${this.user.data.email}`,
+            From: `Teniola from Tell! Books | books@tell.africa`,
+            Subject: `Withdrawal request of ${this.writer.currency} ${this.amount} received!`,
+            Body: `<div style="color: #444444; font-weight: normal;">
   <div style="max-width: 560px; padding: 20px; background: #ffffff; border-radius: 5px; margin: 40px auto; font-family: Source Sans Pro,Source Sans Serif; font-size: 15px; color: #666;">
   <div style="color: #444444; font-weight: normal;">
   <div style="font-weight: 400; font-size: 15px; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; border-bottom: 3px solid #eeeeee; margin-bottom: 1em;">
   <p style="color: #444444;text-align:center"><img class="alignnone wp-image-27004" src="https://tell.africa/wp-content/uploads/2019/03/Webp.net-resizeimage-3.png" alt="" width="40" height="40" /></p>
   <p style="text-align: left;">1 min read |</p>
   
-  <h2 style="color: #666666; text-align: left;"><span style="color: #000000;">Hi ${this.user.displayName}<strong>,</strong></span></h2>
+  <h2 style="color: #666666; text-align: left;"><span style="color: #000000;">Hi ${this.user.data.displayName}<strong>,</strong></span></h2>
   <p style="text-align: left;">Your request to withdraw ${this.writer.currency} ${this.amount} into your ${this.bank} account with Account Number:${this.accountnumber} is currently being processed.</p>
   
   
@@ -279,24 +400,38 @@ export default {
   </div>
   </div>
   </div>
-  </div>`
-})
-    }).then(() =>{
-      db.collection("users").doc(this.author).update({
-        withdrawals: firebase.firestore.FieldValue.arrayUnion(parseFloat(this.amount)),
-        earnings: this.earnings - this.totalWithdrawals - this.amount
-      })
-
-            }).then(() =>{  
-    this.loading = false
-    this.withdrawal = false
-    this.success = true
-})
-    .catch(() => {
-     this.text = "Error requesting for payout. Please try later"
-     this.snackbar = true
-    });
-   },
- }
-}
+  </div>`,
+          });
+        })
+        .then(() => {
+          db.collection("users")
+            .doc(this.author)
+            .update({
+              withdrawals: firebase.firestore.FieldValue.arrayUnion(
+                parseFloat(this.amount)
+              ),
+              earnings: this.earnings - this.totalWithdrawals - this.amount,
+            });
+        })
+        .then(() => {
+          this.loading = false;
+          this.withdrawal = false;
+          this.success = true;
+        })
+        .catch(() => {
+          this.text = "Error requesting for payout. Please try later";
+          this.snackbar = true;
+        });
+    },
+  },
+};
 </script>
+
+
+<style scoped>
+.blueGradient{
+background-color: #4d5dfb;
+background-image: linear-gradient(315deg, #1877f2 0%, #2663ac 100%);
+}
+
+</style>

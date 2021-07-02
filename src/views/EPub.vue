@@ -73,7 +73,7 @@
     </v-overlay>
 
 
-    <v-dialog v-model="dialog" max-width="500">
+    <v-dialog persistent v-model="dialog" max-width="500">
       <v-card elevation="24" color="black" class="pa-7 text-center">
         <v-icon size="100px" color="white">mdi-book-open</v-icon>
         <h1
@@ -82,9 +82,9 @@
         >
           Instructions
         </h1>
-        <p style="font-size:15px;color:white">
-          Hi. Swipe RIGHT to move to the next page. Swipe LEFT to move to the previous
-          page. Tap CENTER to see reading menu.
+        <p style="padding-bottom:20px;font-size:15px;color:white">
+          Hi {{user.data.displayName}}. Swipe RIGHT to move to the next page. Swipe LEFT to move to the previous
+          page. Tap CENTER to see reading menu. Happy Reading!
         </p>
         <v-btn @click="dialog = false" elevation="24"> Ok</v-btn>
       </v-card>

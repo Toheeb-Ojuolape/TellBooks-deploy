@@ -1,10 +1,11 @@
 <template>
   <v-app>
-    <router-view></router-view>
+    <router-view :key="$route.fullPath"></router-view>
   </v-app>
 </template>
 
 <script>
+
 
 export default {
   name: 'App',
@@ -33,6 +34,11 @@ export default {
       this.$workbox.addEventListener("waiting", () => {
         this.showUpgradeUI = true;
       });
+    }
+    if (JSON.parse(localStorage.getItem('nightmode')) == true){
+       this.$vuetify.theme.dark = true
+    } else{
+       this.$vuetify.theme.dark = false
     }
   }
 };

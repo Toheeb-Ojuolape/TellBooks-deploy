@@ -1,6 +1,6 @@
 <template>
   <v-bottom-navigation
-  class="hidden-lg-and-up"
+    class="hidden-lg-and-up"
     app
     color="#f66c1f"
     fixed
@@ -8,25 +8,26 @@
     dense
   >
     <v-btn to="/dashboard">
+    <span>Home</span>
       <v-icon>mdi-view-dashboard</v-icon>
     </v-btn>
 
   
 
     <v-btn to="/library">
+    <span>Library</span>
       <v-icon>mdi-bookshelf</v-icon>
     </v-btn>
 
     <v-btn to="/shelf">
-      <v-icon>mdi-magnify</v-icon>
+    <span>Explore</span>
+      <v-icon>mdi-compass-outline</v-icon>
     </v-btn>
 
-    <v-btn to="/audiobooks">
-      <v-icon>mdi-headphones</v-icon>
-    </v-btn>
 
 
     <v-btn to="/profile">
+    <span>Account</span>
       <v-icon>mdi-account</v-icon>
     </v-btn>
   </v-bottom-navigation>

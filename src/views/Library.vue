@@ -1,14 +1,28 @@
 <template>
   <v-app>
-    <v-card>
-      <v-toolbar class="md-4 hidden-md-and-down ">
+  <v-main>
+   <v-row class="hidden-sm-and-down" no-gutters>
+      <v-col
+        class="hidden-sm-and-down"
+        v-if="person != null"
+        md="1"
+        sm="1"
+        lg="1"
+      >
+        <NavBar />
+      </v-col>
+      <v-spacer/>
+      <v-col md="10" sm="10" lg="10">
+       <div style="margin:10px 0px 0px 110px;padding:0px 160px 0px 0px">
+    <v-card flat>
+      <v-toolbar flat>
         <v-btn
           @click="goBack"
-          class="ml-16"
+          width="10%"
           color="#f66c1f"
-          style="color:white"
+          text
         >
-          <v-icon color="white">mdi-chevron-left</v-icon>Back
+          <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
         </v-btn>
         <v-toolbar-title
           class="mx-14 my-5 font-weight-black"
@@ -25,48 +39,38 @@
           elevation="24"
           to="/publish"
           color="#f66c1f"
-          class="white--text mr-5"
+          class="white--text"
           style="font-size:15px;"
         >
           <v-icon class="mr-1">mdi-plus-circle-outline</v-icon> Publish Book
         </v-btn>
       </v-toolbar>
-
-      <v-toolbar class="md-4 hidden-lg-and-up" color="white">
-        <v-btn @click="goBack" style="color:#f66c1f" text>
-          <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
-        </v-btn>
-
-        <v-spacer />
-
-        <v-btn
-          rounded
-          elevation="24"
-          to="/publish"
-          color="#f66c1f"
-          class=" mr-5"
-          style="font-size:15px;color:white"
-        >
-          <v-icon class="mr-1" color="white">mdi-plus-circle-outline</v-icon
-          >Publish
-        </v-btn>
-      </v-toolbar>
     </v-card>
-    <NavBar />
-    <v-container>
       <p
-        style="font-size:17px;text-align:center;margin-top:10px;margin-bottom:0px"
+        style="font-size:17px;text-align:center;margin-top:20px;margin-bottom:0px"
       >
         Your purchased books will appear here:
       </p>
+
+           
+           <v-text-field
+              style="border-radius:8px;width:650px;font-size:17px;margin:30px 60px 20px 20px"
+              outlined
+              label="Search your library by title, author name or category"
+              max-width="800px"
+              color="#008140"
+              v-model="search"
+              append-icon="mdi-magnify"
+              
+            />
+         
       <!-- Show selected book  -->
       <v-row id="show" class="mb-6">
         <div v-if="newBook == true">
-          <p class="hidden-md-and-down">
+          <p>
             <v-card
               flat
               style="margin-top:80px;margin-left:45px"
-              class="hidden-md-and-down"
             >
               <div class="row">
                 <div class="column">
@@ -89,7 +93,7 @@
                   >
                     <h1
                       style="font-size:25px;padding-left:8px"
-                      class="font-weight-bold"
+                      class="black--text font-weight-bold"
                     >
                       {{ stayBook.title }}
                     </h1>
@@ -100,7 +104,7 @@
                       size="10"
                     ></v-rating>
                     <p
-                      style="font-size:16px;padding-left:10px; margin-bottom:1px"
+                      style="color:black;font-size:16px;padding-left:10px; margin-bottom:1px"
                     >
                       Read {{ bookProgress }}%
                     </p>
@@ -109,6 +113,7 @@
                         striped
                         v-model="bookProgress"
                         color="#008140"
+                        style="width:52%"
                       />
                     </div>
                     <v-btn
@@ -126,11 +131,10 @@
           </p>
         </div>
         <div v-else>
-          <p class="hidden-md-and-down" v-for="(book, i) in oneBook" :key="i">
+          <p  v-for="(book, i) in oneBook" :key="i">
             <v-card
               flat
               style="margin-top:80px;margin-left:45px"
-              class="hidden-md-and-down"
             >
               <div class="row">
                 <div class="column">
@@ -153,7 +157,7 @@
                   >
                     <h1
                       style="font-size:25px;padding-left:8px"
-                      class="font-weight-bold"
+                      class="black--text font-weight-bold"
                     >
                       {{ book.title }}
                     </h1>
@@ -164,7 +168,7 @@
                       size="10"
                     ></v-rating>
                     <p
-                      style="font-size:16px;padding-left:10px; margin-bottom:1px"
+                      style="color:black;font-size:16px;padding-left:10px; margin-bottom:1px"
                     >
                       Read {{ bookProgress }}%
                     </p>
@@ -173,6 +177,7 @@
                         striped
                         v-model="bookProgress"
                         color="#008140"
+                        style="width:52%"
                       />
                     </div>
                     <v-btn
@@ -193,7 +198,7 @@
       <!-- End of Show selected book -->
 
       <!-- Laptop view of books in library -->
-      <v-container class="hidden-md-and-down" style="margin-bottom:30px">
+      <v-container style="margin-bottom:30px">
         <v-row v-if="loading">
           <v-col v-for="n in 3" :key="n">
             <v-skeleton-loader
@@ -208,7 +213,7 @@
             <v-row>
               <p
                 style="margin-left:30px;margin-top:25px"
-                v-for="(book, i) in books"
+                v-for="(book, i) in filteredBooks"
                 :key="i"
               >
                 <v-btn
@@ -231,24 +236,59 @@
               <p style="font-size:16px;color:#f66c1f">
                 You've not bought any books yet
               </p>
+
+              <v-btn rounded color="#f66c1f" to="/shelf"> Buy Books</v-btn>
             </v-main>
           </v-layout>
         </v-row>
       </v-container>
+      </div>
+      </v-col>
+      </v-row>
+      </v-main>
       <!-- End of Laptop view of books in library -->
 
       <!-- Mobile view of books in Library -->
+      <v-main class="hidden-md-and-up">
+      <v-toolbar style="margin-top:-30px" flat>
+        <v-btn @click="goBack" style="color:#f66c1f" text>
+          <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
+        </v-btn>
+
+        <v-spacer />
+
+        <v-btn
+          rounded
+          elevation="10"
+          to="/publish"
+          color="#f66c1f"
+          class=" mr-5"
+          style="font-size:15px;color:white"
+        >
+          <v-icon class="mr-1" color="white">mdi-plus-circle-outline</v-icon
+          >Publish
+        </v-btn>
+      </v-toolbar>
+
       <v-container
-        class="hidden-md-and-up"
-        style="margin-top:-20px;margin-bottom:30px"
+        style="padding:0px 10px 0px 10px;margin-top:-20px;margin-bottom:30px"
       >
+
+      <v-text-field
+              style="border-radius:8px;width:90%;font-size:17px;margin:40px 0px 0px 20px"
+              outlined
+              label="Search your library by title, author name or category"
+              color="#008140"
+              v-model="search"
+              append-icon="mdi-magnify"
+              
+            />
         <!-- Select one book -->
-        <div v-if="newBook == true">
-          <p class="hidden-lg-and-up">
+        <div class="ml-4" v-if="newBook == true">
+          <p>
             <v-card
               flat
               style="margin-top:40px;margin-left:10px"
-              class="hidden-lg-and-up"
             >
               <div class="row">
                 <div class="column4">
@@ -271,7 +311,7 @@
                   >
                     <h1
                       style="font-size:16px;padding-left:8px"
-                      class="font-weight-bold"
+                      class="black--text font-weight-bold"
                       v-if="stayBook.title.length > 15"
                     >
                       {{ String(stayBook.title).slice(0,15) }}...
@@ -279,7 +319,7 @@
                     <h1 
                       v-else
                       style="font-size:16px;padding-left:8px"
-                      class="font-weight-bold"
+                      class="black--text font-weight-bold"
                     >
                       {{ stayBook.title }}
                     </h1>
@@ -290,7 +330,7 @@
                       size="10"
                     ></v-rating>
                     <p
-                      style="font-size:14px;padding-left:10px; margin-bottom:1px"
+                      style="color:black;font-size:14px;padding-left:10px; margin-bottom:1px"
                     >
                       Read {{ bookProgress }}%
                     </p>
@@ -299,6 +339,8 @@
                         striped
                         v-model="bookProgress"
                         color="#008140"
+                        style='width:90%'
+                        
                       />
                     </div>
                     <v-btn
@@ -316,12 +358,11 @@
             </v-card>
           </p>
         </div>
-        <div v-else-if="newBook == false">
-          <p class="hidden-lg-and-up" v-for="(book, i) in oneBook" :key="i">
+        <div class="ml-4" v-else-if="newBook == false">
+          <p v-for="(book, i) in oneBook" :key="i">
             <v-card
               flat
               style="margin-top:40px;margin-left:10px"
-              class="hidden-lg-and-up"
             >
               <div class="row">
                 <div class="column4">
@@ -345,14 +386,14 @@
                     <h1 
                      v-if="book.title.length > 15"
                       style="font-size:16px;padding-left:8px"
-                      class="font-weight-bold"
+                      class="black--text font-weight-bold"
                     >
                       {{ String(book.title).slice(0,15) }}....
                     </h1>
                     <h1
                       v-else
                       style="font-size:16px;padding-left:8px"
-                      class="font-weight-bold"
+                      class="black--text font-weight-bold"
                     >
                       {{ book.title }}
                     </h1>
@@ -363,7 +404,7 @@
                       size="10"
                     ></v-rating>
                     <p
-                      style="font-size:14px;padding-left:10px; margin-bottom:1px"
+                      style="color:black;font-size:14px;padding-left:10px; margin-bottom:1px"
                     >
                       Read {{ bookProgress }}%
                     </p>
@@ -372,6 +413,8 @@
                         striped
                         v-model="bookProgress"
                         color="#008140"
+                        style='width:90%'
+                       
                       />
                     </div>
                     <v-btn
@@ -391,6 +434,16 @@
         </div>
         <!-- Select one book end -->
         <v-row v-if="loading">
+          <v-col v-for="n in 2" :key="n">
+            <v-skeleton-loader
+              class="mb-6 mt-4"
+              type="image"
+              v-if="loading"
+            ></v-skeleton-loader>
+          </v-col>
+        </v-row>
+
+        <v-row v-if="loading">
           <v-col v-for="n in 3" :key="n">
             <v-skeleton-loader
               class="mb-6 mt-4"
@@ -399,11 +452,12 @@
             ></v-skeleton-loader>
           </v-col>
         </v-row>
+        
         <v-row v-if="books.length != 0">
-          <v-col md="7" sm="6" xs="6">
+          <v-col md="7" sm="12" xs="12">
             <v-row>
               <p
-                v-for="(book, i) in books"
+                v-for="(book, i) in filteredBooks"
                 :key="i"
                 style="margin-left:30px;margin-top:25px"
               >
@@ -428,13 +482,15 @@
               <p style="font-size:16px;color:#f66c1f">
                 You've not bought any books yet
               </p>
+
+              <v-btn rounded color="#f66c1f" to="/shelf"> Buy Books</v-btn>
             </v-main>
           </v-layout>
         </v-row>
       </v-container>
+      </v-main>
       <!-- End of Mobile view of books in Library -->
-    </v-container>
-    <BottomMenu />
+    <BottomMenu class="hidden-md-and-up"/>
   </v-app>
 </template>
 
@@ -443,6 +499,7 @@ import firebase from "firebase/app";
 import db from "../main";
 import NavBar from "@/components/NavBar";
 import BottomMenu from "@/components/BottomMenu";
+import { unslugify } from "unslugify"
 
 export default {
   components: {
@@ -450,7 +507,7 @@ export default {
     BottomMenu
   },
   data: () => ({
-    user: "",
+    person: "",
     books: [],
     earnings: 0,
     pdf: false,
@@ -468,17 +525,30 @@ export default {
     progress: false,
     oneBook: [],
     stayBook: [],
-    newBook: false
+    newBook: false,
+    search:""
   }),
+
+
+  computed:{
+    filteredBooks(){
+      const searchBooks = this.search.toLowerCase().trim();
+      if (!searchBooks) return this.books;
+
+      return this.books.filter(
+        book => (book.title.toLowerCase().indexOf(searchBooks)) > -1  ||
+        (unslugify(book.author)).toLowerCase().indexOf(searchBooks) > -1);
+    }
+    },
 
   created() {
 
 
     firebase.auth().onAuthStateChanged(user => {
-      this.user = user;
+      this.person = user;
 
       db.collection("books")
-        .where("readers", "array-contains", this.user.uid)
+        .where("readers", "array-contains", this.person.uid)
         .onSnapshot(querySnapshot => {
           this.books = [];
           querySnapshot.forEach(doc => {
@@ -503,7 +573,7 @@ export default {
       this.bookid = this.id[i];
       this.newBook = false;
       let retrievedData = localStorage.getItem(book.slug);
-      this.oneBook = this.books.slice(i, i + 1);
+      this.oneBook = this.filteredBooks.slice(i, i + 1);
       window.scrollTo(0,0);
       let readingProgress = JSON.parse(retrievedData);
       if (localStorage.getItem(book.slug) != null) {
@@ -524,8 +594,8 @@ export default {
   },
   mounted() {
     firebase.auth().onAuthStateChanged(user => {
-      this.user = user;
-      if (!this.user) this.$router.push("/login");
+      this.person = user;
+      if (!this.person) this.$router.push("/login");
     });
   }
 };
@@ -550,7 +620,7 @@ export default {
 
 .column1 {
   float: left;
-  width: 810px;
+  width: 66%;
   margin-top: -30px;
 }
 .column3 {
@@ -559,11 +629,13 @@ export default {
 }
 
 .column4 {
-  width: 40%;
+  width: 115px;
+  margin-right:14px
 }
 
 .column5 {
-  width: 60%;
+  width: 54%;
+  max-width:90%
 }
 
 .column6 {

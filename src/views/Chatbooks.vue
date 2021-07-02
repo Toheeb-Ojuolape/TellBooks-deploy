@@ -4,11 +4,11 @@
         <v-toolbar flat color="#ffd5d5" class="md-4 hidden-md-and-down ">
           <v-btn
             @click="goBack"
-            class="ml-16"
             color="#f66c1f"
-            style="color:white"
+            text
+            
           >
-            <v-icon color="white">mdi-chevron-left</v-icon>Back
+            <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
           </v-btn>
           <v-toolbar-title
             class="mx-14 my-5 font-weight-bold"
@@ -19,10 +19,7 @@
           </v-toolbar-title>
 
           <v-spacer />
-
-          <v-btn fab text to="/shelf">
-            <v-icon class="green--text">mdi-magnify</v-icon>
-          </v-btn>
+         
 
           <v-btn
             rounded
@@ -42,6 +39,7 @@
 
       <v-spacer />
     </v-toolbar>
+       <v-form @submit.prevent="find()">
        <v-text-field
             v-model="search"
             rounded
@@ -52,7 +50,8 @@
             prepend-inner-icon="mdi-magnify"
             style="padding-top:100px;max-width:80%;margin:auto auto 60px auto"
           />
-      <v-card flat color="white" width="100%" style="border-radius:50px 50px 0px 0;padding-top:70px;padding-bottom:80px">
+          </v-form>
+      <v-card flat width="100%" style="border-radius:50px 50px 0px 0;padding-top:70px;padding-bottom:80px">
     
 <p
         style="margin-bottom:10px;padding-left:10px;font-size:19px"
@@ -82,10 +81,12 @@
       </v-row>
         <div class="scrollmenu">
   <div class="carousel" v-for="(b,i) in filteredChat" :key="i">
- <v-card height="220px" width="300px" elevation="18" style="border-radius:20px 20px 20px 0px;padding:16px;padding-top:40px">
+ <v-card height="220px" width="300px" elevation="18" style="border-radius:20px 20px 20px 0px;padding:40px;padding-top:40px">
   <v-row>
-  <div style="float:left;width:40%">
+  <div style="float:left;width:50%">
+  <v-card height="130px" width="90px" elevation="20">
   <img @click="bookPage(i,b)" :src="b.bookcover" height="130px" width="90px"/>
+  </v-card>
   </div>
   <div style="float:left;width:50%">
   <div @click="bookPage(i,b)" v-if="b.title.length < 20" style="text-align:left;font-size:18px" class="font-weight-bold">{{b.title}}</div>
@@ -94,7 +95,7 @@
   <div style="margin-right:19px;width:1px">
   <v-rating dense  :value="parseFloat(b.rating)" width=1px color="#f6b911" size="14" />
   </div>
-  <v-btn :to="`/chatbook/${b.slug}`" style="float:right;margin-bottom:20px" fab class="pulsingButton" color="#ff69b4"> <v-icon color="white">mdi-message</v-icon></v-btn>
+  <v-btn :to="`/chatbooks/${b.slug}`" style="float:right;margin-bottom:20px" fab class="pulsingButton" color="#ff69b4"> <v-icon color="white">mdi-message</v-icon></v-btn>
   
   </div>
   </v-row>
@@ -176,7 +177,6 @@ export default {
   data: () => ({
     IDs: [],
     model:null,
-    user: "",
     earnings: 0,
     search:"",
     id: [],
@@ -187,18 +187,16 @@ export default {
   computed:{
    ...mapGetters({
      books:"books",
-     loading:"loading"
+     loading:"loading",
+     user:"user"
    }),
 
 
-    filteredChat(){
-      const searchBooks = this.search.toLowerCase().trim();
-      const chatBooks = this.books.filter(book => book.filetype == "Chatbook")
-      if (!searchBooks) return chatBooks;
+   
 
-      return chatBooks.filter(
-        book => book.title.toLowerCase().indexOf(searchBooks) > -1
-      );
+
+    filteredChat(){
+      return this.books.filter(book => book.filetype == "Chatbooks")
     },
   
       
@@ -211,6 +209,10 @@ export default {
   },
 
   methods: {
+
+     find() {
+      this.$router.push(`/search?key=${this.search}`);
+    },
 
    bookPage(i, book) {
       this.bookID = this.IDs[i];
@@ -232,9 +234,6 @@ export default {
 
 <style>
 
-div{
-  font-family: 'Poppins', sans-serif;
-}
 .v-btn {
   text-transform: none !important;
 }
