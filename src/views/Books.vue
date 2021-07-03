@@ -1543,6 +1543,15 @@
         <v-icon color="white">mdi-cloud-download</v-icon>
       </v-btn>
     </div>
+    <v-overlay :absolute="absolute" opacity="0.7" :value="bookLoading" v-if="singleBook == ''">
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        color="#f66c1f"
+        indeterminate
+      ></v-progress-circular>
+      <p class="text-center">Loading...</p>
+    </v-overlay>
   </v-app>
 </template>
 
@@ -1578,6 +1587,7 @@ export default {
       lg: 12,
       md: 12,
       signup: false,
+      absolute:true,
       login: false,
       btnLoading: false,
       dialShare: false,
@@ -1631,6 +1641,7 @@ export default {
       loadMore: 5,
       miniVariant: "",
       person: "",
+      bookLoading:true
     };
   },
   computed: {
@@ -1703,6 +1714,7 @@ export default {
   created() {
     window.scrollTo(0, 0);
     this.$store.dispatch("bindBooks");
+    console.log(this.singleBook)
     firebase.auth().onAuthStateChanged((user) => {
       this.person = user;
       if (this.person != null) {

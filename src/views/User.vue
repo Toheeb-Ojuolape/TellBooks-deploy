@@ -167,26 +167,12 @@
               :key="i"
             >
               <v-card elevation="24" height="250" width="170">
-               <v-img
-                  v-if="b.filetype == 'Audio'"
-                  :src="b.bookcover"
-                  height="250"
-                  width="170"
-                  @click="audioPage(i, b)"
-                />
+               
                 <v-img
-                  v-if="b.filetype == 'Pdf' || b.filetype =='Epub'"
                   :src="b.bookcover"
                   height="250"
                   width="170"
                   @click="bookPage(i, b)"
-                />
-                <v-img
-                  v-if="b.filetype == 'Chat'"
-                  :src="b.bookcover"
-                  height="250"
-                  width="170"
-                  @click="chatPage(i, b)"
                 />
               </v-card>
             </p>
@@ -279,21 +265,6 @@
         >
           <v-card elevation="24" height="190" width="120" class="mx-3">
             <v-img
-              v-if="b.filetype == 'Chatbook'"
-              :src="b.bookcover"
-              height="190"
-              width="120"
-              @click="chatPage(i, b)"
-            />
-            <v-img
-              v-if="b.filetype == 'Audio'"
-              :src="b.bookcover"
-              height="190"
-              width="120"
-              @click="audioPage(i, b)"
-            />
-            <v-img
-              v-if="b.filetype =='Pdf' || b.filetype =='Epub'"
               :src="b.bookcover"
               height="190"
               width="120"

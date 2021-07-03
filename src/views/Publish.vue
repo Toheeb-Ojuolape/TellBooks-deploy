@@ -475,6 +475,7 @@ import BottomMenu from "@/components/BottomMenu";
 import db from "../main";
 import NavBar from '@/components/NavBar'
 import SocialSignup from '@/components/SocialSignup'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -559,6 +560,13 @@ export default {
       failure:false,
 
     };
+  },
+
+
+  computed:{
+    ...mapGetters({
+      user:"user"
+    })
   },
 
   mounted() {
