@@ -275,12 +275,15 @@ export default {
         this.md=10
         this.lg=10
       }
-    });
+    })
+  },
+
+  beforeCreate(){
+    this.$store.dispatch("bindBooks");
   },
 
   created() {
     window.scrollTo(0, 0);
-    this.$store.dispatch("bindBooks");
     this.search = this.$route.query.key
     this.filteredBooks = this.books.filter(
         (book) => 

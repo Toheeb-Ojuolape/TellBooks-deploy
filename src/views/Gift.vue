@@ -534,6 +534,7 @@ export default {
   },
 
   created() {
+    window.scrollTo(0,0);
     firebase.auth().onAuthStateChanged((user) => {
       this.person = user;
 

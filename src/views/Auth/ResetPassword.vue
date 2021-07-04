@@ -106,6 +106,9 @@ export default {
       email: ""
     };
   },
+   created(){
+     window.scrollTo(0, 0);
+  },
   methods: {
     goBack(){
       this.$router.go(-1)

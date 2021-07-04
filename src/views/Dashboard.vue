@@ -661,8 +661,12 @@ export default {
     });
   },
 
-  created() {
+  beforeCreate(){
     this.$store.dispatch("bindBooks");
+  },
+
+  created() {
+    window.scrollTo(0,0);
   },
   methods: {
     find() {

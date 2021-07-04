@@ -2,12 +2,7 @@
   <v-app v-if="userData != undefined">
     <v-card flat>
       <v-toolbar flat class="md-4 hidden-md-and-down ">
-        <v-btn
-          @click="goBack"
-          color="#f66c1f"
-          text
-          class="ml-8"
-        >
+        <v-btn @click="goBack" color="#f66c1f" text class="ml-8">
           <v-icon color="#f66c1f">mdi-chevron-left</v-icon>Back
         </v-btn>
         <v-toolbar-title
@@ -147,7 +142,9 @@
         </v-card>
         <v-col md="7" sm="6" xs="6">
           <v-card style="margin-top:30px;margin-left:30px" width="100%">
-            <p style="font-size:17px;padding:20px">{{ theauthorName }}'s books</p>
+            <p style="font-size:17px;padding:20px">
+              {{ theauthorName }}'s books
+            </p>
             <v-progress-linear
               value="70%"
               color="#f66c1f"
@@ -167,7 +164,6 @@
               :key="i"
             >
               <v-card elevation="24" height="250" width="170">
-               
                 <v-img
                   :src="b.bookcover"
                   height="250"
@@ -303,12 +299,12 @@
 <script>
 import db from "../main";
 import BottomMenu from "@/components/BottomMenu";
-import { mapGetters } from "vuex"
+import { mapGetters } from "vuex";
 import { unslugify } from "unslugify";
 
 export default {
   components: {
-    BottomMenu
+    BottomMenu,
   },
 
   data() {
@@ -320,49 +316,65 @@ export default {
     };
   },
 
-   metaInfo() {
+  metaInfo() {
     return {
       title: `${this.userData.displayName}`,
       titleTemplate: "%s | Tell! Books ",
       meta: [
-                { name: 'description', content: 'Connect and follow' + this.userData.displayName + ' on Tell! Books | Top Online African Book publishing platform' },
-                { property: 'og:title', content: this.userData.displayName + ' | Tell! Books'},
-                { property: 'og:site_name', content: 'Tell! Books'},
-                { property: 'og:description', content: 'Connect and follow ' + this.userData.displayName + ' on Tell! Books | Top Online African Book publishing platform '},
-                {property: 'og:type', content: 'profile'},
-                {property: 'og:url', content: 'https://books.tell.africa/' + this.userData.fullname},
-                {property: 'og:image', content:this.userData.photoURL}    
-            ]
+        {
+          name: "description",
+          content:
+            "Connect and follow" +
+            this.userData.displayName +
+            " on Tell! Books | Top Online African Book publishing platform",
+        },
+        {
+          property: "og:title",
+          content: this.userData.displayName + " | Tell! Books",
+        },
+        { property: "og:site_name", content: "Tell! Books" },
+        {
+          property: "og:description",
+          content:
+            "Connect and follow " +
+            this.userData.displayName +
+            " on Tell! Books | Top Online African Book publishing platform ",
+        },
+        { property: "og:type", content: "profile" },
+        {
+          property: "og:url",
+          content: "https://books.tell.africa/" + this.userData.fullname,
+        },
+        { property: "og:image", content: this.userData.photoURL },
+      ],
     };
   },
 
-  computed:{
+  computed: {
     ...mapGetters({
-      books:"books",
-      loading:"loading"
+      books: "books",
+      loading: "loading",
     }),
 
-    filteredBooks(){
-      return this.books.filter(book => book.author == this.$route.params.id)
+    filteredBooks() {
+      return this.books.filter((book) => book.author == this.$route.params.id);
     },
-   theauthorName(){
-     return unslugify(this.$route.params.id)
-   }
-    
-
+    theauthorName() {
+      return unslugify(this.$route.params.id);
+    },
   },
 
+  beforeCreate() {
+    this.$store.dispatch("bindBooks");
+  },
   created() {
-    this.$store.dispatch('bindBooks')
-    
-    db
-      .collection("users")
+    window.scrollTo(0, 0);
+    db.collection("users")
       .doc(this.$route.params.id)
       .get()
-      .then(user => {
+      .then((user) => {
         this.userData = user.data();
-      })
-      
+      });
   },
 
   methods: {
@@ -375,7 +387,7 @@ export default {
     sendMail() {
       window.open("mailto:" + this.userData.email);
     },
-     bookPage(i, b) {
+    bookPage(i, b) {
       this.bookID = this.IDs[i];
       if (b.filetype == "Audio") {
         this.$router.push({
@@ -396,7 +408,7 @@ export default {
     },
     goBack() {
       this.$router.go(-1);
-    }
+    },
   },
 };
 </script>

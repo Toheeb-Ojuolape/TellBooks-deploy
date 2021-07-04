@@ -114,6 +114,9 @@ export default {
       rules: { required: value => !!value || "Required." }
     };
   },
+   created(){
+     window.scrollTo(0, 0);
+  },
   methods: {
     pressed() {
       this.loading = true;

@@ -449,7 +449,6 @@ export default {
     loadingStat: true,
     reads: [],
     title: [],
-    value: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
     width: 2,
     padding: 8,
     radius: 10,
@@ -475,10 +474,12 @@ export default {
     },
   },
 
-  created() {
-    this.$store.dispatch("bindBooks");
+  beforeCreate(){
+     this.$store.dispatch("bindBooks");
+  },
 
-    setTimeout(() => {
+  created() {
+    window.scrollTo(0, 0);
       firebase.auth().onAuthStateChanged((user) => {
         this.person = user;
         this.pointer = slugify(this.person.displayName, {
@@ -494,11 +495,10 @@ export default {
           this.titles = book.title;
           this.reads = book.readers.length;
           this.readers += book.readers.length;
-          this.earnings += (8.5 * (book.price * book.readers.length)) / 10;
+          this.earnings += (0.9 * (book.price * book.readers.length)) / 10;
           this.loadingStat = false;
         });
-      });
-    }, 3000);
+      })
   },
 
   methods: {

@@ -286,8 +286,12 @@ export default {
 
   },
 
+  beforeCreate(){
+     this.$store.dispatch('bindBooks')
+  },
+
   created() {
-    this.$store.dispatch('bindBooks')
+    window.scrollTo(0,0)
     this.renderBook();
     
   },

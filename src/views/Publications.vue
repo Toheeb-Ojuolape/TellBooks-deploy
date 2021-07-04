@@ -258,10 +258,13 @@ export default {
        }
    },
 
+
+   beforeCreate(){
+     this.$store.dispatch('bindBooks')
+   },
+
     created () {
-      this.$store.dispatch('bindBooks')
-              
-        setTimeout(() => {
+       window.scrollTo(0,0);   
       firebase.auth().onAuthStateChanged((user) => {
         this.person = user;
         this.pointer = slugify(this.person.displayName, {
@@ -277,11 +280,10 @@ export default {
           this.titles = book.title
           this.reads = book.readers.length
           this.readers += book.readers.length
-          this.earnings += (8.5 * (book.price * book.readers.length))/10
+          this.earnings += (0.9 * (book.price * book.readers.length))/10
           this.loadingStat = false
         });
-      });
-    }, 3000);
+      })
     },
 
 

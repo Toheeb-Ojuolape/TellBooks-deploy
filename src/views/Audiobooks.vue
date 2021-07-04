@@ -262,9 +262,12 @@ export default {
     },
   },
 
+  beforeCreate(){
+    this.$store.dispatch("bindBooks");
+  },
+
   created() {
     window.scrollTo(0, 0);
-    this.$store.dispatch("bindBooks");
   },
 
   methods: {

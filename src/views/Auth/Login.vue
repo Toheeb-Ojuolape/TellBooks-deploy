@@ -10,7 +10,7 @@
 
         <v-col md=6 sm=12 lg=6 style="max-width:600px;margin:auto">
           <v-container style="padding:19% 10% 12% 10%">
-            <p class="font-weight-black" style="font-size:22px;padding:0px;margin:0px">
+            <p class="font-weight-black" style="color:#f66c1f;font-size:22px;padding:0px;margin:0px">
               Login
             </p>
             <p
@@ -122,6 +122,9 @@ export default {
         emailMatch: () => "The email and password you entered don't match",
       },
     };
+  },
+  created(){
+     window.scrollTo(0, 0);
   },
   mounted() {
     let ui = firebaseui.auth.AuthUI.getInstance();

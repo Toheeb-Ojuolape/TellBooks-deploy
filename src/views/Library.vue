@@ -542,8 +542,7 @@ export default {
     },
 
   created() {
-
-
+    window.scrollTo(0,0);
     firebase.auth().onAuthStateChanged(user => {
       this.person = user;
 
@@ -597,6 +596,10 @@ export default {
       this.person = user;
       if (!this.person) this.$router.push("/login");
     });
+  },
+
+  updated(){
+    window.scrollTo(0,0);
   }
 };
 </script>

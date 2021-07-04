@@ -336,7 +336,8 @@ export default {
 
   
     created(){
-      firebase.auth().onAuthStateChanged(user => {
+     window.scrollTo(0,0);
+    firebase.auth().onAuthStateChanged(user => {
     this.person = user
     this.pointer = slugify(this.person.displayName, { 
                  replacement:"-",

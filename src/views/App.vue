@@ -231,6 +231,10 @@ export default {
       step: 1
     };
   },
+
+  created(){
+    window.scrollTo(0, 0);
+  },
   mounted() {
     firebase.auth().onAuthStateChanged(user => {
       this.user = user;

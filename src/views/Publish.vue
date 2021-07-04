@@ -261,7 +261,7 @@
         <v-btn @click="failure = false" elevation="24"> Ok</v-btn>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="socialsignup">
+    <v-dialog persistent v-model="socialsignup">
         <SocialSignup />
         </v-dialog>
         </v-col>
@@ -461,7 +461,6 @@
         </v-col>
       </v-row>
     </v-container>
-    
     </v-main>
     <BottomMenu class="hidden-md-and-up" />
   </v-app>
@@ -477,11 +476,13 @@ import NavBar from '@/components/NavBar'
 import SocialSignup from '@/components/SocialSignup'
 import { mapGetters } from 'vuex'
 
+
 export default {
   components: {
     BottomMenu,
     NavBar,
     SocialSignup
+
   },
   data() {
     return {
@@ -577,7 +578,7 @@ export default {
   },
 
   created() {
-    
+       window.scrollTo(0,0);   
       this.pointer = slugify(this.user.data.displayName, {
         replacement: "-",
         remove: /[$*_+~.()'"!:@]/g,
@@ -590,7 +591,7 @@ export default {
         .then(doc => {
           this.userData = doc.data();
         }).then(() =>{
-          if(this.userData == null){
+          if(this.userData == ""){
             this.socialsignup = true
           }
         })

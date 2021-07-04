@@ -175,6 +175,9 @@ export default {
       },
     };
   },
+   created(){
+     window.scrollTo(0, 0);
+  },
   // Signing in with social media accounts
   mounted() {
     let ui = firebaseui.auth.AuthUI.getInstance();

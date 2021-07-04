@@ -1543,7 +1543,7 @@
         <v-icon color="white">mdi-cloud-download</v-icon>
       </v-btn>
     </div>
-    <v-overlay :absolute="absolute" opacity="0.7" :value="bookLoading" v-if="singleBook == ''">
+    <v-overlay :absolute="absolute" opacity="0.7" :value="bookLoading" v-if="loading">
       <v-progress-circular
         :size="70"
         :width="7"
@@ -1586,6 +1586,7 @@ export default {
       sm: 12,
       lg: 12,
       md: 12,
+      vuex:JSON.parse(localStorage.getItem('vuex')),
       signup: false,
       absolute:true,
       login: false,
@@ -1711,52 +1712,12 @@ export default {
   },
 
   //fetching the  book's details
+  beforeCreate(){
+  this.$store.dispatch("bindBooks")
+  },
   created() {
     window.scrollTo(0, 0);
-    this.$store.dispatch("bindBooks");
-    console.log(this.singleBook)
-    firebase.auth().onAuthStateChanged((user) => {
-      this.person = user;
-      if (this.person != null) {
-        this.sm = 10;
-        this.md = 10;
-        this.lg = 10;
-      }
-      if (this.singleBook.price != 0 && this.person == null) {
-        this.notUser = true;
-      }
-      if (
-        this.singleBook.price != 0 &&
-        this.person != null &&
-        !this.singleBook.readers.includes(this.person.uid)
-      ) {
-        this.yesUser = true;
-      }
-      if (
-        this.singleBook.price != 0 &&
-        this.person != null &&
-        this.singleBook.readers.includes(this.person.uid)
-      ) {
-        this.paidUser = true;
-      }
-      if (this.singleBook.price == 0 && this.person == null) {
-        this.notfreeUser = true;
-      }
-      if (
-        this.singleBook.price == 0 &&
-        this.person != null &&
-        !this.singleBook.readers.includes(this.person.uid)
-      ) {
-        this.freeUser = true;
-      }
-      if (
-        this.singleBook.price == 0 &&
-        this.person != null &&
-        this.singleBook.readers.includes(this.person.uid)
-      ) {
-        this.freepaidUser = true;
-      }
-    });
+    
 
     db.collection("reviews")
       .where("on", "==", this.bookName)
@@ -1810,14 +1771,46 @@ export default {
     };
   },
 
-  mounted() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user != null) {
+  updated() {
+      if (this.user.data != null) {
         this.sm = 10;
         this.md = 10;
         this.lg = 10;
       }
-    });
+      if (this.singleBook.price != 0 && this.user.data == null) {
+        this.notUser = true;
+      }
+      if (
+        this.singleBook.price != 0 &&
+        this.user.data != null &&
+        !this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.yesUser = true;
+      }
+      if (
+        this.singleBook.price != 0 &&
+        this.user.data != null &&
+        this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.paidUser = true;
+      }
+      if (this.singleBook.price == 0 && this.user.data == null) {
+        this.notfreeUser = true;
+      }
+      if (
+        this.singleBook.price == 0 &&
+        this.user.data != null &&
+        !this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.freeUser = true;
+      }
+      if (
+        this.singleBook.price == 0 &&
+        this.user.data != null &&
+        this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.freepaidUser = true;
+      }
   },
   //Leaving a comment
   methods: {

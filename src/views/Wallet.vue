@@ -291,6 +291,7 @@ export default {
   },
 
   created() {
+     window.scrollTo(0, 0);
     this.loading = true;
       this.author = slugify(this.user.data.displayName, {
         replacement: "-",

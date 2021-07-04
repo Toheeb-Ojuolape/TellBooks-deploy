@@ -1685,52 +1685,12 @@ export default {
       this.changesInDatabase();
     },
   },
-  //fetching the  book's details
+  
+  beforeCreate(){
+    this.$store.dispatch("bindBooks");
+  },
   created() {
     window.scrollTo(0, 0);
-    this.$store.dispatch("bindBooks");
-    firebase.auth().onAuthStateChanged((user) => {
-      this.person = user;
-      if (user != null) {
-        this.sm = 10;
-        this.md = 10;
-        this.lg = 10;
-      }
-      if (this.singleBook.price != 0 && this.person == null) {
-        this.notUser = true;
-      }
-      if (
-        this.singleBook.price != 0 &&
-        this.person != null &&
-        !this.singleBook.readers.includes(this.person.uid)
-      ) {
-        this.yesUser = true;
-      }
-      if (
-        this.singleBook.price != 0 &&
-        this.person != null &&
-        this.singleBook.readers.includes(this.person.uid)
-      ) {
-        this.paidUser = true;
-      }
-      if (this.singleBook.price == 0 && this.person == null) {
-        this.notfreeUser = true;
-      }
-      if (
-        this.singleBook.price == 0 &&
-        this.person != null &&
-        !this.singleBook.readers.includes(this.person.uid)
-      ) {
-        this.freeUser = true;
-      }
-      if (
-        this.singleBook.price == 0 &&
-        this.person != null &&
-        this.singleBook.readers.includes(this.person.uid)
-      ) {
-        this.freepaidUser = true;
-      }
-    });
 
     db.collection("reviews")
       .where("on", "==", this.bookName)
@@ -1782,6 +1742,49 @@ export default {
         { property: "og:image", content: this.singleBook.bookcover },
       ],
     };
+  },
+
+
+   beforeUpdate() {
+      if (this.user.data != null) {
+        this.sm = 10;
+        this.md = 10;
+        this.lg = 10;
+      }
+      if (this.singleBook.price != 0 && this.user.data == null) {
+        this.notUser = true;
+      }
+      if (
+        this.singleBook.price != 0 &&
+        this.user.data != null &&
+        !this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.yesUser = true;
+      }
+      if (
+        this.singleBook.price != 0 &&
+        this.user.data != null &&
+        this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.paidUser = true;
+      }
+      if (this.singleBook.price == 0 && this.user.data == null) {
+        this.notfreeUser = true;
+      }
+      if (
+        this.singleBook.price == 0 &&
+        this.user.data != null &&
+        !this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.freeUser = true;
+      }
+      if (
+        this.singleBook.price == 0 &&
+        this.user.data != null &&
+        this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.freepaidUser = true;
+      }
   },
 
   //Leaving a comment

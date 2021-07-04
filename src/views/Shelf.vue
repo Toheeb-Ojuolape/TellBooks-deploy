@@ -923,7 +923,14 @@
                   type="article"
                 ></v-skeleton-loader>
                 <p
-                  style="font-size:15px;margin-bottom:0px;padding:10px 0px 0px 0px"
+                 v-if="book.title.length > 18"
+                  style="font-size:15px;margin-bottom:0px;padding:10px 0px 0px -10px"
+                >
+                  {{ String(book.title).slice(0,18)}}...
+                </p>
+                <p
+                v-else
+                  style="font-size:15px;margin-bottom:0px;padding:10px 0px 0px -10px"
                 >
                   {{ book.title }}
                 </p>
@@ -1015,6 +1022,13 @@
                   type="article"
                 ></v-skeleton-loader>
                 <p
+                 v-if="book.title.length > 18"
+                  style="font-size:15px;margin-bottom:0px;padding:10px 0px 0px -10px"
+                >
+                  {{ String(book.title).slice(0,18)}}...
+                </p>
+                <p
+                v-else
                   style="font-size:15px;margin-bottom:0px;padding:10px 0px 0px -10px"
                 >
                   {{ book.title }}
@@ -1107,7 +1121,15 @@
                   width="100%"
                   type="article"
                 ></v-skeleton-loader>
+
                 <p
+                 v-if="book.title.length > 18"
+                  style="font-size:15px;margin-bottom:0px;padding:10px 0px 0px -10px"
+                >
+                  {{ String(book.title).slice(0,18)}}...
+                </p>
+                <p
+                v-else
                   style="font-size:15px;margin-bottom:0px;padding:10px 0px 0px -10px"
                 >
                   {{ book.title }}
@@ -1217,9 +1239,13 @@ export default {
     },
   },
 
+
+  beforeCreate(){
+   this.$store.dispatch("bindBooks");
+  },
+
   created() {
     window.scrollTo(0, 0);
-    this.$store.dispatch("bindBooks");
   },
 
   mounted() {

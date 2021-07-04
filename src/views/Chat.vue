@@ -1750,14 +1750,46 @@ export default {
       this.changesInDatabase();
     },
   },
-   mounted() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if(user !=null){
-        this.sm=10
-        this.md=10
-        this.lg=10
+    beforeUpdate() {
+      if (this.user.data != null) {
+        this.sm = 10;
+        this.md = 10;
+        this.lg = 10;
       }
-    });
+      if (this.singleBook.price != 0 && this.user.data == null) {
+        this.notUser = true;
+      }
+      if (
+        this.singleBook.price != 0 &&
+        this.user.data != null &&
+        !this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.yesUser = true;
+      }
+      if (
+        this.singleBook.price != 0 &&
+        this.user.data != null &&
+        this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.paidUser = true;
+      }
+      if (this.singleBook.price == 0 && this.user.data == null) {
+        this.notfreeUser = true;
+      }
+      if (
+        this.singleBook.price == 0 &&
+        this.user.data != null &&
+        !this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.freeUser = true;
+      }
+      if (
+        this.singleBook.price == 0 &&
+        this.user.data != null &&
+        this.singleBook.readers.includes(this.user.data.uid)
+      ) {
+        this.freepaidUser = true;
+      }
   },
   //fetching the  book's details
   created() {

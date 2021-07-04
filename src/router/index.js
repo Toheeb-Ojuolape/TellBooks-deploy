@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueMeta from 'vue-meta'
 import VueRouter from 'vue-router'
 import EPub from '@/views/EPub'
-import Home from '@/views/Home'
 import App from '@/views/App'
 import Pdf from '@/views/Pdf'
 import User from '@/views/User'
@@ -44,19 +43,7 @@ const routes = [
     name: 'App',
     component: App
   },
-  {
-    path: '/home',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
+  
   {
     path: '/epub/:id',
     name: 'epub-reader-page',
