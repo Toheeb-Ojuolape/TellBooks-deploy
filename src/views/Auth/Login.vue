@@ -144,9 +144,7 @@ export default {
 
     firebase.auth().onAuthStateChanged((user) => {
       this.person = user;
-      if (this.person != "") {
-        this.$router.push("/dashboard");
-      }
+      if (this.person) this.$router.push("/login");
     });
   },
 

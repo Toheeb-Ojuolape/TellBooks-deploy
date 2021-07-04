@@ -199,9 +199,7 @@ export default {
     //this is signup route-guard
     firebase.auth().onAuthStateChanged((user) => {
       this.person = user;
-      if (this.person != ""){
-        this.$router.push("/dashboard")
-      }
+      if (this.person) this.$router.push("/dashboard");
     });
   },
   //signing with social media ends
