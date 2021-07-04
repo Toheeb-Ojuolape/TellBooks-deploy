@@ -81,6 +81,7 @@ export default {
       text: "",
       timeout: 2500,
       country: "",
+      person:"",
       currency: [
         { country: "America", code: "USD" },
         { country: "Argentina", code: "ARS" },
@@ -121,9 +122,9 @@ export default {
     pressed() {
       this.loading = true;
       firebase.auth().onAuthStateChanged(user => {
-        this.user = user;
+        this.person = user;
 
-        this.slug = slugify(user.displayName, {
+        this.slug = slugify(this.person.displayName, {
           replacement: "-",
           remove: /[$*_+~.()'"!\-:@]/g,
           lower: true
@@ -134,8 +135,8 @@ export default {
           .set(
             {
               displayName: this.slug,
-              user_id: this.user.uid,
-              email: this.user.email,
+              user_id: this.person.uid,
+              email: this.person.email,
               earnings: "",
               withdrawals: [],
               books: [],
@@ -144,7 +145,7 @@ export default {
               bio: "I'm about to publish a tellbooks bestseller!",
               currency: this.country,
               tell: "",
-              photoURL: this.user.photoURL
+              photoURL: this.person.photoURL
             },
             { merge: true }
           )

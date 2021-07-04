@@ -135,7 +135,7 @@
                 </div>
 
                 <v-btn
-                  v-if="book.price != 0 && person == null"
+                  v-if="notUser"
                   style="font-size:9px;margin-top:10px"
                   color="#f66c1f"
                   @click="signup = !signup"
@@ -165,7 +165,7 @@
                 </v-btn>
 
                 <v-btn
-                  v-if="book.price == 0 && person == null"
+                  v-if="notfreeUser"
                   class="white---text font-weight-bold body-2"
                   style="font-size:16px;color:white"
                   color="#f66c1f"
@@ -1296,7 +1296,7 @@
 
         <div class="navbar hidden-md-and-up">
           <v-btn
-            v-if="book.price != 0 && person == null"
+            v-if="notUser"
             style="font-size:9px;margin-bottom:20px; color:white"
             width="65%"
             color="#f66c1f"
@@ -1328,7 +1328,7 @@
           </v-btn>
 
           <v-btn
-            v-if="book.price == 0 && person == null"
+            v-if="notfreeUser"
             style="font-size:9px;margin-top:10px;width:80%"
             class="my-5 white--text font-weight-bold body-2"
             color="#f66c1f"
@@ -1756,37 +1756,37 @@ export default {
         this.md = 10;
         this.lg = 10;
       }
-      if (this.singleBook.price != 0 && this.user.data == null) {
+      if (this.book.price != 0 && this.user.data == null) {
         this.notUser = true;
       }
       if (
-        this.singleBook.price != 0 &&
+        this.book.price != 0 &&
         this.user.data != null &&
-        !this.singleBook.readers.includes(this.user.data.uid)
+        !this.book.readers.includes(this.user.data.uid)
       ) {
         this.yesUser = true;
       }
       if (
-        this.singleBook.price != 0 &&
+        this.book.price != 0 &&
         this.user.data != null &&
-        this.singleBook.readers.includes(this.user.data.uid)
+        this.book.readers.includes(this.user.data.uid)
       ) {
         this.paidUser = true;
       }
-      if (this.singleBook.price == 0 && this.user.data == null) {
+      if (this.book.price == 0 && this.user.data == null) {
         this.notfreeUser = true;
       }
       if (
-        this.singleBook.price == 0 &&
+        this.book.price == 0 &&
         this.user.data != null &&
-        !this.singleBook.readers.includes(this.user.data.uid)
+        !this.book.readers.includes(this.user.data.uid)
       ) {
         this.freeUser = true;
       }
       if (
-        this.singleBook.price == 0 &&
+        this.book.price == 0 &&
         this.user.data != null &&
-        this.singleBook.readers.includes(this.user.data.uid)
+        this.book.readers.includes(this.user.data.uid)
       ) {
         this.freepaidUser = true;
       }
@@ -1797,7 +1797,7 @@ export default {
     this.$store.dispatch("bindBooks");
      firebase.auth().onAuthStateChanged((user) => {
       this.person = user
-      if(user !=null){
+      if(this.person !=null){
         this.sm=10
         this.md=10
         this.lg=10

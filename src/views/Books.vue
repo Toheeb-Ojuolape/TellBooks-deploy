@@ -157,7 +157,7 @@
                   </div>
 
                   <v-btn
-                    v-if="singleBook.price != 0 && person == null"
+                    v-if="notUser"
                     style="font-size:9px;margin-top:10px"
                     color="#f66c1f"
                     @click="signup = !signup"
@@ -187,7 +187,7 @@
                   </v-btn>
 
                   <v-btn
-                    v-if="singleBook.price == 0 && person == null"
+                    v-if="notfreeUser"
                     class="white---text font-weight-bold body-2"
                     style="font-size:16px;color:white"
                     color="#f66c1f"
@@ -231,8 +231,7 @@
                     fab
                     color="#008140"
                     v-if="
-                      singleBook.price == 0 &&
-                        person == null &&
+                      notfreeUser &&
                         singleBook.downloadable == 'Yes'
                     "
                     style="margin-left:5px"
@@ -1435,7 +1434,7 @@
 
     <div class="navbar hidden-md-and-up">
       <v-btn
-        v-if="singleBook.price != 0 && person == null"
+        v-if="notUser"
         style="font-size:9px;margin-bottom:20px; color:white"
         width="65%"
         color="#f66c1f"
@@ -1467,7 +1466,7 @@
       </v-btn>
 
       <v-btn
-        v-if="singleBook.price == 0 && person == null"
+        v-if="notfreeUser"
         style="font-size:9px;margin-top:10px;width:80%"
         class="my-5 white--text font-weight-bold body-2"
         color="#f66c1f"
@@ -1511,8 +1510,7 @@
         fab
         color="#008140"
         v-if="
-          singleBook.price != 0 &&
-            person == null &&
+          notUser &&
             singleBook.downloadable == 'Yes'
         "
         style="margin-left:5px"
@@ -1718,6 +1716,48 @@ export default {
   created() {
     window.scrollTo(0, 0);
     
+     firebase.auth().onAuthStateChanged((user) => {
+      this.person = user;
+    if (this.person != null) {
+        this.sm = 10;
+        this.md = 10;
+        this.lg = 10;
+      }
+      if (this.singleBook.price != 0 && this.person == null) {
+        this.notUser = true;
+      }
+      if (
+        this.singleBook.price != 0 &&
+        this.person != null &&
+        !this.singleBook.readers.includes(this.person.uid)
+      ) {
+        this.yesUser = true;
+      }
+      if (
+        this.singleBook.price != 0 &&
+        this.person != null &&
+        this.singleBook.readers.includes(this.person.uid)
+      ) {
+        this.paidUser = true;
+      }
+      if (this.singleBook.price == 0 && this.person == null) {
+        this.notfreeUser = true;
+      }
+      if (
+        this.singleBook.price == 0 &&
+        this.person != null &&
+        !this.singleBook.readers.includes(this.person.uid)
+      ) {
+        this.freeUser = true;
+      }
+      if (
+        this.singleBook.price == 0 &&
+        this.person != null &&
+        this.singleBook.readers.includes(this.person.uid)
+      ) {
+        this.freepaidUser = true;
+      }
+     })
 
     db.collection("reviews")
       .where("on", "==", this.bookName)
@@ -1735,6 +1775,11 @@ export default {
           }
         });
       });
+  },
+
+  mounted(){
+   localStorage.setItem('page',`Tell! Books | Read ${this.singleBook.title} by ${this.singleBook.author} on Tell! Books`)
+
   },
 
   metaInfo() {
@@ -1771,7 +1816,7 @@ export default {
     };
   },
 
-  updated() {
+  beforeUpdate() {
       if (this.user.data != null) {
         this.sm = 10;
         this.md = 10;

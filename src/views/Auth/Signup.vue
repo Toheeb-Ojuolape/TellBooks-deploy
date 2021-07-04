@@ -131,6 +131,7 @@ export default {
       email: "",
       displayName: "",
       password: "",
+      person:"",
       error: null,
       country: "",
       currency: [
@@ -197,8 +198,10 @@ export default {
 
     //this is signup route-guard
     firebase.auth().onAuthStateChanged((user) => {
-      this.user = user;
-      if (this.user) this.$router.push("/dashboard");
+      this.person = user;
+      if (this.person != ""){
+        this.$router.push("/dashboard")
+      }
     });
   },
   //signing with social media ends

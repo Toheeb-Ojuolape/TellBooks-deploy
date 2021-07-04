@@ -113,6 +113,7 @@ export default {
       errors: "",
       color: "",
       mode: "",
+      person:"",
       timeout: 3000,
       y: "top",
       show: false,
@@ -142,8 +143,10 @@ export default {
     ui.start("#firebaseui-auth-container", uiConfig);
 
     firebase.auth().onAuthStateChanged((user) => {
-      this.user = user;
-      if (this.user) this.$router.push("/dashboard");
+      this.person = user;
+      if (this.person != "") {
+        this.$router.push("/dashboard");
+      }
     });
   },
 

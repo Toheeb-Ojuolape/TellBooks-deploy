@@ -169,7 +169,7 @@
                       </div>
 
                       <v-btn
-                        v-if="singleBook.price != 0 && person == null"
+                        v-if="notUser"
                         style="font-size:9px;margin-top:10px"
                         color="#f66c1f"
                         @click="signup = !signup"
@@ -200,7 +200,7 @@
                       </v-btn>
 
                       <v-btn
-                        v-if="singleBook.price == 0 && person == null"
+                        v-if="notfreeUser"
                         class="white---text font-weight-bold body-2"
                         style="font-size:16px;color:white"
                         color="#f66c1f"
@@ -1336,7 +1336,7 @@
 
         <div class="navbar hidden-lg-and-up">
           <v-btn
-            v-if="singleBook.price != 0 && person == null"
+            v-if="notUser"
             style="font-size:9px;margin-bottom:20px; color:white"
             width="65%"
             color="#f66c1f"
@@ -1369,7 +1369,7 @@
           </v-btn>
 
           <v-btn
-            v-if="singleBook.price == 0 && person == null"
+            v-if="notfreeUser"
             style="font-size:9px;margin-top:10px;width:80%"
             class="my-5 white--text font-weight-bold body-2"
             color="#f66c1f"
@@ -1691,6 +1691,48 @@ export default {
   },
   created() {
     window.scrollTo(0, 0);
+    firebase.auth().onAuthStateChanged((user) => {
+      this.person = user
+      if(this.person !=null){
+        this.sm=10
+        this.md=10
+        this.lg=10
+      }
+      if (this.book.price != 0 && this.person == null) {
+            this.notUser = true;
+          }
+          if (
+            this.book.price != 0 &&
+            this.person != null &&
+            !this.book.readers.includes(this.person.uid)
+          ) {
+            this.yesUser = true;
+          }
+          if (
+            this.book.price != 0 &&
+            this.person != null &&
+            this.book.readers.includes(this.person.uid)
+          ) {
+            this.paidUser = true;
+          }
+          if (this.book.price == 0 && this.person == null) {
+            this.notfreeUser = true;
+          }
+          if (
+            this.book.price == 0 &&
+            this.person != null &&
+            !this.book.readers.includes(this.person.uid)
+          ) {
+            this.freeUser = true;
+          }
+          if (
+            this.book.price == 0 &&
+            this.person != null &&
+            this.book.readers.includes(this.person.uid)
+          ) {
+            this.freepaidUser = true;
+          }
+    });
 
     db.collection("reviews")
       .where("on", "==", this.bookName)
