@@ -241,7 +241,6 @@ export default {
                     ref
                       .set({
                         displayName: this.slug,
-                        user_id: this.user.uid,
                         email: this.email,
                         earnings: "",
                         withdrawals: [],
@@ -256,7 +255,9 @@ export default {
                       })
                       .then(() => {
                         this.$router.push("/dashboard");
+                        console.log('Registration Successful!')
                       });
+
                   });
               });
           }

@@ -218,7 +218,6 @@ export default {
                     ref
                       .set({
                         displayName: this.slug,
-                        user_id: this.user.uid,
                         email: this.email,
                         earnings: "",
                         withdrawals: [],

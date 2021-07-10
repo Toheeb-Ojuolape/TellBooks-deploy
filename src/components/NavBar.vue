@@ -9,12 +9,12 @@
       <v-list dense nav class="py-0">
         <v-list-item two-line :class="miniVariant && 'px-0'">
           <v-list-item-avatar>
-            <img :src="user.data.photoURL">
+            <img :src="person.photoURL">
           </v-list-item-avatar>
 
           <v-list-item-content>
             <v-list-item-title style="margin-top:12px">
-              Good day, <strong>{{ user.data.displayName }} </strong>
+              Good day, <strong>{{ person.displayName }} </strong>
             </v-list-item-title>
             <v-list-item-subtitle>
             <v-btn color="#f66c1f" class="white--text pa-2" rounded small to="/profile" style="height:10px;font-size:9px">Edit Profile
@@ -70,7 +70,8 @@ export default {
       ],
       right: false,
       background: false,
-      miniVariant:false
+      miniVariant:false,
+      person:""
     }
    
   },
@@ -80,6 +81,13 @@ export default {
             // map `this.user` to `this.$store.getters.users
             user: "user"
         })        
+    },
+
+    created(){
+    firebase.auth().onAuthStateChanged((user) => {
+      this.person = user;
+    });
+
     },
 
   methods: {

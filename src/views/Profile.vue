@@ -757,7 +757,7 @@ export default {
           this.overlay = false;
           
         }).then(() =>{
-           if (this.userData == ""){
+           if (this.userData == undefined){
             this.socialsignup = true
           }
         })

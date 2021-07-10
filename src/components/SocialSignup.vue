@@ -1,15 +1,22 @@
 <template>
-            <v-card class="pt-7 px-5" flat>
+            <v-card class="pt-7 px-8" flat>
                   <p
                     class="font-weight-black my-7"
-                    style="text-align:left; color:#fa9746; font-size:50px"
+                    style="text-align:left; color:#fa9746; font-size:25px"
                   >
-                    Awesome!
+                    Incomplete Registration
                   </p>
-                  <p style="font-size:15px; text-align:left; margin-top:-36px">
-                    You're a part of the 'No Password Geng'. You can now login
-                    only with the click of your social login button!.<br />
-                    <br />Please select your country and click the button below
+                  <v-alert v-model="alert" type="error">
+               {{ message }}
+            </v-alert>
+                  <p style="font-size:15px; text-align:left; margin-top:0px">
+                   Hi <b>{{person.displayName}}</b><br />
+                   <br />
+
+                   We detected that your registration was not complete. This would prevent you from publishing your book on Tell! Books.
+                    <br />
+                    <br />
+                    Please select your country and click the button below
                     to complete your registration.
                   </p>
                   <v-select
@@ -19,7 +26,8 @@
                     :item-value="'code'"
                     label="Select Country"
                     color="#f66c1f"
-                    style="margin-top:-8px;margin-bottom:7px"
+                    outlined
+                    style="margin-top:-8px"
                     :rules="[rules.required]"
                     chips
                   ></v-select>
@@ -33,10 +41,10 @@
                       :loading="loading"
                       color="#f66c1f"
                       font-size="14px"
-                      class="px-5 white--text mb-14"
+                      class="px-5 white--text mb-6"
                       @click="pressed"
                     >
-                      Continue
+                      Complete Registration
                     </v-btn>
                   </v-card-actions>
             </v-card>
@@ -56,6 +64,8 @@ export default {
       timeout: 2500,
       country: "",
       person:"",
+      message:"",
+      alert:false,
       currency: [
         { country: "America", code: "USD" },
         { country: "Argentina", code: "ARS" },
@@ -89,8 +99,21 @@ export default {
       rules: { required: value => !!value || "Required." }
     };
   },
+  created(){
+     firebase.auth().onAuthStateChanged(user => {
+        this.person= user;
+     })
+  },
   methods: {
+    
     pressed() {
+      if(this.country ==""){
+      this.alert = true
+      this.message = 'Please select your country'
+      setTimeout(()=>{
+        this.alert = false
+      },1500)
+    } else{
       this.loading = true;
       firebase.auth().onAuthStateChanged(user => {
         this.person= user;
@@ -124,6 +147,7 @@ export default {
             this.$router.go(-1);
           });
       });
+    }
     }
   }
 };

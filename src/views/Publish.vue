@@ -591,7 +591,8 @@ export default {
         .then(doc => {
           this.userData = doc.data();
         }).then(() =>{
-          if(this.userData == ""){
+          console.log(this.userData)
+          if(this.userData == undefined){
             this.socialsignup = true
           }
         })
