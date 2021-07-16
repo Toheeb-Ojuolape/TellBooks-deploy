@@ -29,7 +29,7 @@
           <v-text-field
             v-model="displayName"
             outlined
-            label="First Name"
+            label="Name"
             type="text"
             color="#f66c1f"
             style="border-radius:8px;margin-bottom:-15px"
@@ -135,10 +135,12 @@ export default {
       error: null,
       country: "",
       currency: [
+        { country: "Nigeria", code: "NGN" },
         { country: "America", code: "USD" },
-        { country: "Argentina", code: "ARS" },
-        { country: "Australia", code: "AUD" },
+        { country: "Benin", code: "CFA" },
+        { country: "Burkina Faso", code: "CFA" },
         { country: "Burundi", code: "BIF" },
+        { country: "Cameroon", code: "CFA" },
         { country: "Canada", code: "CAD" },
         { country: "Congo", code: "CDF" },
         { country: "Cape Verde", code: "CVE" },
@@ -148,17 +150,22 @@ export default {
         { country: "Gambia", code: "GMD" },
         { country: "Ghana", code: "GHS" },
         { country: "Guinea", code: "GNF" },
+        { country: "Guinea Bissau", code: "CFA" },
+        { country: "Ivory Coast", code: "CFA" },
         { country: "Kenya", code: "KES" },
         { country: "Liberia", code: "LRD" },
         { country: "Malawi", code: "MWK" },
+        { country: "Mali", code: "CFA" },
         { country: "Malaysia", code: "MYR" },
         { country: "Mozambique", code: "MZN" },
-        { country: "Nigeria", code: "NGN" },
+        { country: "Niger", code: "CFA" },
         { country: "Rwanda", code: "RWF" },
         { country: "Sierra Leone", code: "SLL" },
         { country: "Sao Tome", code: "STD" },
         { country: "Saudi Arabia", code: "SAR" },
+        { country: "Senegal", code: "CFA" },
         { country: "South Africa", code: "ZAR" },
+        { country: "Togo", code: "CFA" },
         { country: "Uganda", code: "UGX" },
         { country: "United States of America", code: "USD" },
         { country: "Zambia", code: "ZMW" },
@@ -209,8 +216,7 @@ export default {
   methods: {
     pressed() {
       this.loading = true;
-      setTimeout(() => (this.loading = false), 3500);
-
+      if(this.country){
       if (this.displayName && this.email && this.password) {
         this.slug = slugify(this.displayName, {
           replacement: "-",
@@ -222,6 +228,7 @@ export default {
           if (doc.exists) {
             this.error = "This username is already used.";
             this.snackbar = true;
+            this.loading = false
           } else {
             firebase
               .auth()
@@ -254,6 +261,7 @@ export default {
                         tell: "",
                       })
                       .then(() => {
+                        this.loading = false
                         this.$router.push("/dashboard");
                         console.log('Registration Successful!')
                       });
@@ -264,6 +272,15 @@ export default {
         });
       } else {
         this.error = "You need to enter your details";
+        this.loading = false
+        this.snackbar = true
+        setTimeout(() =>{
+          this.snackbar = false
+        },2000)
+      }
+      }else{
+        this.error = "You need to select your country"
+        this.loading = false
         this.snackbar = true
         setTimeout(() =>{
           this.snackbar = false

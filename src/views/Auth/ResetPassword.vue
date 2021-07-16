@@ -56,7 +56,7 @@
                   <v-icon size="100px" color="white" fab>mdi-email-check</v-icon>
                   <h2 class="white--text mb-2" style="font-size:22px">{{text}}</h2>
                   <p class="white--text"> Please check your inbox for an email from us </p>
-                    <v-btn large color="white" style="color:#2d860f;border-radius:8px" href="https://gmail.com">
+                    <v-btn target="_blank" large color="white" style="color:#2d860f;border-radius:8px" href="https://gmail.com">
                       Open email
                     </v-btn>
                   
@@ -93,6 +93,7 @@ export default {
       loading: false,
       success: false,
       failure:false,
+      person:"",
       text: "",
       timeout: 2500,
 
@@ -108,6 +109,10 @@ export default {
   },
    created(){
      window.scrollTo(0, 0);
+    firebase.auth().onAuthStateChanged((user) => {
+      this.person = user;
+      this.email = user.email
+    });
   },
   methods: {
     goBack(){

@@ -1,5 +1,8 @@
 <template>
   <v-app>
+    <v-dialog persistent v-model="socialsignup" v-if="userData == undefined">
+        <SocialSignup />
+        </v-dialog>
    <v-row no-gutters>
       <v-col
         class="hidden-sm-and-down"
@@ -566,6 +569,9 @@
               </v-list>
             </div>
           </div>
+
+             
+
         <v-dialog fullscreen v-model="profileUpdateMobile">
         <v-sheet
         
@@ -671,9 +677,6 @@
           </v-form>
         </v-sheet>
         </v-dialog>
-        <v-dialog v-model="socialsignup">
-        <SocialSignup />
-        </v-dialog>
         </v-main>
     <BottomMenu class="hidden-md-and-up"/>
   </v-app>
@@ -722,7 +725,7 @@ export default {
       CustomerSupport:false,
       profileUpdate:false,
       profileUpdateMobile:false,
-      socialsignup:false,
+      socialsignup:true,
     };
   },
   //  computed: {
@@ -738,7 +741,7 @@ export default {
       if (!this.person) this.$router.push("/login");
     });
   },
-  created() {
+  beforeCreate() {
     window.scrollTo(0,0);
     firebase.auth().onAuthStateChanged(user => {
       this.person = user;
@@ -754,13 +757,15 @@ export default {
         .get()
         .then(doc => {
           this.userData = doc.data();
-          this.overlay = false;
+          console.log(this.userData)
+          }).then(()=>{
+            if(this.userData == undefined){
+              console.log(this.userData)
+              this.socialsignup = true
+            }
+          })
           
-        }).then(() =>{
-           if (this.userData == undefined){
-            this.socialsignup = true
-          }
-        })
+      
     })
   },
 

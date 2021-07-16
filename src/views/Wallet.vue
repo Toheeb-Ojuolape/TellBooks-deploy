@@ -109,6 +109,7 @@
             label="Account number?"
             color="#1877f2"
             type="number"
+            @keyup="checkAccount()"
             prepend-inner-icon="mdi-account-circle"
           />
 
@@ -247,6 +248,7 @@ import Vue from "vue";
 // eslint-disable-next-line no-unused-vars
 import Loadscript from "vue-plugin-load-script";
 import { mapGetters } from 'vuex';
+import axios from 'axios'
 
 export default {
   components: {
@@ -334,6 +336,22 @@ export default {
   methods: {
     goBack() {
       this.$router.go(-1);
+    },
+
+
+    checkAccount(){
+    if(this.accountnumber.length == 10){
+     axios({
+       method:'post',
+       url:'https://api.flutterwave.com/v3/accounts/resolve',
+       data:{
+         account_number:this.accountnumber,
+         account_bank:this.bank
+       }
+     }).then((response) =>{
+       console.log(response)
+     })
+    }
     },
 
     withdraw() {

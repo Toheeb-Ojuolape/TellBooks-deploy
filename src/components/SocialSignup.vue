@@ -144,7 +144,7 @@ export default {
             { merge: true }
           )
           .then(() => {
-            this.$router.go(-1);
+            location.reload()
           });
       });
     }
