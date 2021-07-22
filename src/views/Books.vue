@@ -505,7 +505,7 @@
                       >
                         <img :src="review.photoURL"
                       /></v-avatar>
-                      <span v-if="review.from.length > 15"
+                      <span v-if="String(review.from).length > 15"
                         >{{ String(review.from).slice(0, 15) }}...</span
                       >
                       <span v-else>{{ review.from }}</span>
@@ -948,7 +948,7 @@
                     >
                       <img :src="review.photoURL"
                     /></v-avatar>
-                    <span v-if="review.from.length > 15"
+                    <span v-if="String(review.from).length > 15"
                       >{{ String(review.from).slice(0, 15) }}...</span
                     >
                     <span v-else>{{ review.from }}</span>

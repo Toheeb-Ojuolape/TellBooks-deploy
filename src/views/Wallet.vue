@@ -134,7 +134,7 @@
           No available balance
         </h1>
         <p style="font-size:15px;color:white">
-          Sorry, {{ user.displayName }}, you cannot request withdrawal because
+          Sorry, {{ user.data.displayName }}, you cannot request withdrawal because
           you have no money in your wallet.
         </p>
         <v-btn @click="withdrawal = false" elevation="24"> Ok</v-btn>
@@ -343,11 +343,15 @@ export default {
     if(this.accountnumber.length == 10){
      axios({
        method:'post',
-       url:'https://api.flutterwave.com/v3/accounts/resolve',
+       url:'http://api.flutterwave.com/v3/accounts/resolve',
        data:{
          account_number:this.accountnumber,
          account_bank:this.bank
-       }
+       },
+       headers: {
+       'Content-Type': 'application/json',
+      'Authorization': 'Bearer FLWSECK-d6d90491e13efc3825383ff4a08a037c-X'
+  }
      }).then((response) =>{
        console.log(response)
      })

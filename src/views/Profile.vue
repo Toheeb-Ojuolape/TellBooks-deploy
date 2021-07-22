@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-dialog persistent v-model="socialsignup" v-if="userData == undefined">
+    <v-dialog persistent v-model="socialsignup">
         <SocialSignup />
         </v-dialog>
    <v-row no-gutters>
@@ -725,7 +725,7 @@ export default {
       CustomerSupport:false,
       profileUpdate:false,
       profileUpdateMobile:false,
-      socialsignup:true,
+      socialsignup:false,
     };
   },
   //  computed: {
@@ -759,8 +759,9 @@ export default {
           this.userData = doc.data();
           console.log(this.userData)
           }).then(()=>{
-            if(this.userData == undefined){
+            if(this.userData){
               console.log(this.userData)
+            }else{
               this.socialsignup = true
             }
           })
